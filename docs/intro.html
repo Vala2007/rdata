@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 2 Introduction | A Minimal Book Example</title>
+  <meta name="description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
+  <meta name="generator" content="bookdown 0.47 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 2 Introduction | A Minimal Book Example" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 2 Introduction | A Minimal Book Example" />
+  
+  <meta name="twitter:description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
+  
+
+<meta name="author" content="Yihui Xie" />
+
+
+<meta name="date" content="2026-08-23" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="index.html"/>
+<link rel="next" href="librería--.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Prerequisites</a></li>
+<li class="chapter" data-level="2" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>2</b> Introduction</a></li>
+<li class="chapter" data-level="3" data-path="librería--.html"><a href="librería--.html"><i class="fa fa-check"></i><b>3</b> Librería —-</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="librería--.html"><a href="librería--.html#an%C3%A1lisis-de-la-variable-target-class"><i class="fa fa-check"></i><b>3.1</b> Análisis de la variable target “class”</a></li>
+<li class="chapter" data-level="3.2" data-path="librería--.html"><a href="librería--.html#an%C3%A1lisis-de-las-variables-independientes"><i class="fa fa-check"></i><b>3.2</b> Análisis de las variables independientes</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="methods.html"><a href="methods.html"><i class="fa fa-check"></i><b>4</b> Methods</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="methods.html"><a href="methods.html#math-example"><i class="fa fa-check"></i><b>4.1</b> math example</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="applications.html"><a href="applications.html"><i class="fa fa-check"></i><b>5</b> Applications</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="applications.html"><a href="applications.html#example-one"><i class="fa fa-check"></i><b>5.1</b> Example one</a></li>
+<li class="chapter" data-level="5.2" data-path="applications.html"><a href="applications.html#example-two"><i class="fa fa-check"></i><b>5.2</b> Example two</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="final-words.html"><a href="final-words.html"><i class="fa fa-check"></i><b>6</b> Final Words</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">A Minimal Book Example</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="intro" class="section level1 hasAnchor" number="2">
+<h1><span class="header-section-number">Chapter 2</span> Introduction<a href="intro.html#intro" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>explicaciones lol:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="intro.html#cb1-1" tabindex="-1"></a>tabla_variables <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb1-2"><a href="intro.html#cb1-2" tabindex="-1"></a>  <span class="at">Variable =</span> <span class="fu">c</span>(</span>
+<span id="cb1-3"><a href="intro.html#cb1-3" tabindex="-1"></a>    <span class="st">&quot;bkblk&quot;</span>, <span class="st">&quot;bknwy&quot;</span>, <span class="st">&quot;bkon8&quot;</span>, <span class="st">&quot;bkona&quot;</span>, <span class="st">&quot;bkspr&quot;</span>, <span class="st">&quot;bkxbq&quot;</span>, <span class="st">&quot;bkxcr&quot;</span>, <span class="st">&quot;bkxwp&quot;</span>,</span>
+<span id="cb1-4"><a href="intro.html#cb1-4" tabindex="-1"></a>    <span class="st">&quot;blxwp&quot;</span>, <span class="st">&quot;bxqsq&quot;</span>, <span class="st">&quot;cntxt&quot;</span>, <span class="st">&quot;dsopp&quot;</span>, <span class="st">&quot;dwipd&quot;</span>, <span class="st">&quot;hdchk&quot;</span>, <span class="st">&quot;katri&quot;</span>, <span class="st">&quot;mulch&quot;</span>,</span>
+<span id="cb1-5"><a href="intro.html#cb1-5" tabindex="-1"></a>    <span class="st">&quot;qxmsq&quot;</span>, <span class="st">&quot;r2ar8&quot;</span>, <span class="st">&quot;reskd&quot;</span>, <span class="st">&quot;reskr&quot;</span>, <span class="st">&quot;rimmx&quot;</span>, <span class="st">&quot;rkxwp&quot;</span>, <span class="st">&quot;rxmsq&quot;</span>, <span class="st">&quot;simpl&quot;</span>,</span>
+<span id="cb1-6"><a href="intro.html#cb1-6" tabindex="-1"></a>    <span class="st">&quot;skach&quot;</span>, <span class="st">&quot;skewr&quot;</span>, <span class="st">&quot;skrxp&quot;</span>, <span class="st">&quot;spcop&quot;</span>, <span class="st">&quot;stlmt&quot;</span>, <span class="st">&quot;thrsk&quot;</span>, <span class="st">&quot;wkcti&quot;</span>, <span class="st">&quot;wkna8&quot;</span>,</span>
+<span id="cb1-7"><a href="intro.html#cb1-7" tabindex="-1"></a>    <span class="st">&quot;wknck&quot;</span>, <span class="st">&quot;wkovl&quot;</span>, <span class="st">&quot;wkpos&quot;</span>, <span class="st">&quot;wtoeg&quot;</span></span>
+<span id="cb1-8"><a href="intro.html#cb1-8" tabindex="-1"></a>  ),</span>
+<span id="cb1-9"><a href="intro.html#cb1-9" tabindex="-1"></a>  <span class="at">Nombre_Real =</span> <span class="fu">c</span>(</span>
+<span id="cb1-10"><a href="intro.html#cb1-10" tabindex="-1"></a>    <span class="st">&quot;Black King Blocked&quot;</span>, <span class="st">&quot;Black King No Way&quot;</span>, <span class="st">&quot;Black King on 8th&quot;</span>, <span class="st">&quot;Black King on a&quot;</span>,</span>
+<span id="cb1-11"><a href="intro.html#cb1-11" tabindex="-1"></a>    <span class="st">&quot;Black King Spread&quot;</span>, <span class="st">&quot;Black King captures Bishop&quot;</span>, <span class="st">&quot;Black King captures Rook&quot;</span>,</span>
+<span id="cb1-12"><a href="intro.html#cb1-12" tabindex="-1"></a>    <span class="st">&quot;Black King captures White Pawn&quot;</span>, <span class="st">&quot;White Pawn on b&quot;</span>, <span class="st">&quot;Bishop Queen Square&quot;</span>,</span>
+<span id="cb1-13"><a href="intro.html#cb1-13" tabindex="-1"></a>    <span class="st">&quot;Context&quot;</span>, <span class="st">&quot;Diagonal Opposite&quot;</span>, <span class="st">&quot;Double Pawn&quot;</span>, <span class="st">&quot;Have Double Check&quot;</span>,</span>
+<span id="cb1-14"><a href="intro.html#cb1-14" tabindex="-1"></a>    <span class="st">&quot;King Attack Three&quot;</span>, <span class="st">&quot;Multiple Checks&quot;</span>, <span class="st">&quot;Queen Square&quot;</span>, <span class="st">&quot;Rook to a8&quot;</span>,</span>
+<span id="cb1-15"><a href="intro.html#cb1-15" tabindex="-1"></a>    <span class="st">&quot;Rook King Distance&quot;</span>, <span class="st">&quot;Rook King&quot;</span>, <span class="st">&quot;Rook in Middle&quot;</span>, <span class="st">&quot;Rook captures Pawn&quot;</span>,</span>
+<span id="cb1-16"><a href="intro.html#cb1-16" tabindex="-1"></a>    <span class="st">&quot;Rook Queen Square&quot;</span>, <span class="st">&quot;Simple Position&quot;</span>, <span class="st">&quot;Skach&quot;</span>, <span class="st">&quot;Skewer&quot;</span>, <span class="st">&quot;Skewer Pawn&quot;</span>,</span>
+<span id="cb1-17"><a href="intro.html#cb1-17" tabindex="-1"></a>    <span class="st">&quot;Space Control&quot;</span>, <span class="st">&quot;Stalemate&quot;</span>, <span class="st">&quot;Three Checks&quot;</span>, <span class="st">&quot;White King on c7&quot;</span>,</span>
+<span id="cb1-18"><a href="intro.html#cb1-18" tabindex="-1"></a>    <span class="st">&quot;White King on a8&quot;</span>, <span class="st">&quot;White King Check&quot;</span>, <span class="st">&quot;White King Overlap&quot;</span>, <span class="st">&quot;White King Position&quot;</span>,</span>
+<span id="cb1-19"><a href="intro.html#cb1-19" tabindex="-1"></a>    <span class="st">&quot;White to Egress&quot;</span></span>
+<span id="cb1-20"><a href="intro.html#cb1-20" tabindex="-1"></a>  ),</span>
+<span id="cb1-21"><a href="intro.html#cb1-21" tabindex="-1"></a>  <span class="at">Significado =</span> <span class="fu">c</span>(</span>
+<span id="cb1-22"><a href="intro.html#cb1-22" tabindex="-1"></a>    <span class="st">&quot;El rey negro está bloqueado por su peón en a7&quot;</span>,</span>
+<span id="cb1-23"><a href="intro.html#cb1-23" tabindex="-1"></a>    <span class="st">&quot;El rey negro no tiene casillas de escape&quot;</span>,</span>
+<span id="cb1-24"><a href="intro.html#cb1-24" tabindex="-1"></a>    <span class="st">&quot;El rey negro está en la fila 8 (la última)&quot;</span>,</span>
+<span id="cb1-25"><a href="intro.html#cb1-25" tabindex="-1"></a>    <span class="st">&quot;El rey negro está en la columna &#39;a&#39;&quot;</span>,</span>
+<span id="cb1-26"><a href="intro.html#cb1-26" tabindex="-1"></a>    <span class="st">&quot;El rey negro está separado de su peón&quot;</span>,</span>
+<span id="cb1-27"><a href="intro.html#cb1-27" tabindex="-1"></a>    <span class="st">&quot;El rey negro puede capturar al alfil blanco&quot;</span>,</span>
+<span id="cb1-28"><a href="intro.html#cb1-28" tabindex="-1"></a>    <span class="st">&quot;El rey negro puede capturar la torre blanca&quot;</span>,</span>
+<span id="cb1-29"><a href="intro.html#cb1-29" tabindex="-1"></a>    <span class="st">&quot;El rey negro puede capturar el peón blanco&quot;</span>,</span>
+<span id="cb1-30"><a href="intro.html#cb1-30" tabindex="-1"></a>    <span class="st">&quot;El peón blanco está en la columna &#39;b&#39;&quot;</span>,</span>
+<span id="cb1-31"><a href="intro.html#cb1-31" tabindex="-1"></a>    <span class="st">&quot;El alfil está en la casilla de coronación&quot;</span>,</span>
+<span id="cb1-32"><a href="intro.html#cb1-32" tabindex="-1"></a>    <span class="st">&quot;Contexto general de la posición&quot;</span>,</span>
+<span id="cb1-33"><a href="intro.html#cb1-33" tabindex="-1"></a>    <span class="st">&quot;El rey blanco está en diagonal opuesta al peón&quot;</span>,</span>
+<span id="cb1-34"><a href="intro.html#cb1-34" tabindex="-1"></a>    <span class="st">&quot;Hay un peón doble (muy raro)&quot;</span>,</span>
+<span id="cb1-35"><a href="intro.html#cb1-35" tabindex="-1"></a>    <span class="st">&quot;Hay doble jaque disponible&quot;</span>,</span>
+<span id="cb1-36"><a href="intro.html#cb1-36" tabindex="-1"></a>    <span class="st">&quot;Ataque del rey con 3 piezas&quot;</span>,</span>
+<span id="cb1-37"><a href="intro.html#cb1-37" tabindex="-1"></a>    <span class="st">&quot;Múltiples jaques disponibles&quot;</span>,</span>
+<span id="cb1-38"><a href="intro.html#cb1-38" tabindex="-1"></a>    <span class="st">&quot;La torre está en la casilla de coronación&quot;</span>,</span>
+<span id="cb1-39"><a href="intro.html#cb1-39" tabindex="-1"></a>    <span class="st">&quot;La torre puede ir a a8&quot;</span>,</span>
+<span id="cb1-40"><a href="intro.html#cb1-40" tabindex="-1"></a>    <span class="st">&quot;Distancia del rey a la torre&quot;</span>,</span>
+<span id="cb1-41"><a href="intro.html#cb1-41" tabindex="-1"></a>    <span class="st">&quot;Relación rey-torre&quot;</span>,</span>
+<span id="cb1-42"><a href="intro.html#cb1-42" tabindex="-1"></a>    <span class="st">&quot;La torre está en el centro&quot;</span>,</span>
+<span id="cb1-43"><a href="intro.html#cb1-43" tabindex="-1"></a>    <span class="st">&quot;La torre captura el peón&quot;</span>,</span>
+<span id="cb1-44"><a href="intro.html#cb1-44" tabindex="-1"></a>    <span class="st">&quot;La torre está en la casilla de coronación&quot;</span>,</span>
+<span id="cb1-45"><a href="intro.html#cb1-45" tabindex="-1"></a>    <span class="st">&quot;Posición simple (pocas piezas)&quot;</span>,</span>
+<span id="cb1-46"><a href="intro.html#cb1-46" tabindex="-1"></a>    <span class="st">&quot;Estructura de ataque&quot;</span>,</span>
+<span id="cb1-47"><a href="intro.html#cb1-47" tabindex="-1"></a>    <span class="st">&quot;Posibilidad de clavada (skewer)&quot;</span>,</span>
+<span id="cb1-48"><a href="intro.html#cb1-48" tabindex="-1"></a>    <span class="st">&quot;Clavada al peón&quot;</span>,</span>
+<span id="cb1-49"><a href="intro.html#cb1-49" tabindex="-1"></a>    <span class="st">&quot;Control de espacio&quot;</span>,</span>
+<span id="cb1-50"><a href="intro.html#cb1-50" tabindex="-1"></a>    <span class="st">&quot;Riesgo de ahogado (stalemate)&quot;</span>,</span>
+<span id="cb1-51"><a href="intro.html#cb1-51" tabindex="-1"></a>    <span class="st">&quot;Tres jaques disponibles&quot;</span>,</span>
+<span id="cb1-52"><a href="intro.html#cb1-52" tabindex="-1"></a>    <span class="st">&quot;El rey blanco está en c7&quot;</span>,</span>
+<span id="cb1-53"><a href="intro.html#cb1-53" tabindex="-1"></a>    <span class="st">&quot;El rey blanco está en a8&quot;</span>,</span>
+<span id="cb1-54"><a href="intro.html#cb1-54" tabindex="-1"></a>    <span class="st">&quot;El rey blanco está en jaque&quot;</span>,</span>
+<span id="cb1-55"><a href="intro.html#cb1-55" tabindex="-1"></a>    <span class="st">&quot;Superposición de reyes&quot;</span>,</span>
+<span id="cb1-56"><a href="intro.html#cb1-56" tabindex="-1"></a>    <span class="st">&quot;Posición del rey blanco&quot;</span>,</span>
+<span id="cb1-57"><a href="intro.html#cb1-57" tabindex="-1"></a>    <span class="st">&quot;El rey blanco tiene ruta de escape&quot;</span></span>
+<span id="cb1-58"><a href="intro.html#cb1-58" tabindex="-1"></a>  ),</span>
+<span id="cb1-59"><a href="intro.html#cb1-59" tabindex="-1"></a>  <span class="at">Tipo =</span> <span class="fu">c</span>(</span>
+<span id="cb1-60"><a href="intro.html#cb1-60" tabindex="-1"></a>    <span class="fu">rep</span>(<span class="st">&quot;Binaria&quot;</span>, <span class="dv">5</span>),  <span class="co"># bkblk a bkspr son binarias (t/f)</span></span>
+<span id="cb1-61"><a href="intro.html#cb1-61" tabindex="-1"></a>    <span class="st">&quot;Binaria&quot;</span>, <span class="st">&quot;Binaria&quot;</span>, <span class="st">&quot;Binaria&quot;</span>,  <span class="co"># bkxbq, bkxcr, bkxwp</span></span>
+<span id="cb1-62"><a href="intro.html#cb1-62" tabindex="-1"></a>    <span class="st">&quot;Binaria&quot;</span>, <span class="st">&quot;Binaria&quot;</span>,  <span class="co"># blxwp, bxqsq</span></span>
+<span id="cb1-63"><a href="intro.html#cb1-63" tabindex="-1"></a>    <span class="st">&quot;Ternaria&quot;</span>,  <span class="co"># cntxt (n/b/g)</span></span>
+<span id="cb1-64"><a href="intro.html#cb1-64" tabindex="-1"></a>    <span class="st">&quot;Binaria&quot;</span>,  <span class="co"># dsopp</span></span>
+<span id="cb1-65"><a href="intro.html#cb1-65" tabindex="-1"></a>    <span class="st">&quot;Binaria&quot;</span>,  <span class="co"># dwipd</span></span>
+<span id="cb1-66"><a href="intro.html#cb1-66" tabindex="-1"></a>    <span class="st">&quot;Binaria&quot;</span>,  <span class="co"># hdchk</span></span>
+<span id="cb1-67"><a href="intro.html#cb1-67" tabindex="-1"></a>    <span class="st">&quot;Ternaria&quot;</span>,  <span class="co"># katri (n/b/g)</span></span>
+<span id="cb1-68"><a href="intro.html#cb1-68" tabindex="-1"></a>    <span class="st">&quot;Binaria&quot;</span>,  <span class="co"># mulch</span></span>
+<span id="cb1-69"><a href="intro.html#cb1-69" tabindex="-1"></a>    <span class="st">&quot;Binaria&quot;</span>,  <span class="co"># qxmsq</span></span>
+<span id="cb1-70"><a href="intro.html#cb1-70" tabindex="-1"></a>    <span class="st">&quot;Binaria&quot;</span>,  <span class="co"># r2ar8</span></span>
+<span id="cb1-71"><a href="intro.html#cb1-71" tabindex="-1"></a>    <span class="st">&quot;Binaria&quot;</span>,  <span class="co"># reskd</span></span>
+<span id="cb1-72"><a href="intro.html#cb1-72" tabindex="-1"></a>    <span class="st">&quot;Binaria&quot;</span>,  <span class="co"># reskr</span></span>
+<span id="cb1-73"><a href="intro.html#cb1-73" tabindex="-1"></a>    <span class="st">&quot;Binaria&quot;</span>,  <span class="co"># rimmx</span></span>
+<span id="cb1-74"><a href="intro.html#cb1-74" tabindex="-1"></a>    <span class="st">&quot;Binaria&quot;</span>,  <span class="co"># rkxwp</span></span>
+<span id="cb1-75"><a href="intro.html#cb1-75" tabindex="-1"></a>    <span class="st">&quot;Binaria&quot;</span>,  <span class="co"># rxmsq</span></span>
+<span id="cb1-76"><a href="intro.html#cb1-76" tabindex="-1"></a>    <span class="st">&quot;Binaria&quot;</span>,  <span class="co"># simpl</span></span>
+<span id="cb1-77"><a href="intro.html#cb1-77" tabindex="-1"></a>    <span class="st">&quot;Binaria&quot;</span>,  <span class="co"># skach</span></span>
+<span id="cb1-78"><a href="intro.html#cb1-78" tabindex="-1"></a>    <span class="st">&quot;Binaria&quot;</span>,  <span class="co"># skewr</span></span>
+<span id="cb1-79"><a href="intro.html#cb1-79" tabindex="-1"></a>    <span class="st">&quot;Binaria&quot;</span>,  <span class="co"># skrxp</span></span>
+<span id="cb1-80"><a href="intro.html#cb1-80" tabindex="-1"></a>    <span class="st">&quot;Binaria&quot;</span>,  <span class="co"># spcop</span></span>
+<span id="cb1-81"><a href="intro.html#cb1-81" tabindex="-1"></a>    <span class="st">&quot;Binaria&quot;</span>,  <span class="co"># stlmt</span></span>
+<span id="cb1-82"><a href="intro.html#cb1-82" tabindex="-1"></a>    <span class="st">&quot;Binaria&quot;</span>,  <span class="co"># thrsk</span></span>
+<span id="cb1-83"><a href="intro.html#cb1-83" tabindex="-1"></a>    <span class="st">&quot;Binaria&quot;</span>,  <span class="co"># wkcti</span></span>
+<span id="cb1-84"><a href="intro.html#cb1-84" tabindex="-1"></a>    <span class="st">&quot;Binaria&quot;</span>,  <span class="co"># wkna8</span></span>
+<span id="cb1-85"><a href="intro.html#cb1-85" tabindex="-1"></a>    <span class="st">&quot;Binaria&quot;</span>,  <span class="co"># wknck</span></span>
+<span id="cb1-86"><a href="intro.html#cb1-86" tabindex="-1"></a>    <span class="st">&quot;Binaria&quot;</span>,  <span class="co"># wkovl</span></span>
+<span id="cb1-87"><a href="intro.html#cb1-87" tabindex="-1"></a>    <span class="st">&quot;Ternaria&quot;</span>,  <span class="co"># wkpos (n/b/g)</span></span>
+<span id="cb1-88"><a href="intro.html#cb1-88" tabindex="-1"></a>    <span class="st">&quot;Binaria&quot;</span>   <span class="co"># wtoeg</span></span>
+<span id="cb1-89"><a href="intro.html#cb1-89" tabindex="-1"></a>  ),</span>
+<span id="cb1-90"><a href="intro.html#cb1-90" tabindex="-1"></a>  <span class="at">Niveles =</span> <span class="fu">c</span>(</span>
+<span id="cb1-91"><a href="intro.html#cb1-91" tabindex="-1"></a>    <span class="st">&quot;t, f&quot;</span>, <span class="st">&quot;t, f&quot;</span>, <span class="st">&quot;t, f&quot;</span>, <span class="st">&quot;t, f&quot;</span>, <span class="st">&quot;t, f&quot;</span>,</span>
+<span id="cb1-92"><a href="intro.html#cb1-92" tabindex="-1"></a>    <span class="st">&quot;t, f&quot;</span>, <span class="st">&quot;t, f&quot;</span>, <span class="st">&quot;t, f&quot;</span>, <span class="st">&quot;t, f&quot;</span>, <span class="st">&quot;t, f&quot;</span>,</span>
+<span id="cb1-93"><a href="intro.html#cb1-93" tabindex="-1"></a>    <span class="st">&quot;n, b, g&quot;</span>, <span class="st">&quot;t, f&quot;</span>, <span class="st">&quot;t, f&quot;</span>, <span class="st">&quot;t, f&quot;</span>,</span>
+<span id="cb1-94"><a href="intro.html#cb1-94" tabindex="-1"></a>    <span class="st">&quot;n, b, g&quot;</span>, <span class="st">&quot;t, f&quot;</span>, <span class="st">&quot;t, f&quot;</span>, <span class="st">&quot;t, f&quot;</span>,</span>
+<span id="cb1-95"><a href="intro.html#cb1-95" tabindex="-1"></a>    <span class="st">&quot;t, f&quot;</span>, <span class="st">&quot;t, f&quot;</span>, <span class="st">&quot;t, f&quot;</span>, <span class="st">&quot;t, f&quot;</span>,</span>
+<span id="cb1-96"><a href="intro.html#cb1-96" tabindex="-1"></a>    <span class="st">&quot;t, f&quot;</span>, <span class="st">&quot;t, f&quot;</span>, <span class="st">&quot;t, f&quot;</span>, <span class="st">&quot;t, f&quot;</span>,</span>
+<span id="cb1-97"><a href="intro.html#cb1-97" tabindex="-1"></a>    <span class="st">&quot;t, f&quot;</span>, <span class="st">&quot;t, f&quot;</span>, <span class="st">&quot;t, f&quot;</span>, <span class="st">&quot;t, f&quot;</span>,</span>
+<span id="cb1-98"><a href="intro.html#cb1-98" tabindex="-1"></a>    <span class="st">&quot;t, f&quot;</span>, <span class="st">&quot;t, f&quot;</span>, <span class="st">&quot;t, f&quot;</span>, <span class="st">&quot;t, f&quot;</span>,</span>
+<span id="cb1-99"><a href="intro.html#cb1-99" tabindex="-1"></a>    <span class="st">&quot;n, b, g&quot;</span>, <span class="st">&quot;t, f&quot;</span></span>
+<span id="cb1-100"><a href="intro.html#cb1-100" tabindex="-1"></a>  ),</span>
+<span id="cb1-101"><a href="intro.html#cb1-101" tabindex="-1"></a>  <span class="at">Significado_Niveles =</span> <span class="fu">c</span>(</span>
+<span id="cb1-102"><a href="intro.html#cb1-102" tabindex="-1"></a>    <span class="st">&quot;t=bloqueado, f=no bloqueado&quot;</span>,</span>
+<span id="cb1-103"><a href="intro.html#cb1-103" tabindex="-1"></a>    <span class="st">&quot;t=sin salida, f=con salida&quot;</span>,</span>
+<span id="cb1-104"><a href="intro.html#cb1-104" tabindex="-1"></a>    <span class="st">&quot;t=en fila 8, f=no&quot;</span>,</span>
+<span id="cb1-105"><a href="intro.html#cb1-105" tabindex="-1"></a>    <span class="st">&quot;t=en columna a, f=no&quot;</span>,</span>
+<span id="cb1-106"><a href="intro.html#cb1-106" tabindex="-1"></a>    <span class="st">&quot;t=separado, f=junto&quot;</span>,</span>
+<span id="cb1-107"><a href="intro.html#cb1-107" tabindex="-1"></a>    <span class="st">&quot;t=puede capturar, f=no&quot;</span>,</span>
+<span id="cb1-108"><a href="intro.html#cb1-108" tabindex="-1"></a>    <span class="st">&quot;t=puede capturar, f=no&quot;</span>,</span>
+<span id="cb1-109"><a href="intro.html#cb1-109" tabindex="-1"></a>    <span class="st">&quot;t=puede capturar, f=no&quot;</span>,</span>
+<span id="cb1-110"><a href="intro.html#cb1-110" tabindex="-1"></a>    <span class="st">&quot;t=en b, f=no&quot;</span>,</span>
+<span id="cb1-111"><a href="intro.html#cb1-111" tabindex="-1"></a>    <span class="st">&quot;t=en coronación, f=no&quot;</span>,</span>
+<span id="cb1-112"><a href="intro.html#cb1-112" tabindex="-1"></a>    <span class="st">&quot;n=ninguno, b=negras, g=blancas&quot;</span>,</span>
+<span id="cb1-113"><a href="intro.html#cb1-113" tabindex="-1"></a>    <span class="st">&quot;t=en diagonal, f=no&quot;</span>,</span>
+<span id="cb1-114"><a href="intro.html#cb1-114" tabindex="-1"></a>    <span class="st">&quot;t=peón doble, f=no&quot;</span>,</span>
+<span id="cb1-115"><a href="intro.html#cb1-115" tabindex="-1"></a>    <span class="st">&quot;t=doble jaque, f=no&quot;</span>,</span>
+<span id="cb1-116"><a href="intro.html#cb1-116" tabindex="-1"></a>    <span class="st">&quot;n=ninguno, b=negras, g=blancas&quot;</span>,</span>
+<span id="cb1-117"><a href="intro.html#cb1-117" tabindex="-1"></a>    <span class="st">&quot;t=múltiple, f=no&quot;</span>,</span>
+<span id="cb1-118"><a href="intro.html#cb1-118" tabindex="-1"></a>    <span class="st">&quot;t=en coronación, f=no&quot;</span>,</span>
+<span id="cb1-119"><a href="intro.html#cb1-119" tabindex="-1"></a>    <span class="st">&quot;t=puede ir a a8, f=no&quot;</span>,</span>
+<span id="cb1-120"><a href="intro.html#cb1-120" tabindex="-1"></a>    <span class="st">&quot;t=cerca, f=lejos&quot;</span>,</span>
+<span id="cb1-121"><a href="intro.html#cb1-121" tabindex="-1"></a>    <span class="st">&quot;t=relación, f=no&quot;</span>,</span>
+<span id="cb1-122"><a href="intro.html#cb1-122" tabindex="-1"></a>    <span class="st">&quot;t=en centro, f=no&quot;</span>,</span>
+<span id="cb1-123"><a href="intro.html#cb1-123" tabindex="-1"></a>    <span class="st">&quot;t=puede capturar, f=no&quot;</span>,</span>
+<span id="cb1-124"><a href="intro.html#cb1-124" tabindex="-1"></a>    <span class="st">&quot;t=en coronación, f=no&quot;</span>,</span>
+<span id="cb1-125"><a href="intro.html#cb1-125" tabindex="-1"></a>    <span class="st">&quot;t=simple, f=compleja&quot;</span>,</span>
+<span id="cb1-126"><a href="intro.html#cb1-126" tabindex="-1"></a>    <span class="st">&quot;t=estructura, f=no&quot;</span>,</span>
+<span id="cb1-127"><a href="intro.html#cb1-127" tabindex="-1"></a>    <span class="st">&quot;t=clavada, f=no&quot;</span>,</span>
+<span id="cb1-128"><a href="intro.html#cb1-128" tabindex="-1"></a>    <span class="st">&quot;t=clavada, f=no&quot;</span>,</span>
+<span id="cb1-129"><a href="intro.html#cb1-129" tabindex="-1"></a>    <span class="st">&quot;t=control, f=no&quot;</span>,</span>
+<span id="cb1-130"><a href="intro.html#cb1-130" tabindex="-1"></a>    <span class="st">&quot;t=riesgo, f=no&quot;</span>,</span>
+<span id="cb1-131"><a href="intro.html#cb1-131" tabindex="-1"></a>    <span class="st">&quot;t=tres jaques, f=no&quot;</span>,</span>
+<span id="cb1-132"><a href="intro.html#cb1-132" tabindex="-1"></a>    <span class="st">&quot;t=en c7, f=no&quot;</span>,</span>
+<span id="cb1-133"><a href="intro.html#cb1-133" tabindex="-1"></a>    <span class="st">&quot;t=en a8, f=no&quot;</span>,</span>
+<span id="cb1-134"><a href="intro.html#cb1-134" tabindex="-1"></a>    <span class="st">&quot;t=jaque, f=no&quot;</span>,</span>
+<span id="cb1-135"><a href="intro.html#cb1-135" tabindex="-1"></a>    <span class="st">&quot;t=superposición, f=no&quot;</span>,</span>
+<span id="cb1-136"><a href="intro.html#cb1-136" tabindex="-1"></a>    <span class="st">&quot;n=ninguna, b=negras, g=blancas&quot;</span>,</span>
+<span id="cb1-137"><a href="intro.html#cb1-137" tabindex="-1"></a>    <span class="st">&quot;t=ruta, f=no&quot;</span></span>
+<span id="cb1-138"><a href="intro.html#cb1-138" tabindex="-1"></a>  )</span>
+<span id="cb1-139"><a href="intro.html#cb1-139" tabindex="-1"></a>)</span>
+<span id="cb1-140"><a href="intro.html#cb1-140" tabindex="-1"></a></span>
+<span id="cb1-141"><a href="intro.html#cb1-141" tabindex="-1"></a><span class="co"># Ver la tabla</span></span>
+<span id="cb1-142"><a href="intro.html#cb1-142" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(tabla_variables)</span></code></pre></div>
+<table style="width:100%;">
+<colgroup>
+<col width="6%" />
+<col width="22%" />
+<col width="34%" />
+<col width="6%" />
+<col width="5%" />
+<col width="22%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Variable</th>
+<th align="left">Nombre_Real</th>
+<th align="left">Significado</th>
+<th align="left">Tipo</th>
+<th align="left">Niveles</th>
+<th align="left">Significado_Niveles</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">bkblk</td>
+<td align="left">Black King Blocked</td>
+<td align="left">El rey negro está bloqueado por su peón en a7</td>
+<td align="left">Binaria</td>
+<td align="left">t, f</td>
+<td align="left">t=bloqueado, f=no bloqueado</td>
+</tr>
+<tr class="even">
+<td align="left">bknwy</td>
+<td align="left">Black King No Way</td>
+<td align="left">El rey negro no tiene casillas de escape</td>
+<td align="left">Binaria</td>
+<td align="left">t, f</td>
+<td align="left">t=sin salida, f=con salida</td>
+</tr>
+<tr class="odd">
+<td align="left">bkon8</td>
+<td align="left">Black King on 8th</td>
+<td align="left">El rey negro está en la fila 8 (la última)</td>
+<td align="left">Binaria</td>
+<td align="left">t, f</td>
+<td align="left">t=en fila 8, f=no</td>
+</tr>
+<tr class="even">
+<td align="left">bkona</td>
+<td align="left">Black King on a</td>
+<td align="left">El rey negro está en la columna ‘a’</td>
+<td align="left">Binaria</td>
+<td align="left">t, f</td>
+<td align="left">t=en columna a, f=no</td>
+</tr>
+<tr class="odd">
+<td align="left">bkspr</td>
+<td align="left">Black King Spread</td>
+<td align="left">El rey negro está separado de su peón</td>
+<td align="left">Binaria</td>
+<td align="left">t, f</td>
+<td align="left">t=separado, f=junto</td>
+</tr>
+<tr class="even">
+<td align="left">bkxbq</td>
+<td align="left">Black King captures Bishop</td>
+<td align="left">El rey negro puede capturar al alfil blanco</td>
+<td align="left">Binaria</td>
+<td align="left">t, f</td>
+<td align="left">t=puede capturar, f=no</td>
+</tr>
+<tr class="odd">
+<td align="left">bkxcr</td>
+<td align="left">Black King captures Rook</td>
+<td align="left">El rey negro puede capturar la torre blanca</td>
+<td align="left">Binaria</td>
+<td align="left">t, f</td>
+<td align="left">t=puede capturar, f=no</td>
+</tr>
+<tr class="even">
+<td align="left">bkxwp</td>
+<td align="left">Black King captures White Pawn</td>
+<td align="left">El rey negro puede capturar el peón blanco</td>
+<td align="left">Binaria</td>
+<td align="left">t, f</td>
+<td align="left">t=puede capturar, f=no</td>
+</tr>
+<tr class="odd">
+<td align="left">blxwp</td>
+<td align="left">White Pawn on b</td>
+<td align="left">El peón blanco está en la columna ‘b’</td>
+<td align="left">Binaria</td>
+<td align="left">t, f</td>
+<td align="left">t=en b, f=no</td>
+</tr>
+<tr class="even">
+<td align="left">bxqsq</td>
+<td align="left">Bishop Queen Square</td>
+<td align="left">El alfil está en la casilla de coronación</td>
+<td align="left">Binaria</td>
+<td align="left">t, f</td>
+<td align="left">t=en coronación, f=no</td>
+</tr>
+<tr class="odd">
+<td align="left">cntxt</td>
+<td align="left">Context</td>
+<td align="left">Contexto general de la posición</td>
+<td align="left">Ternaria</td>
+<td align="left">n, b, g</td>
+<td align="left">n=ninguno, b=negras, g=blancas</td>
+</tr>
+<tr class="even">
+<td align="left">dsopp</td>
+<td align="left">Diagonal Opposite</td>
+<td align="left">El rey blanco está en diagonal opuesta al peón</td>
+<td align="left">Binaria</td>
+<td align="left">t, f</td>
+<td align="left">t=en diagonal, f=no</td>
+</tr>
+<tr class="odd">
+<td align="left">dwipd</td>
+<td align="left">Double Pawn</td>
+<td align="left">Hay un peón doble (muy raro)</td>
+<td align="left">Binaria</td>
+<td align="left">t, f</td>
+<td align="left">t=peón doble, f=no</td>
+</tr>
+<tr class="even">
+<td align="left">hdchk</td>
+<td align="left">Have Double Check</td>
+<td align="left">Hay doble jaque disponible</td>
+<td align="left">Binaria</td>
+<td align="left">t, f</td>
+<td align="left">t=doble jaque, f=no</td>
+</tr>
+<tr class="odd">
+<td align="left">katri</td>
+<td align="left">King Attack Three</td>
+<td align="left">Ataque del rey con 3 piezas</td>
+<td align="left">Ternaria</td>
+<td align="left">n, b, g</td>
+<td align="left">n=ninguno, b=negras, g=blancas</td>
+</tr>
+<tr class="even">
+<td align="left">mulch</td>
+<td align="left">Multiple Checks</td>
+<td align="left">Múltiples jaques disponibles</td>
+<td align="left">Binaria</td>
+<td align="left">t, f</td>
+<td align="left">t=múltiple, f=no</td>
+</tr>
+<tr class="odd">
+<td align="left">qxmsq</td>
+<td align="left">Queen Square</td>
+<td align="left">La torre está en la casilla de coronación</td>
+<td align="left">Binaria</td>
+<td align="left">t, f</td>
+<td align="left">t=en coronación, f=no</td>
+</tr>
+<tr class="even">
+<td align="left">r2ar8</td>
+<td align="left">Rook to a8</td>
+<td align="left">La torre puede ir a a8</td>
+<td align="left">Binaria</td>
+<td align="left">t, f</td>
+<td align="left">t=puede ir a a8, f=no</td>
+</tr>
+<tr class="odd">
+<td align="left">reskd</td>
+<td align="left">Rook King Distance</td>
+<td align="left">Distancia del rey a la torre</td>
+<td align="left">Binaria</td>
+<td align="left">t, f</td>
+<td align="left">t=cerca, f=lejos</td>
+</tr>
+<tr class="even">
+<td align="left">reskr</td>
+<td align="left">Rook King</td>
+<td align="left">Relación rey-torre</td>
+<td align="left">Binaria</td>
+<td align="left">t, f</td>
+<td align="left">t=relación, f=no</td>
+</tr>
+<tr class="odd">
+<td align="left">rimmx</td>
+<td align="left">Rook in Middle</td>
+<td align="left">La torre está en el centro</td>
+<td align="left">Binaria</td>
+<td align="left">t, f</td>
+<td align="left">t=en centro, f=no</td>
+</tr>
+<tr class="even">
+<td align="left">rkxwp</td>
+<td align="left">Rook captures Pawn</td>
+<td align="left">La torre captura el peón</td>
+<td align="left">Binaria</td>
+<td align="left">t, f</td>
+<td align="left">t=puede capturar, f=no</td>
+</tr>
+<tr class="odd">
+<td align="left">rxmsq</td>
+<td align="left">Rook Queen Square</td>
+<td align="left">La torre está en la casilla de coronación</td>
+<td align="left">Binaria</td>
+<td align="left">t, f</td>
+<td align="left">t=en coronación, f=no</td>
+</tr>
+<tr class="even">
+<td align="left">simpl</td>
+<td align="left">Simple Position</td>
+<td align="left">Posición simple (pocas piezas)</td>
+<td align="left">Binaria</td>
+<td align="left">t, f</td>
+<td align="left">t=simple, f=compleja</td>
+</tr>
+<tr class="odd">
+<td align="left">skach</td>
+<td align="left">Skach</td>
+<td align="left">Estructura de ataque</td>
+<td align="left">Binaria</td>
+<td align="left">t, f</td>
+<td align="left">t=estructura, f=no</td>
+</tr>
+<tr class="even">
+<td align="left">skewr</td>
+<td align="left">Skewer</td>
+<td align="left">Posibilidad de clavada (skewer)</td>
+<td align="left">Binaria</td>
+<td align="left">t, f</td>
+<td align="left">t=clavada, f=no</td>
+</tr>
+<tr class="odd">
+<td align="left">skrxp</td>
+<td align="left">Skewer Pawn</td>
+<td align="left">Clavada al peón</td>
+<td align="left">Binaria</td>
+<td align="left">t, f</td>
+<td align="left">t=clavada, f=no</td>
+</tr>
+<tr class="even">
+<td align="left">spcop</td>
+<td align="left">Space Control</td>
+<td align="left">Control de espacio</td>
+<td align="left">Binaria</td>
+<td align="left">t, f</td>
+<td align="left">t=control, f=no</td>
+</tr>
+<tr class="odd">
+<td align="left">stlmt</td>
+<td align="left">Stalemate</td>
+<td align="left">Riesgo de ahogado (stalemate)</td>
+<td align="left">Binaria</td>
+<td align="left">t, f</td>
+<td align="left">t=riesgo, f=no</td>
+</tr>
+<tr class="even">
+<td align="left">thrsk</td>
+<td align="left">Three Checks</td>
+<td align="left">Tres jaques disponibles</td>
+<td align="left">Binaria</td>
+<td align="left">t, f</td>
+<td align="left">t=tres jaques, f=no</td>
+</tr>
+<tr class="odd">
+<td align="left">wkcti</td>
+<td align="left">White King on c7</td>
+<td align="left">El rey blanco está en c7</td>
+<td align="left">Binaria</td>
+<td align="left">t, f</td>
+<td align="left">t=en c7, f=no</td>
+</tr>
+<tr class="even">
+<td align="left">wkna8</td>
+<td align="left">White King on a8</td>
+<td align="left">El rey blanco está en a8</td>
+<td align="left">Binaria</td>
+<td align="left">t, f</td>
+<td align="left">t=en a8, f=no</td>
+</tr>
+<tr class="odd">
+<td align="left">wknck</td>
+<td align="left">White King Check</td>
+<td align="left">El rey blanco está en jaque</td>
+<td align="left">Binaria</td>
+<td align="left">t, f</td>
+<td align="left">t=jaque, f=no</td>
+</tr>
+<tr class="even">
+<td align="left">wkovl</td>
+<td align="left">White King Overlap</td>
+<td align="left">Superposición de reyes</td>
+<td align="left">Binaria</td>
+<td align="left">t, f</td>
+<td align="left">t=superposición, f=no</td>
+</tr>
+<tr class="odd">
+<td align="left">wkpos</td>
+<td align="left">White King Position</td>
+<td align="left">Posición del rey blanco</td>
+<td align="left">Ternaria</td>
+<td align="left">n, b, g</td>
+<td align="left">n=ninguna, b=negras, g=blancas</td>
+</tr>
+<tr class="even">
+<td align="left">wtoeg</td>
+<td align="left">White to Egress</td>
+<td align="left">El rey blanco tiene ruta de escape</td>
+<td align="left">Binaria</td>
+<td align="left">t, f</td>
+<td align="left">t=ruta, f=no</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="librería--.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": "https://github.com/rstudio/bookdown-demo/edit/master/01-intro.Rmd",
+    "text": "Edit"
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["bookdown-demo.pdf", "bookdown-demo.epub"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 3 Librerías | King+Rook vs King+Pawn on a7 (KRKPA7)</title>
+  <meta name="description" content="Chapter 3 Librerías | King+Rook vs King+Pawn on a7 (KRKPA7)" />
+  <meta name="generator" content="bookdown 0.47 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 3 Librerías | King+Rook vs King+Pawn on a7 (KRKPA7)" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 3 Librerías | King+Rook vs King+Pawn on a7 (KRKPA7)" />
+  
+  
+  
+
+<meta name="author" content="Valamy Donado y Abraham Navarro" />
+
+
+<meta name="date" content="2026-08-23" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="análisis-exploratorio-de-datos-eda.html"/>
+<link rel="next" href="librerías-1.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">KRKPA7</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introducción</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#contexto"><i class="fa fa-check"></i><b>1.1</b> Contexto</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#el-dataset"><i class="fa fa-check"></i><b>1.2</b> El dataset</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#objetivo-del-an%C3%A1lisis"><i class="fa fa-check"></i><b>1.3</b> Objetivo del análisis</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html"><i class="fa fa-check"></i><b>2</b> Análisis exploratorio de datos (EDA)</a></li>
+<li class="chapter" data-level="3" data-path="librerías.html"><a href="librerías.html"><i class="fa fa-check"></i><b>3</b> Librerías</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="librerías.html"><a href="librerías.html#an%C3%A1lisis-de-la-variable-target-class"><i class="fa fa-check"></i><b>3.1</b> Análisis de la variable target “class”</a></li>
+<li class="chapter" data-level="3.2" data-path="librerías.html"><a href="librerías.html#an%C3%A1lisis-de-las-variables-independientes"><i class="fa fa-check"></i><b>3.2</b> Análisis de las variables independientes</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="librerías-1.html"><a href="librerías-1.html"><i class="fa fa-check"></i><b>4</b> Librerías</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="librerías-1.html"><a href="librerías-1.html#an%C3%A1lisis-de-la-variable-target-class-1"><i class="fa fa-check"></i><b>4.1</b> Análisis de la variable target “class”</a></li>
+<li class="chapter" data-level="4.2" data-path="librerías-1.html"><a href="librerías-1.html#an%C3%A1lisis-de-las-variables-independientes-1"><i class="fa fa-check"></i><b>4.2</b> Análisis de las variables independientes</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="methods.html"><a href="methods.html"><i class="fa fa-check"></i><b>5</b> Methods</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="methods.html"><a href="methods.html#math-example"><i class="fa fa-check"></i><b>5.1</b> math example</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="applications.html"><a href="applications.html"><i class="fa fa-check"></i><b>6</b> Applications</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="applications.html"><a href="applications.html#example-one"><i class="fa fa-check"></i><b>6.1</b> Example one</a></li>
+<li class="chapter" data-level="6.2" data-path="applications.html"><a href="applications.html#example-two"><i class="fa fa-check"></i><b>6.2</b> Example two</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="final-words.html"><a href="final-words.html"><i class="fa fa-check"></i><b>7</b> Final Words</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">King+Rook vs King+Pawn on a7 (KRKPA7)</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="librerías" class="section level1 hasAnchor" number="3">
+<h1><span class="header-section-number">Chapter 3</span> Librerías<a href="librerías.html#librer%C3%ADas" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="librerías.html#cb1-1" tabindex="-1"></a><span class="co">#install.packages(&quot;tidyverse&quot;)</span></span>
+<span id="cb1-2"><a href="librerías.html#cb1-2" tabindex="-1"></a><span class="co">#install.packages(&quot;GGally&quot;)</span></span>
+<span id="cb1-3"><a href="librerías.html#cb1-3" tabindex="-1"></a><span class="co">#install.packages(&quot;gridExtra&quot;)</span></span>
+<span id="cb1-4"><a href="librerías.html#cb1-4" tabindex="-1"></a><span class="co">#install.packages(&quot;patchwork&quot;)</span></span>
+<span id="cb1-5"><a href="librerías.html#cb1-5" tabindex="-1"></a><span class="co">#install.packages(&quot;viridis&quot;)</span></span>
+<span id="cb1-6"><a href="librerías.html#cb1-6" tabindex="-1"></a><span class="co">#install.packages(&quot;tidytext&quot;)</span></span>
+<span id="cb1-7"><a href="librerías.html#cb1-7" tabindex="-1"></a><span class="co">#install.packages(&quot;Amelia&quot;)</span></span>
+<span id="cb1-8"><a href="librerías.html#cb1-8" tabindex="-1"></a><span class="co">#install.packages(&quot;vcd&quot;)</span></span>
+<span id="cb1-9"><a href="librerías.html#cb1-9" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
+<pre><code>## Warning: package &#39;tidyverse&#39; was built under R version 4.5.3</code></pre>
+<pre><code>## Warning: package &#39;ggplot2&#39; was built under R version 4.5.3</code></pre>
+<pre><code>## Warning: package &#39;tibble&#39; was built under R version 4.5.3</code></pre>
+<pre><code>## Warning: package &#39;tidyr&#39; was built under R version 4.5.3</code></pre>
+<pre><code>## Warning: package &#39;readr&#39; was built under R version 4.5.3</code></pre>
+<pre><code>## Warning: package &#39;purrr&#39; was built under R version 4.5.3</code></pre>
+<pre><code>## Warning: package &#39;dplyr&#39; was built under R version 4.5.3</code></pre>
+<pre><code>## Warning: package &#39;stringr&#39; was built under R version 4.5.3</code></pre>
+<pre><code>## Warning: package &#39;forcats&#39; was built under R version 4.5.3</code></pre>
+<pre><code>## Warning: package &#39;lubridate&#39; was built under R version 4.5.3</code></pre>
+<pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+## ✔ dplyr     1.2.1     ✔ readr     2.2.0
+## ✔ forcats   1.0.1     ✔ stringr   1.6.0
+## ✔ ggplot2   4.0.3     ✔ tibble    3.3.1
+## ✔ lubridate 1.9.5     ✔ tidyr     1.3.2
+## ✔ purrr     1.2.2     
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="librerías.html#cb13-1" tabindex="-1"></a><span class="fu">library</span>(GGally)</span></code></pre></div>
+<pre><code>## Warning: package &#39;GGally&#39; was built under R version 4.5.3</code></pre>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="librerías.html#cb15-1" tabindex="-1"></a><span class="fu">library</span>(gridExtra)</span></code></pre></div>
+<pre><code>## Warning: package &#39;gridExtra&#39; was built under R version 4.5.3</code></pre>
+<pre><code>## 
+## Adjuntando el paquete: &#39;gridExtra&#39;
+## 
+## The following object is masked from &#39;package:dplyr&#39;:
+## 
+##     combine</code></pre>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="librerías.html#cb18-1" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span></code></pre></div>
+<pre><code>## Warning: package &#39;patchwork&#39; was built under R version 4.5.3</code></pre>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="librerías.html#cb20-1" tabindex="-1"></a><span class="fu">library</span>(viridis)</span></code></pre></div>
+<pre><code>## Warning: package &#39;viridis&#39; was built under R version 4.5.3</code></pre>
+<pre><code>## Cargando paquete requerido: viridisLite</code></pre>
+<pre><code>## Warning: package &#39;viridisLite&#39; was built under R version 4.5.3</code></pre>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="librerías.html#cb24-1" tabindex="-1"></a><span class="fu">library</span>(tidytext)</span></code></pre></div>
+<pre><code>## Warning: package &#39;tidytext&#39; was built under R version 4.5.3</code></pre>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="librerías.html#cb26-1" tabindex="-1"></a><span class="fu">library</span>(Amelia)</span></code></pre></div>
+<pre><code>## Cargando paquete requerido: Rcpp</code></pre>
+<pre><code>## Warning: package &#39;Rcpp&#39; was built under R version 4.5.3</code></pre>
+<pre><code>## ## 
+## ## Amelia II: Multiple Imputation
+## ## (Version 1.8.3, built: 2024-11-07)
+## ## Copyright (C) 2005-2026 James Honaker, Gary King and Matthew Blackwell
+## ## Refer to http://gking.harvard.edu/amelia/ for more information
+## ##</code></pre>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="librerías.html#cb30-1" tabindex="-1"></a><span class="fu">library</span>(reshape2)</span></code></pre></div>
+<pre><code>## Warning: package &#39;reshape2&#39; was built under R version 4.5.3</code></pre>
+<pre><code>## 
+## Adjuntando el paquete: &#39;reshape2&#39;
+## 
+## The following object is masked from &#39;package:tidyr&#39;:
+## 
+##     smiths</code></pre>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="librerías.html#cb33-1" tabindex="-1"></a><span class="fu">library</span>(vcd)</span></code></pre></div>
+<pre><code>## Warning: package &#39;vcd&#39; was built under R version 4.5.3</code></pre>
+<pre><code>## Cargando paquete requerido: grid</code></pre>
+<p>Se hace la carga de los datos:</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="librerías.html#cb36-1" tabindex="-1"></a>datos <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">&quot;kr-vs-kp.data&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;,&quot;</span>, <span class="at">header =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<p>Asignamos nombres de columnas según el archivo .names:</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="librerías.html#cb37-1" tabindex="-1"></a>nombres <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;bkblk&quot;</span>,<span class="st">&quot;bknwy&quot;</span>,<span class="st">&quot;bkon8&quot;</span>,<span class="st">&quot;bkona&quot;</span>,<span class="st">&quot;bkspr&quot;</span>,<span class="st">&quot;bkxbq&quot;</span>,<span class="st">&quot;bkxcr&quot;</span>,<span class="st">&quot;bkxwp&quot;</span>,</span>
+<span id="cb37-2"><a href="librerías.html#cb37-2" tabindex="-1"></a>             <span class="st">&quot;blxwp&quot;</span>,<span class="st">&quot;bxqsq&quot;</span>,<span class="st">&quot;cntxt&quot;</span>,<span class="st">&quot;dsopp&quot;</span>,<span class="st">&quot;dwipd&quot;</span>,<span class="st">&quot;hdchk&quot;</span>,<span class="st">&quot;katri&quot;</span>,<span class="st">&quot;mulch&quot;</span>,</span>
+<span id="cb37-3"><a href="librerías.html#cb37-3" tabindex="-1"></a>             <span class="st">&quot;qxmsq&quot;</span>,<span class="st">&quot;r2ar8&quot;</span>,<span class="st">&quot;reskd&quot;</span>,<span class="st">&quot;reskr&quot;</span>,<span class="st">&quot;rimmx&quot;</span>,<span class="st">&quot;rkxwp&quot;</span>,<span class="st">&quot;rxmsq&quot;</span>,<span class="st">&quot;simpl&quot;</span>,</span>
+<span id="cb37-4"><a href="librerías.html#cb37-4" tabindex="-1"></a>             <span class="st">&quot;skach&quot;</span>,<span class="st">&quot;skewr&quot;</span>,<span class="st">&quot;skrxp&quot;</span>,<span class="st">&quot;spcop&quot;</span>,<span class="st">&quot;stlmt&quot;</span>,<span class="st">&quot;thrsk&quot;</span>,<span class="st">&quot;wkcti&quot;</span>,<span class="st">&quot;wkna8&quot;</span>,</span>
+<span id="cb37-5"><a href="librerías.html#cb37-5" tabindex="-1"></a>             <span class="st">&quot;wknck&quot;</span>,<span class="st">&quot;wkovl&quot;</span>,<span class="st">&quot;wkpos&quot;</span>,<span class="st">&quot;wtoeg&quot;</span>,<span class="st">&quot;class&quot;</span>)</span>
+<span id="cb37-6"><a href="librerías.html#cb37-6" tabindex="-1"></a></span>
+<span id="cb37-7"><a href="librerías.html#cb37-7" tabindex="-1"></a><span class="fu">colnames</span>(datos) <span class="ot">&lt;-</span> nombres</span>
+<span id="cb37-8"><a href="librerías.html#cb37-8" tabindex="-1"></a><span class="fu">colnames</span>(datos)</span></code></pre></div>
+<pre><code>##  [1] &quot;bkblk&quot; &quot;bknwy&quot; &quot;bkon8&quot; &quot;bkona&quot; &quot;bkspr&quot; &quot;bkxbq&quot; &quot;bkxcr&quot; &quot;bkxwp&quot; &quot;blxwp&quot;
+## [10] &quot;bxqsq&quot; &quot;cntxt&quot; &quot;dsopp&quot; &quot;dwipd&quot; &quot;hdchk&quot; &quot;katri&quot; &quot;mulch&quot; &quot;qxmsq&quot; &quot;r2ar8&quot;
+## [19] &quot;reskd&quot; &quot;reskr&quot; &quot;rimmx&quot; &quot;rkxwp&quot; &quot;rxmsq&quot; &quot;simpl&quot; &quot;skach&quot; &quot;skewr&quot; &quot;skrxp&quot;
+## [28] &quot;spcop&quot; &quot;stlmt&quot; &quot;thrsk&quot; &quot;wkcti&quot; &quot;wkna8&quot; &quot;wknck&quot; &quot;wkovl&quot; &quot;wkpos&quot; &quot;wtoeg&quot;
+## [37] &quot;class&quot;</code></pre>
+<p>Realizamos una inspección inicial de los datos:</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="librerías.html#cb39-1" tabindex="-1"></a><span class="fu">dim</span>(datos)  </span></code></pre></div>
+<pre><code>## [1] 3196   37</code></pre>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="librerías.html#cb41-1" tabindex="-1"></a><span class="fu">str</span>(datos)</span></code></pre></div>
+<pre><code>## &#39;data.frame&#39;:    3196 obs. of  37 variables:
+##  $ bkblk: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ bknwy: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ bkon8: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ bkona: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ bkspr: chr  &quot;f&quot; &quot;t&quot; &quot;t&quot; &quot;f&quot; ...
+##  $ bkxbq: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ bkxcr: chr  &quot;f&quot; &quot;f&quot; &quot;t&quot; &quot;f&quot; ...
+##  $ bkxwp: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ blxwp: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;t&quot; ...
+##  $ bxqsq: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ cntxt: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ dsopp: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ dwipd: chr  &quot;l&quot; &quot;l&quot; &quot;l&quot; &quot;l&quot; ...
+##  $ hdchk: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ katri: chr  &quot;n&quot; &quot;n&quot; &quot;n&quot; &quot;n&quot; ...
+##  $ mulch: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ qxmsq: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ r2ar8: chr  &quot;t&quot; &quot;t&quot; &quot;t&quot; &quot;t&quot; ...
+##  $ reskd: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ reskr: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ rimmx: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ rkxwp: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;t&quot; ...
+##  $ rxmsq: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ simpl: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ skach: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ skewr: chr  &quot;t&quot; &quot;t&quot; &quot;t&quot; &quot;t&quot; ...
+##  $ skrxp: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ spcop: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ stlmt: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ thrsk: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ wkcti: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ wkna8: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ wknck: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ wkovl: chr  &quot;t&quot; &quot;t&quot; &quot;t&quot; &quot;t&quot; ...
+##  $ wkpos: chr  &quot;t&quot; &quot;t&quot; &quot;t&quot; &quot;t&quot; ...
+##  $ wtoeg: chr  &quot;n&quot; &quot;n&quot; &quot;n&quot; &quot;n&quot; ...
+##  $ class: chr  &quot;won&quot; &quot;won&quot; &quot;won&quot; &quot;won&quot; ...</code></pre>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="librerías.html#cb43-1" tabindex="-1"></a><span class="fu">summary</span>(datos)</span></code></pre></div>
+<pre><code>##     bkblk              bknwy              bkon8              bkona          
+##  Length:3196        Length:3196        Length:3196        Length:3196       
+##  Class :character   Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+##     bkspr              bkxbq              bkxcr              bkxwp          
+##  Length:3196        Length:3196        Length:3196        Length:3196       
+##  Class :character   Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+##     blxwp              bxqsq              cntxt              dsopp          
+##  Length:3196        Length:3196        Length:3196        Length:3196       
+##  Class :character   Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+##     dwipd              hdchk              katri              mulch          
+##  Length:3196        Length:3196        Length:3196        Length:3196       
+##  Class :character   Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+##     qxmsq              r2ar8              reskd              reskr          
+##  Length:3196        Length:3196        Length:3196        Length:3196       
+##  Class :character   Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+##     rimmx              rkxwp              rxmsq              simpl          
+##  Length:3196        Length:3196        Length:3196        Length:3196       
+##  Class :character   Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+##     skach              skewr              skrxp              spcop          
+##  Length:3196        Length:3196        Length:3196        Length:3196       
+##  Class :character   Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+##     stlmt              thrsk              wkcti              wkna8          
+##  Length:3196        Length:3196        Length:3196        Length:3196       
+##  Class :character   Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+##     wknck              wkovl              wkpos              wtoeg          
+##  Length:3196        Length:3196        Length:3196        Length:3196       
+##  Class :character   Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+##     class          
+##  Length:3196       
+##  Class :character  
+##  Mode  :character</code></pre>
+<p>Verificamos que no hayan datos faltantes o casillas vacías (NAs):</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="librerías.html#cb45-1" tabindex="-1"></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(datos))</span></code></pre></div>
+<pre><code>## bkblk bknwy bkon8 bkona bkspr bkxbq bkxcr bkxwp blxwp bxqsq cntxt dsopp dwipd 
+##     0     0     0     0     0     0     0     0     0     0     0     0     0 
+## hdchk katri mulch qxmsq r2ar8 reskd reskr rimmx rkxwp rxmsq simpl skach skewr 
+##     0     0     0     0     0     0     0     0     0     0     0     0     0 
+## skrxp spcop stlmt thrsk wkcti wkna8 wknck wkovl wkpos wtoeg class 
+##     0     0     0     0     0     0     0     0     0     0     0</code></pre>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="librerías.html#cb47-1" tabindex="-1"></a><span class="fu">missmap</span>(datos)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-7-1.png" alt="" width="672" /></p>
+<p>No tenemos NAs</p>
+<p>Las variables de este dataset son categóricas (representan características del tablero con valores como <code>t</code>, <code>f</code>, <code>n</code>, <code>b</code>, <code>g</code>). Para que R las interprete correctamente como categorías y no como texto plano, las convertimos a factores.</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="librerías.html#cb48-1" tabindex="-1"></a>datos <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
+<span id="cb48-2"><a href="librerías.html#cb48-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="sc">-</span>class, as.factor),</span>
+<span id="cb48-3"><a href="librerías.html#cb48-3" tabindex="-1"></a>         <span class="at">class =</span> <span class="fu">as.factor</span>(class))</span>
+<span id="cb48-4"><a href="librerías.html#cb48-4" tabindex="-1"></a><span class="fu">str</span>(datos)</span></code></pre></div>
+<pre><code>## &#39;data.frame&#39;:    3196 obs. of  37 variables:
+##  $ bkblk: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ bknwy: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ bkon8: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ bkona: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ bkspr: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 2 2 1 1 1 1 2 1 1 ...
+##  $ bkxbq: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ bkxcr: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 2 1 1 1 1 1 1 2 ...
+##  $ bkxwp: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ blxwp: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 2 1 1 2 1 1 1 ...
+##  $ bxqsq: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ cntxt: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 2 2 2 ...
+##  $ dsopp: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ dwipd: Factor w/ 2 levels &quot;g&quot;,&quot;l&quot;: 2 2 2 2 2 2 2 2 2 2 ...
+##  $ hdchk: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ katri: Factor w/ 3 levels &quot;b&quot;,&quot;n&quot;,&quot;w&quot;: 2 2 2 2 2 2 2 2 2 2 ...
+##  $ mulch: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ qxmsq: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ r2ar8: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 2 2 2 2 2 2 2 2 2 2 ...
+##  $ reskd: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ reskr: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ rimmx: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ rkxwp: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 2 1 1 2 1 1 1 ...
+##  $ rxmsq: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ simpl: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 2 2 2 1 1 1 ...
+##  $ skach: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ skewr: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 2 2 2 2 2 2 2 2 2 2 ...
+##  $ skrxp: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ spcop: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ stlmt: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ thrsk: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 2 1 1 1 1 ...
+##  $ wkcti: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 2 1 ...
+##  $ wkna8: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ wknck: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ wkovl: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 2 2 2 2 2 2 2 2 2 2 ...
+##  $ wkpos: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 2 2 2 2 2 2 2 2 2 2 ...
+##  $ wtoeg: Factor w/ 2 levels &quot;n&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ class: Factor w/ 2 levels &quot;nowin&quot;,&quot;won&quot;: 2 2 2 2 2 2 2 2 2 2 ...</code></pre>
+<div id="análisis-de-la-variable-target-class" class="section level2 hasAnchor" number="3.1">
+<h2><span class="header-section-number">3.1</span> Análisis de la variable target “class”<a href="librerías.html#an%C3%A1lisis-de-la-variable-target-class" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Tabla de frecuencias:</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="librerías.html#cb50-1" tabindex="-1"></a>tabla_target <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
+<span id="cb50-2"><a href="librerías.html#cb50-2" tabindex="-1"></a>  <span class="fu">count</span>(class, <span class="at">name =</span> <span class="st">&quot;Frecuencia&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb50-3"><a href="librerías.html#cb50-3" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb50-4"><a href="librerías.html#cb50-4" tabindex="-1"></a>    <span class="at">Porcentaje =</span> <span class="fu">round</span>((Frecuencia <span class="sc">/</span> <span class="fu">sum</span>(Frecuencia)) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">1</span>),</span>
+<span id="cb50-5"><a href="librerías.html#cb50-5" tabindex="-1"></a>    <span class="at">Etiqueta =</span> <span class="fu">paste0</span>(Frecuencia, <span class="st">&quot; (&quot;</span>, Porcentaje, <span class="st">&quot;%)&quot;</span>)</span>
+<span id="cb50-6"><a href="librerías.html#cb50-6" tabindex="-1"></a>  )</span>
+<span id="cb50-7"><a href="librerías.html#cb50-7" tabindex="-1"></a><span class="fu">print</span>(tabla_target)</span></code></pre></div>
+<pre><code>##   class Frecuencia Porcentaje     Etiqueta
+## 1 nowin       1527       47.8 1527 (47.8%)
+## 2   won       1669       52.2 1669 (52.2%)</code></pre>
+<p>Gráfico de barras:</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="librerías.html#cb52-1" tabindex="-1"></a>g_target <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(tabla_target, <span class="fu">aes</span>(<span class="at">x =</span> class, <span class="at">y =</span> Frecuencia, <span class="at">fill =</span> class)) <span class="sc">+</span></span>
+<span id="cb52-2"><a href="librerías.html#cb52-2" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">width =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb52-3"><a href="librerías.html#cb52-3" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> Etiqueta), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.5</span>, <span class="at">size =</span> <span class="fl">3.5</span>) <span class="sc">+</span></span>
+<span id="cb52-4"><a href="librerías.html#cb52-4" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;steelblue&quot;</span>, <span class="st">&quot;#56B4E9&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb52-5"><a href="librerías.html#cb52-5" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">expand =</span> <span class="fu">expansion</span>(<span class="at">mult =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.15</span>))) <span class="sc">+</span></span>
+<span id="cb52-6"><a href="librerías.html#cb52-6" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb52-7"><a href="librerías.html#cb52-7" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;Clase&quot;</span>,</span>
+<span id="cb52-8"><a href="librerías.html#cb52-8" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Frecuencia (Porcentaje)&quot;</span></span>
+<span id="cb52-9"><a href="librerías.html#cb52-9" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb52-10"><a href="librerías.html#cb52-10" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">12</span>) <span class="sc">+</span></span>
+<span id="cb52-11"><a href="librerías.html#cb52-11" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb52-12"><a href="librerías.html#cb52-12" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>,</span>
+<span id="cb52-13"><a href="librerías.html#cb52-13" tabindex="-1"></a>    <span class="at">panel.grid.major.x =</span> <span class="fu">element_blank</span>()</span>
+<span id="cb52-14"><a href="librerías.html#cb52-14" tabindex="-1"></a>  )</span></code></pre></div>
+<p>Gráfico de torta para visualizar mejor la proporción:</p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="librerías.html#cb53-1" tabindex="-1"></a>g_torta <span class="ot">&lt;-</span> tabla_target <span class="sc">%&gt;%</span></span>
+<span id="cb53-2"><a href="librerías.html#cb53-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> Frecuencia, <span class="at">fill =</span> class)) <span class="sc">+</span></span>
+<span id="cb53-3"><a href="librerías.html#cb53-3" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">width =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb53-4"><a href="librerías.html#cb53-4" tabindex="-1"></a>  <span class="fu">coord_polar</span>(<span class="at">theta =</span> <span class="st">&quot;y&quot;</span>) <span class="sc">+</span></span>
+<span id="cb53-5"><a href="librerías.html#cb53-5" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> Etiqueta), <span class="at">position =</span> <span class="fu">position_stack</span>(<span class="at">vjust =</span> <span class="fl">0.5</span>), <span class="at">size =</span> <span class="fl">3.5</span>) <span class="sc">+</span></span>
+<span id="cb53-6"><a href="librerías.html#cb53-6" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;steelblue&quot;</span>, <span class="st">&quot;#56B4E9&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb53-7"><a href="librerías.html#cb53-7" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb53-8"><a href="librerías.html#cb53-8" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb53-9"><a href="librerías.html#cb53-9" tabindex="-1"></a>    <span class="at">x =</span> <span class="cn">NULL</span>,</span>
+<span id="cb53-10"><a href="librerías.html#cb53-10" tabindex="-1"></a>    <span class="at">y =</span> <span class="cn">NULL</span></span>
+<span id="cb53-11"><a href="librerías.html#cb53-11" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb53-12"><a href="librerías.html#cb53-12" tabindex="-1"></a>  <span class="fu">theme_void</span>(<span class="at">base_size =</span> <span class="dv">12</span>) <span class="sc">+</span></span>
+<span id="cb53-13"><a href="librerías.html#cb53-13" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</span></code></pre></div>
+<p>Observemos los dos gráficos:</p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="librerías.html#cb54-1" tabindex="-1"></a>(g_target <span class="sc">|</span> g_torta) <span class="sc">+</span></span>
+<span id="cb54-2"><a href="librerías.html#cb54-2" tabindex="-1"></a>  <span class="fu">plot_annotation</span>(</span>
+<span id="cb54-3"><a href="librerías.html#cb54-3" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Distribución de la variable target&quot;</span>,</span>
+<span id="cb54-4"><a href="librerías.html#cb54-4" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="fu">paste</span>(<span class="fu">nrow</span>(datos), <span class="st">&quot;observaciones&quot;</span>)</span>
+<span id="cb54-5"><a href="librerías.html#cb54-5" tabindex="-1"></a>  )</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-12-1.png" alt="" width="672" /></p>
+<p>La diferencia entre ambas clases es de solo 4.4 puntos porcentuales, lo que indica que el dataset no tiene un sesgo significativo hacia ninguna clase, esto significa que en aproximadamente la mitad de las posiciones del final Rey+Torre vs Rey+Peón en a7, las blancas tienen una estrategia ganadora, mientras que en la otra mitad el peón negro logra coronar o las negras consiguen tablas.</p>
+</div>
+<div id="análisis-de-las-variables-independientes" class="section level2 hasAnchor" number="3.2">
+<h2><span class="header-section-number">3.2</span> Análisis de las variables independientes<a href="librerías.html#an%C3%A1lisis-de-las-variables-independientes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Número de niveles por variable:</p>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="librerías.html#cb55-1" tabindex="-1"></a>frecuencias <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
+<span id="cb55-2"><a href="librerías.html#cb55-2" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>class) <span class="sc">%&gt;%</span></span>
+<span id="cb55-3"><a href="librerías.html#cb55-3" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">everything</span>(),</span>
+<span id="cb55-4"><a href="librerías.html#cb55-4" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">&quot;variable&quot;</span>,</span>
+<span id="cb55-5"><a href="librerías.html#cb55-5" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">&quot;valor&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb55-6"><a href="librerías.html#cb55-6" tabindex="-1"></a>  <span class="fu">count</span>(variable, valor) <span class="sc">%&gt;%</span></span>
+<span id="cb55-7"><a href="librerías.html#cb55-7" tabindex="-1"></a>  <span class="fu">group_by</span>(variable) <span class="sc">%&gt;%</span></span>
+<span id="cb55-8"><a href="librerías.html#cb55-8" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb55-9"><a href="librerías.html#cb55-9" tabindex="-1"></a>    <span class="at">porcentaje =</span> <span class="dv">100</span> <span class="sc">*</span> n <span class="sc">/</span> <span class="fu">sum</span>(n)</span>
+<span id="cb55-10"><a href="librerías.html#cb55-10" tabindex="-1"></a>  )</span></code></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="librerías.html#cb56-1" tabindex="-1"></a>tabla_resumen <span class="ot">&lt;-</span> frecuencias <span class="sc">%&gt;%</span></span>
+<span id="cb56-2"><a href="librerías.html#cb56-2" tabindex="-1"></a>  <span class="fu">group_by</span>(variable) <span class="sc">%&gt;%</span></span>
+<span id="cb56-3"><a href="librerías.html#cb56-3" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb56-4"><a href="librerías.html#cb56-4" tabindex="-1"></a>    <span class="at">niveles =</span> <span class="fu">paste</span>(valor, <span class="at">collapse =</span> <span class="st">&quot; / &quot;</span>),</span>
+<span id="cb56-5"><a href="librerías.html#cb56-5" tabindex="-1"></a>    <span class="at">n_niveles =</span> <span class="fu">n</span>(),</span>
+<span id="cb56-6"><a href="librerías.html#cb56-6" tabindex="-1"></a>    <span class="at">max_porc =</span> <span class="fu">max</span>(porcentaje),</span>
+<span id="cb56-7"><a href="librerías.html#cb56-7" tabindex="-1"></a>    <span class="at">min_porc =</span> <span class="fu">min</span>(porcentaje),</span>
+<span id="cb56-8"><a href="librerías.html#cb56-8" tabindex="-1"></a>    <span class="at">balance =</span> <span class="fu">round</span>(<span class="dv">100</span> <span class="sc">-</span> (max_porc <span class="sc">-</span> min_porc), <span class="dv">1</span>),</span>
+<span id="cb56-9"><a href="librerías.html#cb56-9" tabindex="-1"></a>    <span class="at">utilidad =</span> <span class="fu">case_when</span>(</span>
+<span id="cb56-10"><a href="librerías.html#cb56-10" tabindex="-1"></a>      balance <span class="sc">&gt;</span> <span class="dv">70</span> <span class="sc">~</span> <span class="st">&quot;✅ Buena&quot;</span>,</span>
+<span id="cb56-11"><a href="librerías.html#cb56-11" tabindex="-1"></a>      balance <span class="sc">&gt;</span> <span class="dv">30</span> <span class="sc">~</span> <span class="st">&quot;⚠️ Media&quot;</span>,</span>
+<span id="cb56-12"><a href="librerías.html#cb56-12" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">&quot;❌ Mala&quot;</span></span>
+<span id="cb56-13"><a href="librerías.html#cb56-13" tabindex="-1"></a>    )</span>
+<span id="cb56-14"><a href="librerías.html#cb56-14" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb56-15"><a href="librerías.html#cb56-15" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(balance))</span>
+<span id="cb56-16"><a href="librerías.html#cb56-16" tabindex="-1"></a>tabla_resumen</span></code></pre></div>
+<pre><code>## # A tibble: 36 × 7
+##    variable niveles n_niveles max_porc min_porc balance utilidad
+##    &lt;chr&gt;    &lt;chr&gt;       &lt;int&gt;    &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;   
+##  1 bkxbq    f / t           2     53.9     46.1    92.2 ✅ Buena
+##  2 cntxt    f / t           2     56.9     43.1    86.3 ✅ Buena
+##  3 simpl    f / t           2     61.8     38.2    76.4 ✅ Buena
+##  4 blxwp    f / t           2     62.0     38.0    76.1 ✅ Buena
+##  5 wknck    f / t           2     62.1     37.9    75.8 ✅ Buena
+##  6 wkovl    f / t           2     62.8     37.2    74.4 ✅ Buena
+##  7 bkxcr    f / t           2     63.4     36.6    73.2 ✅ Buena
+##  8 bkspr    f / t           2     66.6     33.4    66.8 ⚠️ Media 
+##  9 r2ar8    f / t           2     68.7     31.3    62.6 ⚠️ Media 
+## 10 dwipd    g / l           2     69.0     31.0    62   ⚠️ Media 
+## # ℹ 26 more rows</code></pre>
+<p>Variables con 2 niveles:</p>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="librerías.html#cb58-1" tabindex="-1"></a>binarias <span class="ot">&lt;-</span> frecuencias <span class="sc">%&gt;%</span></span>
+<span id="cb58-2"><a href="librerías.html#cb58-2" tabindex="-1"></a>  <span class="fu">group_by</span>(variable) <span class="sc">%&gt;%</span></span>
+<span id="cb58-3"><a href="librerías.html#cb58-3" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">n</span>() <span class="sc">==</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb58-4"><a href="librerías.html#cb58-4" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb58-5"><a href="librerías.html#cb58-5" tabindex="-1"></a>  <span class="fu">select</span>(variable, valor, porcentaje) <span class="sc">%&gt;%</span></span>
+<span id="cb58-6"><a href="librerías.html#cb58-6" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> valor, <span class="at">values_from =</span> porcentaje, <span class="at">values_fill =</span> <span class="dv">0</span>)</span>
+<span id="cb58-7"><a href="librerías.html#cb58-7" tabindex="-1"></a></span>
+<span id="cb58-8"><a href="librerías.html#cb58-8" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;Variables binarias (2 niveles):&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;Variables binarias (2 niveles):&quot;</code></pre>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="librerías.html#cb60-1" tabindex="-1"></a><span class="fu">print</span>(binarias)</span></code></pre></div>
+<pre><code>## # A tibble: 35 × 6
+##    variable     f     t     g     l     n
+##    &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1 bkblk     88.8 11.2      0     0     0
+##  2 bknwy     93.0  7.04     0     0     0
+##  3 bkon8     96.2  3.75     0     0     0
+##  4 bkona     89.9 10.1      0     0     0
+##  5 bkspr     66.6 33.4      0     0     0
+##  6 bkxbq     53.9 46.1      0     0     0
+##  7 bkxcr     63.4 36.6      0     0     0
+##  8 bkxwp     78.2 21.8      0     0     0
+##  9 blxwp     62.0 38.0      0     0     0
+## 10 bxqsq     69.6 30.4      0     0     0
+## # ℹ 25 more rows</code></pre>
+<p>Variables con 3 niveles:</p>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="librerías.html#cb62-1" tabindex="-1"></a>ternarias <span class="ot">&lt;-</span> frecuencias <span class="sc">%&gt;%</span></span>
+<span id="cb62-2"><a href="librerías.html#cb62-2" tabindex="-1"></a>  <span class="fu">group_by</span>(variable) <span class="sc">%&gt;%</span></span>
+<span id="cb62-3"><a href="librerías.html#cb62-3" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">n</span>() <span class="sc">==</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb62-4"><a href="librerías.html#cb62-4" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb62-5"><a href="librerías.html#cb62-5" tabindex="-1"></a>  <span class="fu">select</span>(variable, valor, porcentaje) <span class="sc">%&gt;%</span></span>
+<span id="cb62-6"><a href="librerías.html#cb62-6" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> valor, <span class="at">values_from =</span> porcentaje, <span class="at">values_fill =</span> <span class="dv">0</span>)</span>
+<span id="cb62-7"><a href="librerías.html#cb62-7" tabindex="-1"></a></span>
+<span id="cb62-8"><a href="librerías.html#cb62-8" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;Variables ternarias (3 niveles):&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;Variables ternarias (3 niveles):&quot;</code></pre>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="librerías.html#cb64-1" tabindex="-1"></a><span class="fu">print</span>(ternarias)</span></code></pre></div>
+<pre><code>## # A tibble: 1 × 4
+##   variable     b     n     w
+##   &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 katri     7.01  79.0  14.0</code></pre>
+<p>Variables que se pueden descartar:</p>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="librerías.html#cb66-1" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;variables a descartar:&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;variables a descartar:&quot;</code></pre>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="librerías.html#cb68-1" tabindex="-1"></a>tabla_resumen <span class="sc">%&gt;%</span> <span class="fu">filter</span>(balance <span class="sc">&lt;</span> <span class="dv">20</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 13 × 7
+##    variable niveles n_niveles max_porc min_porc balance utilidad
+##    &lt;chr&gt;    &lt;chr&gt;       &lt;int&gt;    &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;   
+##  1 bknwy    f / t           2     93.0   7.04      14.1 ❌ Mala 
+##  2 rxmsq    f / t           2     94.3   5.73      11.5 ❌ Mala 
+##  3 skrxp    f / t           2     94.5   5.48      11   ❌ Mala 
+##  4 wkna8    f / t           2     94.5   5.48      11   ❌ Mala 
+##  5 mulch    f / t           2     95.1   4.88       9.8 ❌ Mala 
+##  6 thrsk    f / t           2     95.7   4.26       8.5 ❌ Mala 
+##  7 bkon8    f / t           2     96.2   3.75       7.5 ❌ Mala 
+##  8 qxmsq    f / t           2     97.0   3.04       6.1 ❌ Mala 
+##  9 stlmt    f / t           2     98.5   1.47       2.9 ❌ Mala 
+## 10 reskd    f / t           2     99.2   0.814      1.6 ❌ Mala 
+## 11 hdchk    f / t           2     99.5   0.469      0.9 ❌ Mala 
+## 12 skach    f / t           2     99.7   0.344      0.7 ❌ Mala 
+## 13 spcop    f / t           2    100.0   0.0313     0.1 ❌ Mala</code></pre>
+<p>Variables útiles:</p>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="librerías.html#cb70-1" tabindex="-1"></a>variables_utiles <span class="ot">&lt;-</span> tabla_resumen <span class="sc">%&gt;%</span></span>
+<span id="cb70-2"><a href="librerías.html#cb70-2" tabindex="-1"></a>  <span class="fu">filter</span>(balance <span class="sc">&gt;=</span> <span class="dv">20</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb70-3"><a href="librerías.html#cb70-3" tabindex="-1"></a>  <span class="fu">pull</span>(variable)</span>
+<span id="cb70-4"><a href="librerías.html#cb70-4" tabindex="-1"></a></span>
+<span id="cb70-5"><a href="librerías.html#cb70-5" tabindex="-1"></a>df <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
+<span id="cb70-6"><a href="librerías.html#cb70-6" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">all_of</span>(<span class="fu">c</span>(variables_utiles, <span class="st">&quot;class&quot;</span>)))</span>
+<span id="cb70-7"><a href="librerías.html#cb70-7" tabindex="-1"></a></span>
+<span id="cb70-8"><a href="librerías.html#cb70-8" tabindex="-1"></a><span class="fu">write.csv</span>(df, <span class="st">&quot;df.csv&quot;</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<p>Veamos la estructura de nuestro dataset reducido:</p>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="librerías.html#cb71-1" tabindex="-1"></a><span class="fu">str</span>(df)</span></code></pre></div>
+<pre><code>## &#39;data.frame&#39;:    3196 obs. of  24 variables:
+##  $ bkxbq: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ cntxt: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 2 2 2 ...
+##  $ simpl: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 2 2 2 1 1 1 ...
+##  $ blxwp: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 2 1 1 2 1 1 1 ...
+##  $ wknck: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ wkovl: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 2 2 2 2 2 2 2 2 2 2 ...
+##  $ bkxcr: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 2 1 1 1 1 1 1 2 ...
+##  $ bkspr: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 2 2 1 1 1 1 2 1 1 ...
+##  $ r2ar8: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 2 2 2 2 2 2 2 2 2 2 ...
+##  $ dwipd: Factor w/ 2 levels &quot;g&quot;,&quot;l&quot;: 2 2 2 2 2 2 2 2 2 2 ...
+##  $ skewr: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 2 2 2 2 2 2 2 2 2 2 ...
+##  $ bxqsq: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ wkpos: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 2 2 2 2 2 2 2 2 2 2 ...
+##  $ wtoeg: Factor w/ 2 levels &quot;n&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ bkxwp: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ rkxwp: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 2 1 1 2 1 1 1 ...
+##  $ rimmx: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ wkcti: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 2 1 ...
+##  $ reskr: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ katri: Factor w/ 3 levels &quot;b&quot;,&quot;n&quot;,&quot;w&quot;: 2 2 2 2 2 2 2 2 2 2 ...
+##  $ bkblk: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ dsopp: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ bkona: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ class: Factor w/ 2 levels &quot;nowin&quot;,&quot;won&quot;: 2 2 2 2 2 2 2 2 2 2 ...</code></pre>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="librerías.html#cb73-1" tabindex="-1"></a><span class="fu">dim</span>(df)</span></code></pre></div>
+<pre><code>## [1] 3196   24</code></pre>
+<p>kdcjndhdihovñhvjf</p>
+<p>Vamos a usar vcd dkeñfkrnoñrnjgrlkg,</p>
+<p>Calculemos la matriz de asociación (Cramer´s V):</p>
+<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="librerías.html#cb75-1" tabindex="-1"></a>cramer_v <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y) {</span>
+<span id="cb75-2"><a href="librerías.html#cb75-2" tabindex="-1"></a>  tbl <span class="ot">&lt;-</span> <span class="fu">table</span>(x, y)</span>
+<span id="cb75-3"><a href="librerías.html#cb75-3" tabindex="-1"></a>  chi2 <span class="ot">&lt;-</span> <span class="fu">chisq.test</span>(tbl, <span class="at">simulate.p.value =</span> <span class="cn">TRUE</span>)<span class="sc">$</span>statistic</span>
+<span id="cb75-4"><a href="librerías.html#cb75-4" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">sum</span>(tbl)</span>
+<span id="cb75-5"><a href="librerías.html#cb75-5" tabindex="-1"></a>  r <span class="ot">&lt;-</span> <span class="fu">min</span>(<span class="fu">nrow</span>(tbl), <span class="fu">ncol</span>(tbl))</span>
+<span id="cb75-6"><a href="librerías.html#cb75-6" tabindex="-1"></a>  <span class="fu">sqrt</span>(<span class="fu">as.numeric</span>(chi2) <span class="sc">/</span> (n <span class="sc">*</span> (r <span class="sc">-</span> <span class="dv">1</span>)))</span>
+<span id="cb75-7"><a href="librerías.html#cb75-7" tabindex="-1"></a>}</span>
+<span id="cb75-8"><a href="librerías.html#cb75-8" tabindex="-1"></a></span>
+<span id="cb75-9"><a href="librerías.html#cb75-9" tabindex="-1"></a><span class="co"># Calcular para variables útiles</span></span>
+<span id="cb75-10"><a href="librerías.html#cb75-10" tabindex="-1"></a>vars_utiles <span class="ot">&lt;-</span> <span class="fu">colnames</span>(df)</span>
+<span id="cb75-11"><a href="librerías.html#cb75-11" tabindex="-1"></a>cramer_matrix <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, </span>
+<span id="cb75-12"><a href="librerías.html#cb75-12" tabindex="-1"></a>                        <span class="at">nrow =</span> <span class="fu">length</span>(vars_utiles), </span>
+<span id="cb75-13"><a href="librerías.html#cb75-13" tabindex="-1"></a>                        <span class="at">ncol =</span> <span class="fu">length</span>(vars_utiles))</span>
+<span id="cb75-14"><a href="librerías.html#cb75-14" tabindex="-1"></a><span class="fu">rownames</span>(cramer_matrix) <span class="ot">&lt;-</span> vars_utiles</span>
+<span id="cb75-15"><a href="librerías.html#cb75-15" tabindex="-1"></a><span class="fu">colnames</span>(cramer_matrix) <span class="ot">&lt;-</span> vars_utiles</span>
+<span id="cb75-16"><a href="librerías.html#cb75-16" tabindex="-1"></a></span>
+<span id="cb75-17"><a href="librerías.html#cb75-17" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(vars_utiles)) {</span>
+<span id="cb75-18"><a href="librerías.html#cb75-18" tabindex="-1"></a>  <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(vars_utiles)) {</span>
+<span id="cb75-19"><a href="librerías.html#cb75-19" tabindex="-1"></a>    cramer_matrix[i, j] <span class="ot">&lt;-</span> <span class="fu">cramer_v</span>(df[[vars_utiles[i]]], </span>
+<span id="cb75-20"><a href="librerías.html#cb75-20" tabindex="-1"></a>                                     df[[vars_utiles[j]]])</span>
+<span id="cb75-21"><a href="librerías.html#cb75-21" tabindex="-1"></a>  }</span>
+<span id="cb75-22"><a href="librerías.html#cb75-22" tabindex="-1"></a>}</span>
+<span id="cb75-23"><a href="librerías.html#cb75-23" tabindex="-1"></a></span>
+<span id="cb75-24"><a href="librerías.html#cb75-24" tabindex="-1"></a><span class="co"># Visualizar como heatmap</span></span>
+<span id="cb75-25"><a href="librerías.html#cb75-25" tabindex="-1"></a>cramer_matrix <span class="sc">%&gt;%</span></span>
+<span id="cb75-26"><a href="librerías.html#cb75-26" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb75-27"><a href="librerías.html#cb75-27" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="st">&quot;var1&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb75-28"><a href="librerías.html#cb75-28" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>var1, <span class="at">names_to =</span> <span class="st">&quot;var2&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;cramer&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb75-29"><a href="librerías.html#cb75-29" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> var1, <span class="at">y =</span> var2, <span class="at">fill =</span> cramer)) <span class="sc">+</span></span>
+<span id="cb75-30"><a href="librerías.html#cb75-30" tabindex="-1"></a>  <span class="fu">geom_tile</span>() <span class="sc">+</span></span>
+<span id="cb75-31"><a href="librerías.html#cb75-31" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">round</span>(cramer, <span class="dv">2</span>)), <span class="at">size =</span> <span class="fl">2.3</span>) <span class="sc">+</span></span>
+<span id="cb75-32"><a href="librerías.html#cb75-32" tabindex="-1"></a>  <span class="fu">scale_fill_gradient</span>(<span class="at">low =</span> <span class="st">&quot;white&quot;</span>, <span class="at">high =</span> <span class="st">&quot;steelblue&quot;</span>, <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb75-33"><a href="librerías.html#cb75-33" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Asociación entre variables útiles (Cramér&#39;s V)&quot;</span>,</span>
+<span id="cb75-34"><a href="librerías.html#cb75-34" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> <span class="st">&quot;&quot;</span>, <span class="at">fill =</span> <span class="st">&quot;Cramer&#39;s V&quot;</span>) <span class="sc">+</span></span>
+<span id="cb75-35"><a href="librerías.html#cb75-35" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">9</span>) <span class="sc">+</span></span>
+<span id="cb75-36"><a href="librerías.html#cb75-36" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">7</span>),</span>
+<span id="cb75-37"><a href="librerías.html#cb75-37" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>))</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-20-1.png" alt="" width="672" /></p>
+<p>fw.lvhjfvliufhlvhvf</p>
+<p>Extraemos asociación con class:</p>
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="librerías.html#cb76-1" tabindex="-1"></a>asociacion_class <span class="ot">&lt;-</span> cramer_matrix[<span class="st">&quot;class&quot;</span>, ] <span class="sc">%&gt;%</span></span>
+<span id="cb76-2"><a href="librerías.html#cb76-2" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb76-3"><a href="librerías.html#cb76-3" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="st">&quot;variable&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb76-4"><a href="librerías.html#cb76-4" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">cramer =</span> <span class="st">&quot;.&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb76-5"><a href="librerías.html#cb76-5" tabindex="-1"></a>  <span class="fu">filter</span>(variable <span class="sc">!=</span> <span class="st">&quot;class&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb76-6"><a href="librerías.html#cb76-6" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(cramer))</span>
+<span id="cb76-7"><a href="librerías.html#cb76-7" tabindex="-1"></a></span>
+<span id="cb76-8"><a href="librerías.html#cb76-8" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;Top 3 variables más asociadas con el resultado:&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;Top 3 variables más asociadas con el resultado:&quot;</code></pre>
+<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="librerías.html#cb78-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">head</span>(asociacion_class, <span class="dv">3</span>))</span></code></pre></div>
+<pre><code>##   variable    cramer
+## 1    rimmx 0.4522840
+## 2    bxqsq 0.3801012
+## 3    wknck 0.3652651</code></pre>
+<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="librerías.html#cb80-1" tabindex="-1"></a>asociacion_class <span class="sc">%&gt;%</span></span>
+<span id="cb80-2"><a href="librerías.html#cb80-2" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">3</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb80-3"><a href="librerías.html#cb80-3" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(variable, cramer), <span class="at">y =</span> cramer, <span class="at">fill =</span> cramer)) <span class="sc">+</span></span>
+<span id="cb80-4"><a href="librerías.html#cb80-4" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">width =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb80-5"><a href="librerías.html#cb80-5" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb80-6"><a href="librerías.html#cb80-6" tabindex="-1"></a>  <span class="fu">scale_fill_gradient</span>(<span class="at">low =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="at">high =</span> <span class="st">&quot;darkblue&quot;</span>) <span class="sc">+</span></span>
+<span id="cb80-7"><a href="librerías.html#cb80-7" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">round</span>(cramer, <span class="dv">3</span>)), <span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.2</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb80-8"><a href="librerías.html#cb80-8" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb80-9"><a href="librerías.html#cb80-9" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Top 3 factores clave para determinar &#39;won&#39; o &#39;nowin&#39;&quot;</span>,</span>
+<span id="cb80-10"><a href="librerías.html#cb80-10" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">&quot;Variables con mayor asociación con el resultado&quot;</span>,</span>
+<span id="cb80-11"><a href="librerías.html#cb80-11" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;Variable&quot;</span>, </span>
+<span id="cb80-12"><a href="librerías.html#cb80-12" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Cramer&#39;s V&quot;</span></span>
+<span id="cb80-13"><a href="librerías.html#cb80-13" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb80-14"><a href="librerías.html#cb80-14" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">13</span>) <span class="sc">+</span></span>
+<span id="cb80-15"><a href="librerías.html#cb80-15" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-21-1.png" alt="" width="672" /></p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="análisis-exploratorio-de-datos-eda.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="librerías-1.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": "https://github.com/rstudio/bookdown-demo/edit/master/01-intro.Rmd",
+    "text": "Edit"
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["bookdown-demo.pdf", "bookdown-demo.epub"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

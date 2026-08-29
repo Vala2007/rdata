@@ -1,0 +1,3802 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 2 Análisis exploratorio de datos (EDA) | King+Rook vs King+Pawn on a7 (KRKPA7)</title>
+  <meta name="description" content="Chapter 2 Análisis exploratorio de datos (EDA) | King+Rook vs King+Pawn on a7 (KRKPA7)" />
+  <meta name="generator" content="bookdown 0.47 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 2 Análisis exploratorio de datos (EDA) | King+Rook vs King+Pawn on a7 (KRKPA7)" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 2 Análisis exploratorio de datos (EDA) | King+Rook vs King+Pawn on a7 (KRKPA7)" />
+  
+  
+  
+
+<meta name="author" content="Valamy Donado y Abraham Navarro" />
+
+
+<meta name="date" content="2026-08-23" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="index.html"/>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">KRKPA7</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introducción</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#contexto"><i class="fa fa-check"></i><b>1.1</b> Contexto</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#el-dataset"><i class="fa fa-check"></i><b>1.2</b> El dataset</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#objetivo-del-an%C3%A1lisis"><i class="fa fa-check"></i><b>1.3</b> Objetivo del análisis</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html"><i class="fa fa-check"></i><b>2</b> Análisis exploratorio de datos (EDA)</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#librer%C3%ADas"><i class="fa fa-check"></i><b>2.1</b> Librerías</a></li>
+<li class="chapter" data-level="2.2" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#an%C3%A1lisis-de-la-variable-target-class"><i class="fa fa-check"></i><b>2.2</b> Análisis de la variable target “class”</a></li>
+<li class="chapter" data-level="2.3" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#an%C3%A1lisis-de-las-variables-independientes"><i class="fa fa-check"></i><b>2.3</b> Análisis de las variables independientes</a></li>
+<li class="chapter" data-level="2.4" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#an%C3%A1lisis-bivariado-class-vs-independientes"><i class="fa fa-check"></i><b>2.4</b> Análisis bivariado class vs independientes</a></li>
+<li class="chapter" data-level="2.5" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#relaciones-entre-variables-predictoras"><i class="fa fa-check"></i><b>2.5</b> Relaciones entre variables predictoras</a></li>
+<li class="chapter" data-level="2.6" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#conclusiones"><i class="fa fa-check"></i><b>2.6</b> Conclusiones</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">King+Rook vs King+Pawn on a7 (KRKPA7)</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="análisis-exploratorio-de-datos-eda" class="section level1 hasAnchor" number="2">
+<h1><span class="header-section-number">Chapter 2</span> Análisis exploratorio de datos (EDA)<a href="análisis-exploratorio-de-datos-eda.html#an%C3%A1lisis-exploratorio-de-datos-eda" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="librerías" class="section level2 hasAnchor" number="2.1">
+<h2><span class="header-section-number">2.1</span> Librerías<a href="análisis-exploratorio-de-datos-eda.html#librer%C3%ADas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="análisis-exploratorio-de-datos-eda.html#cb1-1" tabindex="-1"></a><span class="co">#install.packages(&quot;tidyverse&quot;)</span></span>
+<span id="cb1-2"><a href="análisis-exploratorio-de-datos-eda.html#cb1-2" tabindex="-1"></a><span class="co">#install.packages(&quot;GGally&quot;)</span></span>
+<span id="cb1-3"><a href="análisis-exploratorio-de-datos-eda.html#cb1-3" tabindex="-1"></a><span class="co">#install.packages(&quot;gridExtra&quot;)</span></span>
+<span id="cb1-4"><a href="análisis-exploratorio-de-datos-eda.html#cb1-4" tabindex="-1"></a><span class="co">#install.packages(&quot;patchwork&quot;)</span></span>
+<span id="cb1-5"><a href="análisis-exploratorio-de-datos-eda.html#cb1-5" tabindex="-1"></a><span class="co">#install.packages(&quot;viridis&quot;)</span></span>
+<span id="cb1-6"><a href="análisis-exploratorio-de-datos-eda.html#cb1-6" tabindex="-1"></a><span class="co">#install.packages(&quot;tidytext&quot;)</span></span>
+<span id="cb1-7"><a href="análisis-exploratorio-de-datos-eda.html#cb1-7" tabindex="-1"></a><span class="co">#install.packages(&quot;Amelia&quot;)</span></span>
+<span id="cb1-8"><a href="análisis-exploratorio-de-datos-eda.html#cb1-8" tabindex="-1"></a><span class="co">#install.packages(&quot;vcd&quot;)</span></span>
+<span id="cb1-9"><a href="análisis-exploratorio-de-datos-eda.html#cb1-9" tabindex="-1"></a><span class="co">#install.packages(&quot;knitr&quot;)</span></span>
+<span id="cb1-10"><a href="análisis-exploratorio-de-datos-eda.html#cb1-10" tabindex="-1"></a><span class="co">#install.packages(&quot;kableExtra&quot;)</span></span>
+<span id="cb1-11"><a href="análisis-exploratorio-de-datos-eda.html#cb1-11" tabindex="-1"></a><span class="co">#install.packages(&quot;shiny&quot;)</span></span>
+<span id="cb1-12"><a href="análisis-exploratorio-de-datos-eda.html#cb1-12" tabindex="-1"></a><span class="co">#install.packages(&quot;shinyWidgets&quot;)</span></span>
+<span id="cb1-13"><a href="análisis-exploratorio-de-datos-eda.html#cb1-13" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="análisis-exploratorio-de-datos-eda.html#cb1-14" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-15"><a href="análisis-exploratorio-de-datos-eda.html#cb1-15" tabindex="-1"></a><span class="fu">library</span>(GGally)</span>
+<span id="cb1-16"><a href="análisis-exploratorio-de-datos-eda.html#cb1-16" tabindex="-1"></a><span class="fu">library</span>(gridExtra)</span>
+<span id="cb1-17"><a href="análisis-exploratorio-de-datos-eda.html#cb1-17" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
+<span id="cb1-18"><a href="análisis-exploratorio-de-datos-eda.html#cb1-18" tabindex="-1"></a><span class="fu">library</span>(viridis)</span>
+<span id="cb1-19"><a href="análisis-exploratorio-de-datos-eda.html#cb1-19" tabindex="-1"></a><span class="fu">library</span>(tidytext)</span>
+<span id="cb1-20"><a href="análisis-exploratorio-de-datos-eda.html#cb1-20" tabindex="-1"></a><span class="fu">library</span>(Amelia)</span>
+<span id="cb1-21"><a href="análisis-exploratorio-de-datos-eda.html#cb1-21" tabindex="-1"></a><span class="fu">library</span>(reshape2)</span>
+<span id="cb1-22"><a href="análisis-exploratorio-de-datos-eda.html#cb1-22" tabindex="-1"></a><span class="fu">library</span>(vcd)</span>
+<span id="cb1-23"><a href="análisis-exploratorio-de-datos-eda.html#cb1-23" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb1-24"><a href="análisis-exploratorio-de-datos-eda.html#cb1-24" tabindex="-1"></a><span class="fu">library</span>(shiny)</span>
+<span id="cb1-25"><a href="análisis-exploratorio-de-datos-eda.html#cb1-25" tabindex="-1"></a><span class="fu">library</span>(shinyWidgets)</span></code></pre></div>
+<p>Se hace la carga de los datos:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="análisis-exploratorio-de-datos-eda.html#cb2-1" tabindex="-1"></a>datos <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">&quot;kr-vs-kp.data&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;,&quot;</span>, <span class="at">header =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<p>Asignamos nombres de columnas según el archivo .names:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="análisis-exploratorio-de-datos-eda.html#cb3-1" tabindex="-1"></a>nombres <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;wkblk&quot;</span>, <span class="st">&quot;wknwy&quot;</span>, <span class="st">&quot;wkna8&quot;</span>, <span class="st">&quot;wkona&quot;</span>, <span class="st">&quot;wkspr&quot;</span>, <span class="st">&quot;wkxbq&quot;</span>, <span class="st">&quot;wkxcr&quot;</span>, <span class="st">&quot;wkxbp&quot;</span>,</span>
+<span id="cb3-2"><a href="análisis-exploratorio-de-datos-eda.html#cb3-2" tabindex="-1"></a>    <span class="st">&quot;whxbp&quot;</span>, <span class="st">&quot;wxqsq&quot;</span>, <span class="st">&quot;cntxt&quot;</span>, <span class="st">&quot;dsopp&quot;</span>, <span class="st">&quot;dwipd&quot;</span>, <span class="st">&quot;hdchk&quot;</span>, <span class="st">&quot;katri&quot;</span>, <span class="st">&quot;mulch&quot;</span>,</span>
+<span id="cb3-3"><a href="análisis-exploratorio-de-datos-eda.html#cb3-3" tabindex="-1"></a>    <span class="st">&quot;qxmsq&quot;</span>, <span class="st">&quot;r2ar8&quot;</span>, <span class="st">&quot;reskd&quot;</span>, <span class="st">&quot;reskr&quot;</span>, <span class="st">&quot;rimmx&quot;</span>, <span class="st">&quot;rkxwp&quot;</span>, <span class="st">&quot;rxmsq&quot;</span>, <span class="st">&quot;simpl&quot;</span>,</span>
+<span id="cb3-4"><a href="análisis-exploratorio-de-datos-eda.html#cb3-4" tabindex="-1"></a>    <span class="st">&quot;skach&quot;</span>, <span class="st">&quot;skewr&quot;</span>, <span class="st">&quot;skrxp&quot;</span>, <span class="st">&quot;spcop&quot;</span>, <span class="st">&quot;stlmt&quot;</span>, <span class="st">&quot;thrsk&quot;</span>, <span class="st">&quot;bkcti&quot;</span>, <span class="st">&quot;bkna8&quot;</span>,</span>
+<span id="cb3-5"><a href="análisis-exploratorio-de-datos-eda.html#cb3-5" tabindex="-1"></a>    <span class="st">&quot;bknck&quot;</span>, <span class="st">&quot;bkovl&quot;</span>, <span class="st">&quot;bkpos&quot;</span>, <span class="st">&quot;btoeg&quot;</span>,<span class="st">&quot;class&quot;</span>)</span>
+<span id="cb3-6"><a href="análisis-exploratorio-de-datos-eda.html#cb3-6" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="análisis-exploratorio-de-datos-eda.html#cb3-7" tabindex="-1"></a><span class="fu">colnames</span>(datos) <span class="ot">&lt;-</span> nombres</span>
+<span id="cb3-8"><a href="análisis-exploratorio-de-datos-eda.html#cb3-8" tabindex="-1"></a><span class="fu">colnames</span>(datos)</span></code></pre></div>
+<pre><code>##  [1] &quot;wkblk&quot; &quot;wknwy&quot; &quot;wkna8&quot; &quot;wkona&quot; &quot;wkspr&quot; &quot;wkxbq&quot; &quot;wkxcr&quot; &quot;wkxbp&quot; &quot;whxbp&quot;
+## [10] &quot;wxqsq&quot; &quot;cntxt&quot; &quot;dsopp&quot; &quot;dwipd&quot; &quot;hdchk&quot; &quot;katri&quot; &quot;mulch&quot; &quot;qxmsq&quot; &quot;r2ar8&quot;
+## [19] &quot;reskd&quot; &quot;reskr&quot; &quot;rimmx&quot; &quot;rkxwp&quot; &quot;rxmsq&quot; &quot;simpl&quot; &quot;skach&quot; &quot;skewr&quot; &quot;skrxp&quot;
+## [28] &quot;spcop&quot; &quot;stlmt&quot; &quot;thrsk&quot; &quot;bkcti&quot; &quot;bkna8&quot; &quot;bknck&quot; &quot;bkovl&quot; &quot;bkpos&quot; &quot;btoeg&quot;
+## [37] &quot;class&quot;</code></pre>
+<p>Realizamos una inspección inicial de los datos:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="análisis-exploratorio-de-datos-eda.html#cb5-1" tabindex="-1"></a><span class="fu">dim</span>(datos)  </span></code></pre></div>
+<pre><code>## [1] 3196   37</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="análisis-exploratorio-de-datos-eda.html#cb7-1" tabindex="-1"></a><span class="fu">str</span>(datos)</span></code></pre></div>
+<pre><code>## &#39;data.frame&#39;:    3196 obs. of  37 variables:
+##  $ wkblk: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ wknwy: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ wkna8: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ wkona: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ wkspr: chr  &quot;f&quot; &quot;t&quot; &quot;t&quot; &quot;f&quot; ...
+##  $ wkxbq: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ wkxcr: chr  &quot;f&quot; &quot;f&quot; &quot;t&quot; &quot;f&quot; ...
+##  $ wkxbp: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ whxbp: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;t&quot; ...
+##  $ wxqsq: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ cntxt: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ dsopp: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ dwipd: chr  &quot;l&quot; &quot;l&quot; &quot;l&quot; &quot;l&quot; ...
+##  $ hdchk: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ katri: chr  &quot;n&quot; &quot;n&quot; &quot;n&quot; &quot;n&quot; ...
+##  $ mulch: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ qxmsq: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ r2ar8: chr  &quot;t&quot; &quot;t&quot; &quot;t&quot; &quot;t&quot; ...
+##  $ reskd: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ reskr: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ rimmx: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ rkxwp: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;t&quot; ...
+##  $ rxmsq: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ simpl: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ skach: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ skewr: chr  &quot;t&quot; &quot;t&quot; &quot;t&quot; &quot;t&quot; ...
+##  $ skrxp: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ spcop: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ stlmt: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ thrsk: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ bkcti: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ bkna8: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ bknck: chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ bkovl: chr  &quot;t&quot; &quot;t&quot; &quot;t&quot; &quot;t&quot; ...
+##  $ bkpos: chr  &quot;t&quot; &quot;t&quot; &quot;t&quot; &quot;t&quot; ...
+##  $ btoeg: chr  &quot;n&quot; &quot;n&quot; &quot;n&quot; &quot;n&quot; ...
+##  $ class: chr  &quot;won&quot; &quot;won&quot; &quot;won&quot; &quot;won&quot; ...</code></pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="análisis-exploratorio-de-datos-eda.html#cb9-1" tabindex="-1"></a><span class="fu">summary</span>(datos)</span></code></pre></div>
+<pre><code>##     wkblk              wknwy              wkna8              wkona          
+##  Length:3196        Length:3196        Length:3196        Length:3196       
+##  Class :character   Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+##     wkspr              wkxbq              wkxcr              wkxbp          
+##  Length:3196        Length:3196        Length:3196        Length:3196       
+##  Class :character   Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+##     whxbp              wxqsq              cntxt              dsopp          
+##  Length:3196        Length:3196        Length:3196        Length:3196       
+##  Class :character   Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+##     dwipd              hdchk              katri              mulch          
+##  Length:3196        Length:3196        Length:3196        Length:3196       
+##  Class :character   Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+##     qxmsq              r2ar8              reskd              reskr          
+##  Length:3196        Length:3196        Length:3196        Length:3196       
+##  Class :character   Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+##     rimmx              rkxwp              rxmsq              simpl          
+##  Length:3196        Length:3196        Length:3196        Length:3196       
+##  Class :character   Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+##     skach              skewr              skrxp              spcop          
+##  Length:3196        Length:3196        Length:3196        Length:3196       
+##  Class :character   Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+##     stlmt              thrsk              bkcti              bkna8          
+##  Length:3196        Length:3196        Length:3196        Length:3196       
+##  Class :character   Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+##     bknck              bkovl              bkpos              btoeg          
+##  Length:3196        Length:3196        Length:3196        Length:3196       
+##  Class :character   Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+##     class          
+##  Length:3196       
+##  Class :character  
+##  Mode  :character</code></pre>
+<p>Verificamos que no hayan datos faltantes o casillas vacías (NAs):</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="análisis-exploratorio-de-datos-eda.html#cb11-1" tabindex="-1"></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(datos))</span></code></pre></div>
+<pre><code>## wkblk wknwy wkna8 wkona wkspr wkxbq wkxcr wkxbp whxbp wxqsq cntxt dsopp dwipd 
+##     0     0     0     0     0     0     0     0     0     0     0     0     0 
+## hdchk katri mulch qxmsq r2ar8 reskd reskr rimmx rkxwp rxmsq simpl skach skewr 
+##     0     0     0     0     0     0     0     0     0     0     0     0     0 
+## skrxp spcop stlmt thrsk bkcti bkna8 bknck bkovl bkpos btoeg class 
+##     0     0     0     0     0     0     0     0     0     0     0</code></pre>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="análisis-exploratorio-de-datos-eda.html#cb13-1" tabindex="-1"></a><span class="fu">missmap</span>(datos)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-7-1.png" alt="" width="672" /></p>
+<p>No tenemos NAs</p>
+<p>Las variables de este dataset son categóricas (representan características del tablero con valores como <code>t</code>, <code>f</code>, <code>n</code>, <code>b</code>, <code>g</code>, <code>l</code>, <code>w</code>). Para que R las interprete correctamente como categorías y no como texto plano, las convertimos a factores.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="análisis-exploratorio-de-datos-eda.html#cb14-1" tabindex="-1"></a>datos <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
+<span id="cb14-2"><a href="análisis-exploratorio-de-datos-eda.html#cb14-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="sc">-</span>class, as.factor),</span>
+<span id="cb14-3"><a href="análisis-exploratorio-de-datos-eda.html#cb14-3" tabindex="-1"></a>         <span class="at">class =</span> <span class="fu">as.factor</span>(class))</span>
+<span id="cb14-4"><a href="análisis-exploratorio-de-datos-eda.html#cb14-4" tabindex="-1"></a><span class="fu">str</span>(datos)</span></code></pre></div>
+<pre><code>## &#39;data.frame&#39;:    3196 obs. of  37 variables:
+##  $ wkblk: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ wknwy: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ wkna8: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ wkona: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ wkspr: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 2 2 1 1 1 1 2 1 1 ...
+##  $ wkxbq: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ wkxcr: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 2 1 1 1 1 1 1 2 ...
+##  $ wkxbp: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ whxbp: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 2 1 1 2 1 1 1 ...
+##  $ wxqsq: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ cntxt: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 2 2 2 ...
+##  $ dsopp: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ dwipd: Factor w/ 2 levels &quot;g&quot;,&quot;l&quot;: 2 2 2 2 2 2 2 2 2 2 ...
+##  $ hdchk: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ katri: Factor w/ 3 levels &quot;b&quot;,&quot;n&quot;,&quot;w&quot;: 2 2 2 2 2 2 2 2 2 2 ...
+##  $ mulch: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ qxmsq: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ r2ar8: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 2 2 2 2 2 2 2 2 2 2 ...
+##  $ reskd: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ reskr: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ rimmx: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ rkxwp: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 2 1 1 2 1 1 1 ...
+##  $ rxmsq: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ simpl: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 2 2 2 1 1 1 ...
+##  $ skach: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ skewr: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 2 2 2 2 2 2 2 2 2 2 ...
+##  $ skrxp: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ spcop: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ stlmt: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ thrsk: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 2 1 1 1 1 ...
+##  $ bkcti: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 2 1 ...
+##  $ bkna8: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ bknck: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ bkovl: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 2 2 2 2 2 2 2 2 2 2 ...
+##  $ bkpos: Factor w/ 2 levels &quot;f&quot;,&quot;t&quot;: 2 2 2 2 2 2 2 2 2 2 ...
+##  $ btoeg: Factor w/ 2 levels &quot;n&quot;,&quot;t&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ class: Factor w/ 2 levels &quot;nowin&quot;,&quot;won&quot;: 2 2 2 2 2 2 2 2 2 2 ...</code></pre>
+</div>
+<div id="análisis-de-la-variable-target-class" class="section level2 hasAnchor" number="2.2">
+<h2><span class="header-section-number">2.2</span> Análisis de la variable target “class”<a href="análisis-exploratorio-de-datos-eda.html#an%C3%A1lisis-de-la-variable-target-class" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Tabla de frecuencias:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="análisis-exploratorio-de-datos-eda.html#cb16-1" tabindex="-1"></a>tabla_target <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
+<span id="cb16-2"><a href="análisis-exploratorio-de-datos-eda.html#cb16-2" tabindex="-1"></a>  <span class="fu">count</span>(class, <span class="at">name =</span> <span class="st">&quot;Frecuencia&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb16-3"><a href="análisis-exploratorio-de-datos-eda.html#cb16-3" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb16-4"><a href="análisis-exploratorio-de-datos-eda.html#cb16-4" tabindex="-1"></a>    <span class="at">Porcentaje =</span> <span class="fu">round</span>((Frecuencia <span class="sc">/</span> <span class="fu">sum</span>(Frecuencia)) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">1</span>),</span>
+<span id="cb16-5"><a href="análisis-exploratorio-de-datos-eda.html#cb16-5" tabindex="-1"></a>    <span class="at">Etiqueta =</span> <span class="fu">paste0</span>(Frecuencia, <span class="st">&quot; (&quot;</span>, Porcentaje, <span class="st">&quot;%)&quot;</span>)</span>
+<span id="cb16-6"><a href="análisis-exploratorio-de-datos-eda.html#cb16-6" tabindex="-1"></a>  )</span>
+<span id="cb16-7"><a href="análisis-exploratorio-de-datos-eda.html#cb16-7" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(tabla_target)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">class</th>
+<th align="right">Frecuencia</th>
+<th align="right">Porcentaje</th>
+<th align="left">Etiqueta</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">nowin</td>
+<td align="right">1527</td>
+<td align="right">47.8</td>
+<td align="left">1527 (47.8%)</td>
+</tr>
+<tr class="even">
+<td align="left">won</td>
+<td align="right">1669</td>
+<td align="right">52.2</td>
+<td align="left">1669 (52.2%)</td>
+</tr>
+</tbody>
+</table>
+<p>Gráfico de barras:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="análisis-exploratorio-de-datos-eda.html#cb17-1" tabindex="-1"></a>g_target <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(tabla_target, <span class="fu">aes</span>(<span class="at">x =</span> class, <span class="at">y =</span> Frecuencia, <span class="at">fill =</span> class)) <span class="sc">+</span></span>
+<span id="cb17-2"><a href="análisis-exploratorio-de-datos-eda.html#cb17-2" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">width =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb17-3"><a href="análisis-exploratorio-de-datos-eda.html#cb17-3" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> Etiqueta), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.5</span>, <span class="at">size =</span> <span class="fl">3.5</span>) <span class="sc">+</span></span>
+<span id="cb17-4"><a href="análisis-exploratorio-de-datos-eda.html#cb17-4" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;steelblue&quot;</span>, <span class="st">&quot;#56B4E9&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb17-5"><a href="análisis-exploratorio-de-datos-eda.html#cb17-5" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">expand =</span> <span class="fu">expansion</span>(<span class="at">mult =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.15</span>))) <span class="sc">+</span></span>
+<span id="cb17-6"><a href="análisis-exploratorio-de-datos-eda.html#cb17-6" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb17-7"><a href="análisis-exploratorio-de-datos-eda.html#cb17-7" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;Clase&quot;</span>,</span>
+<span id="cb17-8"><a href="análisis-exploratorio-de-datos-eda.html#cb17-8" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Frecuencia (Porcentaje)&quot;</span></span>
+<span id="cb17-9"><a href="análisis-exploratorio-de-datos-eda.html#cb17-9" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb17-10"><a href="análisis-exploratorio-de-datos-eda.html#cb17-10" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">12</span>) <span class="sc">+</span></span>
+<span id="cb17-11"><a href="análisis-exploratorio-de-datos-eda.html#cb17-11" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb17-12"><a href="análisis-exploratorio-de-datos-eda.html#cb17-12" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>,</span>
+<span id="cb17-13"><a href="análisis-exploratorio-de-datos-eda.html#cb17-13" tabindex="-1"></a>    <span class="at">panel.grid.major.x =</span> <span class="fu">element_blank</span>()</span>
+<span id="cb17-14"><a href="análisis-exploratorio-de-datos-eda.html#cb17-14" tabindex="-1"></a>  )</span></code></pre></div>
+<p>Gráfico de torta para visualizar mejor la proporción:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="análisis-exploratorio-de-datos-eda.html#cb18-1" tabindex="-1"></a>g_torta <span class="ot">&lt;-</span> tabla_target <span class="sc">%&gt;%</span></span>
+<span id="cb18-2"><a href="análisis-exploratorio-de-datos-eda.html#cb18-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> Frecuencia, <span class="at">fill =</span> class)) <span class="sc">+</span></span>
+<span id="cb18-3"><a href="análisis-exploratorio-de-datos-eda.html#cb18-3" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">width =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb18-4"><a href="análisis-exploratorio-de-datos-eda.html#cb18-4" tabindex="-1"></a>  <span class="fu">coord_polar</span>(<span class="at">theta =</span> <span class="st">&quot;y&quot;</span>) <span class="sc">+</span></span>
+<span id="cb18-5"><a href="análisis-exploratorio-de-datos-eda.html#cb18-5" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> Etiqueta), <span class="at">position =</span> <span class="fu">position_stack</span>(<span class="at">vjust =</span> <span class="fl">0.5</span>), <span class="at">size =</span> <span class="fl">3.5</span>) <span class="sc">+</span></span>
+<span id="cb18-6"><a href="análisis-exploratorio-de-datos-eda.html#cb18-6" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;steelblue&quot;</span>, <span class="st">&quot;#56B4E9&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb18-7"><a href="análisis-exploratorio-de-datos-eda.html#cb18-7" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb18-8"><a href="análisis-exploratorio-de-datos-eda.html#cb18-8" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb18-9"><a href="análisis-exploratorio-de-datos-eda.html#cb18-9" tabindex="-1"></a>    <span class="at">x =</span> <span class="cn">NULL</span>,</span>
+<span id="cb18-10"><a href="análisis-exploratorio-de-datos-eda.html#cb18-10" tabindex="-1"></a>    <span class="at">y =</span> <span class="cn">NULL</span></span>
+<span id="cb18-11"><a href="análisis-exploratorio-de-datos-eda.html#cb18-11" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb18-12"><a href="análisis-exploratorio-de-datos-eda.html#cb18-12" tabindex="-1"></a>  <span class="fu">theme_void</span>(<span class="at">base_size =</span> <span class="dv">12</span>) <span class="sc">+</span></span>
+<span id="cb18-13"><a href="análisis-exploratorio-de-datos-eda.html#cb18-13" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</span></code></pre></div>
+<p>Observemos los dos gráficos:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="análisis-exploratorio-de-datos-eda.html#cb19-1" tabindex="-1"></a>(g_target <span class="sc">|</span> g_torta) <span class="sc">+</span></span>
+<span id="cb19-2"><a href="análisis-exploratorio-de-datos-eda.html#cb19-2" tabindex="-1"></a>  <span class="fu">plot_annotation</span>(</span>
+<span id="cb19-3"><a href="análisis-exploratorio-de-datos-eda.html#cb19-3" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Distribución de la variable target&quot;</span>,</span>
+<span id="cb19-4"><a href="análisis-exploratorio-de-datos-eda.html#cb19-4" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="fu">paste</span>(<span class="fu">nrow</span>(datos), <span class="st">&quot;observaciones&quot;</span>)</span>
+<span id="cb19-5"><a href="análisis-exploratorio-de-datos-eda.html#cb19-5" tabindex="-1"></a>  )</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-12-1.png" alt="" width="672" /></p>
+<p>En 1669 partidas, el 52.2%, resultó <code>won</code>, es decir que las blancas ganaron, y en 1527 partidas, el 47.8%, resultó <code>nowin</code>, es decir que el peón negro logró coronar o las negras consiguieron tablas; la diferencia entre ambas clases es de solo 4.4 puntos porcentuales, lo que indica que el dataset no tiene un sesgo significativo hacia ninguna clase.</p>
+</div>
+<div id="análisis-de-las-variables-independientes" class="section level2 hasAnchor" number="2.3">
+<h2><span class="header-section-number">2.3</span> Análisis de las variables independientes<a href="análisis-exploratorio-de-datos-eda.html#an%C3%A1lisis-de-las-variables-independientes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Número de niveles por variable:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="análisis-exploratorio-de-datos-eda.html#cb20-1" tabindex="-1"></a>frecuencias <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
+<span id="cb20-2"><a href="análisis-exploratorio-de-datos-eda.html#cb20-2" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>class) <span class="sc">%&gt;%</span></span>
+<span id="cb20-3"><a href="análisis-exploratorio-de-datos-eda.html#cb20-3" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">everything</span>(),</span>
+<span id="cb20-4"><a href="análisis-exploratorio-de-datos-eda.html#cb20-4" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">&quot;variable&quot;</span>,</span>
+<span id="cb20-5"><a href="análisis-exploratorio-de-datos-eda.html#cb20-5" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">&quot;valor&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb20-6"><a href="análisis-exploratorio-de-datos-eda.html#cb20-6" tabindex="-1"></a>  <span class="fu">count</span>(variable, valor) <span class="sc">%&gt;%</span></span>
+<span id="cb20-7"><a href="análisis-exploratorio-de-datos-eda.html#cb20-7" tabindex="-1"></a>  <span class="fu">group_by</span>(variable) <span class="sc">%&gt;%</span></span>
+<span id="cb20-8"><a href="análisis-exploratorio-de-datos-eda.html#cb20-8" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb20-9"><a href="análisis-exploratorio-de-datos-eda.html#cb20-9" tabindex="-1"></a>    <span class="at">porcentaje =</span> <span class="dv">100</span> <span class="sc">*</span> n <span class="sc">/</span> <span class="fu">sum</span>(n)</span>
+<span id="cb20-10"><a href="análisis-exploratorio-de-datos-eda.html#cb20-10" tabindex="-1"></a>  )</span></code></pre></div>
+<p>Variables con 2 niveles:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="análisis-exploratorio-de-datos-eda.html#cb21-1" tabindex="-1"></a>binarias <span class="ot">&lt;-</span> frecuencias <span class="sc">%&gt;%</span></span>
+<span id="cb21-2"><a href="análisis-exploratorio-de-datos-eda.html#cb21-2" tabindex="-1"></a>  <span class="fu">group_by</span>(variable) <span class="sc">%&gt;%</span></span>
+<span id="cb21-3"><a href="análisis-exploratorio-de-datos-eda.html#cb21-3" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">n</span>() <span class="sc">==</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb21-4"><a href="análisis-exploratorio-de-datos-eda.html#cb21-4" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb21-5"><a href="análisis-exploratorio-de-datos-eda.html#cb21-5" tabindex="-1"></a>  <span class="fu">select</span>(variable, valor, porcentaje) <span class="sc">%&gt;%</span></span>
+<span id="cb21-6"><a href="análisis-exploratorio-de-datos-eda.html#cb21-6" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> valor, <span class="at">values_from =</span> porcentaje, <span class="at">values_fill =</span> <span class="dv">0</span>)</span>
+<span id="cb21-7"><a href="análisis-exploratorio-de-datos-eda.html#cb21-7" tabindex="-1"></a></span>
+<span id="cb21-8"><a href="análisis-exploratorio-de-datos-eda.html#cb21-8" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(binarias)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">variable</th>
+<th align="right">f</th>
+<th align="right">t</th>
+<th align="right">n</th>
+<th align="right">g</th>
+<th align="right">l</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">bkcti</td>
+<td align="right">82.32165</td>
+<td align="right">17.6783479</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="even">
+<td align="left">bkna8</td>
+<td align="right">94.52441</td>
+<td align="right">5.4755945</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="odd">
+<td align="left">bknck</td>
+<td align="right">62.07760</td>
+<td align="right">37.9224030</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="even">
+<td align="left">bkovl</td>
+<td align="right">37.20275</td>
+<td align="right">62.7972466</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="odd">
+<td align="left">bkpos</td>
+<td align="right">26.62703</td>
+<td align="right">73.3729662</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="even">
+<td align="left">btoeg</td>
+<td align="right">0.00000</td>
+<td align="right">24.6871089</td>
+<td align="right">75.31289</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="odd">
+<td align="left">cntxt</td>
+<td align="right">56.85232</td>
+<td align="right">43.1476846</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="even">
+<td align="left">dsopp</td>
+<td align="right">89.48686</td>
+<td align="right">10.5131414</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="odd">
+<td align="left">dwipd</td>
+<td align="right">0.00000</td>
+<td align="right">0.0000000</td>
+<td align="right">0.00000</td>
+<td align="right">31.00751</td>
+<td align="right">68.99249</td>
+</tr>
+<tr class="even">
+<td align="left">hdchk</td>
+<td align="right">99.53066</td>
+<td align="right">0.4693367</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="odd">
+<td align="left">mulch</td>
+<td align="right">95.11890</td>
+<td align="right">4.8811014</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="even">
+<td align="left">qxmsq</td>
+<td align="right">96.96496</td>
+<td align="right">3.0350438</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="odd">
+<td align="left">r2ar8</td>
+<td align="right">31.28911</td>
+<td align="right">68.7108886</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="even">
+<td align="left">reskd</td>
+<td align="right">99.18648</td>
+<td align="right">0.8135169</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="odd">
+<td align="left">reskr</td>
+<td align="right">84.91865</td>
+<td align="right">15.0813517</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="even">
+<td align="left">rimmx</td>
+<td align="right">81.72716</td>
+<td align="right">18.2728411</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="odd">
+<td align="left">rkxwp</td>
+<td align="right">79.97497</td>
+<td align="right">20.0250313</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="even">
+<td align="left">rxmsq</td>
+<td align="right">94.27409</td>
+<td align="right">5.7259074</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="odd">
+<td align="left">simpl</td>
+<td align="right">61.79599</td>
+<td align="right">38.2040050</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="even">
+<td align="left">skach</td>
+<td align="right">99.65582</td>
+<td align="right">0.3441802</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="odd">
+<td align="left">skewr</td>
+<td align="right">30.66333</td>
+<td align="right">69.3366708</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="even">
+<td align="left">skrxp</td>
+<td align="right">94.52441</td>
+<td align="right">5.4755945</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="odd">
+<td align="left">spcop</td>
+<td align="right">99.96871</td>
+<td align="right">0.0312891</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="even">
+<td align="left">stlmt</td>
+<td align="right">98.52941</td>
+<td align="right">1.4705882</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="odd">
+<td align="left">thrsk</td>
+<td align="right">95.74468</td>
+<td align="right">4.2553191</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="even">
+<td align="left">whxbp</td>
+<td align="right">61.95244</td>
+<td align="right">38.0475594</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="odd">
+<td align="left">wkblk</td>
+<td align="right">88.82979</td>
+<td align="right">11.1702128</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="even">
+<td align="left">wkna8</td>
+<td align="right">96.24531</td>
+<td align="right">3.7546934</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="odd">
+<td align="left">wknwy</td>
+<td align="right">92.95995</td>
+<td align="right">7.0400501</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="even">
+<td align="left">wkona</td>
+<td align="right">89.92491</td>
+<td align="right">10.0750939</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="odd">
+<td align="left">wkspr</td>
+<td align="right">66.61452</td>
+<td align="right">33.3854819</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="even">
+<td align="left">wkxbp</td>
+<td align="right">78.22278</td>
+<td align="right">21.7772215</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="odd">
+<td align="left">wkxbq</td>
+<td align="right">53.87985</td>
+<td align="right">46.1201502</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="even">
+<td align="left">wkxcr</td>
+<td align="right">63.39174</td>
+<td align="right">36.6082603</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="odd">
+<td align="left">wxqsq</td>
+<td align="right">69.61827</td>
+<td align="right">30.3817272</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+</tr>
+</tbody>
+</table>
+<p>Se muestra el porcentaje de cada característica (<code>t</code>, <code>f</code>, <code>n</code>, <code>b</code>, <code>g</code>, <code>l</code>) para cada variable, en particular, solo 2 de alguna de las 6, ya que son binarias. Se puede observar que la mayoría poseen <code>t</code> y <code>f</code>, true y false, a excepción de <code>dwipd</code>, con <code>g</code> y <code>l</code>, y</p>
+<p>Variables con 3 niveles:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="análisis-exploratorio-de-datos-eda.html#cb22-1" tabindex="-1"></a>ternarias <span class="ot">&lt;-</span> frecuencias <span class="sc">%&gt;%</span></span>
+<span id="cb22-2"><a href="análisis-exploratorio-de-datos-eda.html#cb22-2" tabindex="-1"></a>  <span class="fu">group_by</span>(variable) <span class="sc">%&gt;%</span></span>
+<span id="cb22-3"><a href="análisis-exploratorio-de-datos-eda.html#cb22-3" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">n</span>() <span class="sc">==</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb22-4"><a href="análisis-exploratorio-de-datos-eda.html#cb22-4" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb22-5"><a href="análisis-exploratorio-de-datos-eda.html#cb22-5" tabindex="-1"></a>  <span class="fu">select</span>(variable, valor, porcentaje) <span class="sc">%&gt;%</span></span>
+<span id="cb22-6"><a href="análisis-exploratorio-de-datos-eda.html#cb22-6" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> valor, <span class="at">values_from =</span> porcentaje, <span class="at">values_fill =</span> <span class="dv">0</span>)</span>
+<span id="cb22-7"><a href="análisis-exploratorio-de-datos-eda.html#cb22-7" tabindex="-1"></a></span>
+<span id="cb22-8"><a href="análisis-exploratorio-de-datos-eda.html#cb22-8" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(ternarias)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">variable</th>
+<th align="right">b</th>
+<th align="right">n</th>
+<th align="right">w</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">katri</td>
+<td align="right">7.008761</td>
+<td align="right">79.0363</td>
+<td align="right">13.95494</td>
+</tr>
+</tbody>
+</table>
+<p>Se muestra el porcentaje de cada característica (<code>n</code>, <code>b</code>, <code>w</code>) para la variable.</p>
+<p>Ahora,</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="análisis-exploratorio-de-datos-eda.html#cb23-1" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span></code></pre></div>
+<pre><code>## 
+## Adjuntando el paquete: &#39;kableExtra&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
+## 
+##     group_rows</code></pre>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="análisis-exploratorio-de-datos-eda.html#cb26-1" tabindex="-1"></a>colores_personalizados <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb26-2"><a href="análisis-exploratorio-de-datos-eda.html#cb26-2" tabindex="-1"></a>  <span class="st">&quot;t&quot;</span> <span class="ot">=</span> <span class="st">&quot;#2E86C1&quot;</span>,   <span class="co"># Azul</span></span>
+<span id="cb26-3"><a href="análisis-exploratorio-de-datos-eda.html#cb26-3" tabindex="-1"></a>  <span class="st">&quot;f&quot;</span> <span class="ot">=</span> <span class="st">&quot;#E74C3C&quot;</span>,   <span class="co"># Rojo</span></span>
+<span id="cb26-4"><a href="análisis-exploratorio-de-datos-eda.html#cb26-4" tabindex="-1"></a>  <span class="st">&quot;n&quot;</span> <span class="ot">=</span> <span class="st">&quot;#95A5A6&quot;</span>,   <span class="co"># Gris</span></span>
+<span id="cb26-5"><a href="análisis-exploratorio-de-datos-eda.html#cb26-5" tabindex="-1"></a>  <span class="st">&quot;b&quot;</span> <span class="ot">=</span> <span class="st">&quot;#1A1A1A&quot;</span>,   <span class="co"># Negro</span></span>
+<span id="cb26-6"><a href="análisis-exploratorio-de-datos-eda.html#cb26-6" tabindex="-1"></a>  <span class="st">&quot;w&quot;</span> <span class="ot">=</span> <span class="st">&quot;#F39C12&quot;</span>,   <span class="co"># Naranja</span></span>
+<span id="cb26-7"><a href="análisis-exploratorio-de-datos-eda.html#cb26-7" tabindex="-1"></a>  <span class="st">&quot;g&quot;</span> <span class="ot">=</span> <span class="st">&quot;#27AE60&quot;</span>,   <span class="co"># Verde</span></span>
+<span id="cb26-8"><a href="análisis-exploratorio-de-datos-eda.html#cb26-8" tabindex="-1"></a>  <span class="st">&quot;l&quot;</span> <span class="ot">=</span> <span class="st">&quot;#8E44AD&quot;</span>    <span class="co"># Morado</span></span>
+<span id="cb26-9"><a href="análisis-exploratorio-de-datos-eda.html#cb26-9" tabindex="-1"></a>)</span>
+<span id="cb26-10"><a href="análisis-exploratorio-de-datos-eda.html#cb26-10" tabindex="-1"></a></span>
+<span id="cb26-11"><a href="análisis-exploratorio-de-datos-eda.html#cb26-11" tabindex="-1"></a>graficar_pastel <span class="ot">&lt;-</span> <span class="cf">function</span>(var) {</span>
+<span id="cb26-12"><a href="análisis-exploratorio-de-datos-eda.html#cb26-12" tabindex="-1"></a>  </span>
+<span id="cb26-13"><a href="análisis-exploratorio-de-datos-eda.html#cb26-13" tabindex="-1"></a>  tabla <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
+<span id="cb26-14"><a href="análisis-exploratorio-de-datos-eda.html#cb26-14" tabindex="-1"></a>    <span class="fu">count</span>(<span class="sc">!!</span><span class="fu">sym</span>(var)) <span class="sc">%&gt;%</span></span>
+<span id="cb26-15"><a href="análisis-exploratorio-de-datos-eda.html#cb26-15" tabindex="-1"></a>    <span class="fu">mutate</span>(</span>
+<span id="cb26-16"><a href="análisis-exploratorio-de-datos-eda.html#cb26-16" tabindex="-1"></a>      <span class="at">Porcentaje =</span> <span class="fu">round</span>((n <span class="sc">/</span> <span class="fu">sum</span>(n)) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">1</span>),</span>
+<span id="cb26-17"><a href="análisis-exploratorio-de-datos-eda.html#cb26-17" tabindex="-1"></a>      <span class="at">Etiqueta =</span> <span class="fu">paste0</span>(n, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>, Porcentaje, <span class="st">&quot;%&quot;</span>),</span>
+<span id="cb26-18"><a href="análisis-exploratorio-de-datos-eda.html#cb26-18" tabindex="-1"></a>      <span class="at">valor =</span> <span class="fu">factor</span>(<span class="sc">!!</span><span class="fu">sym</span>(var))</span>
+<span id="cb26-19"><a href="análisis-exploratorio-de-datos-eda.html#cb26-19" tabindex="-1"></a>    )</span>
+<span id="cb26-20"><a href="análisis-exploratorio-de-datos-eda.html#cb26-20" tabindex="-1"></a>  </span>
+<span id="cb26-21"><a href="análisis-exploratorio-de-datos-eda.html#cb26-21" tabindex="-1"></a>  valores_existentes <span class="ot">&lt;-</span> <span class="fu">unique</span>(tabla<span class="sc">$</span>valor)</span>
+<span id="cb26-22"><a href="análisis-exploratorio-de-datos-eda.html#cb26-22" tabindex="-1"></a>  colores_usar <span class="ot">&lt;-</span> colores_personalizados[<span class="fu">names</span>(colores_personalizados) <span class="sc">%in%</span> valores_existentes]</span>
+<span id="cb26-23"><a href="análisis-exploratorio-de-datos-eda.html#cb26-23" tabindex="-1"></a>  </span>
+<span id="cb26-24"><a href="análisis-exploratorio-de-datos-eda.html#cb26-24" tabindex="-1"></a>  <span class="fu">ggplot</span>(tabla, <span class="fu">aes</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> n, <span class="at">fill =</span> valor)) <span class="sc">+</span></span>
+<span id="cb26-25"><a href="análisis-exploratorio-de-datos-eda.html#cb26-25" tabindex="-1"></a>    <span class="fu">geom_col</span>(<span class="at">width =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb26-26"><a href="análisis-exploratorio-de-datos-eda.html#cb26-26" tabindex="-1"></a>    <span class="fu">coord_polar</span>(<span class="at">theta =</span> <span class="st">&quot;y&quot;</span>) <span class="sc">+</span></span>
+<span id="cb26-27"><a href="análisis-exploratorio-de-datos-eda.html#cb26-27" tabindex="-1"></a>    <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> Etiqueta),</span>
+<span id="cb26-28"><a href="análisis-exploratorio-de-datos-eda.html#cb26-28" tabindex="-1"></a>              <span class="at">position =</span> <span class="fu">position_stack</span>(<span class="at">vjust =</span> <span class="fl">0.5</span>),</span>
+<span id="cb26-29"><a href="análisis-exploratorio-de-datos-eda.html#cb26-29" tabindex="-1"></a>              <span class="at">size =</span> <span class="fl">2.5</span>) <span class="sc">+</span></span>
+<span id="cb26-30"><a href="análisis-exploratorio-de-datos-eda.html#cb26-30" tabindex="-1"></a>    <span class="fu">labs</span>(</span>
+<span id="cb26-31"><a href="análisis-exploratorio-de-datos-eda.html#cb26-31" tabindex="-1"></a>      <span class="at">title =</span> var,</span>
+<span id="cb26-32"><a href="análisis-exploratorio-de-datos-eda.html#cb26-32" tabindex="-1"></a>      <span class="at">x =</span> <span class="cn">NULL</span>,</span>
+<span id="cb26-33"><a href="análisis-exploratorio-de-datos-eda.html#cb26-33" tabindex="-1"></a>      <span class="at">y =</span> <span class="cn">NULL</span></span>
+<span id="cb26-34"><a href="análisis-exploratorio-de-datos-eda.html#cb26-34" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb26-35"><a href="análisis-exploratorio-de-datos-eda.html#cb26-35" tabindex="-1"></a>    <span class="fu">scale_fill_manual</span>(</span>
+<span id="cb26-36"><a href="análisis-exploratorio-de-datos-eda.html#cb26-36" tabindex="-1"></a>      <span class="at">values =</span> colores_usar,</span>
+<span id="cb26-37"><a href="análisis-exploratorio-de-datos-eda.html#cb26-37" tabindex="-1"></a>      <span class="at">breaks =</span> <span class="fu">c</span>(<span class="st">&quot;t&quot;</span>, <span class="st">&quot;f&quot;</span>, <span class="st">&quot;n&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;w&quot;</span>, <span class="st">&quot;g&quot;</span>, <span class="st">&quot;l&quot;</span>),</span>
+<span id="cb26-38"><a href="análisis-exploratorio-de-datos-eda.html#cb26-38" tabindex="-1"></a>      <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;t = True&quot;</span>, <span class="st">&quot;f = False&quot;</span>, <span class="st">&quot;n = None&quot;</span>, <span class="st">&quot;b = Black&quot;</span>, <span class="st">&quot;w = White&quot;</span>, <span class="st">&quot;g = Good&quot;</span>, <span class="st">&quot;l = Large&quot;</span>)</span>
+<span id="cb26-39"><a href="análisis-exploratorio-de-datos-eda.html#cb26-39" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb26-40"><a href="análisis-exploratorio-de-datos-eda.html#cb26-40" tabindex="-1"></a>    <span class="fu">theme_void</span>(<span class="at">base_size =</span> <span class="dv">8</span>) <span class="sc">+</span></span>
+<span id="cb26-41"><a href="análisis-exploratorio-de-datos-eda.html#cb26-41" tabindex="-1"></a>    <span class="fu">theme</span>(</span>
+<span id="cb26-42"><a href="análisis-exploratorio-de-datos-eda.html#cb26-42" tabindex="-1"></a>      <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>),</span>
+<span id="cb26-43"><a href="análisis-exploratorio-de-datos-eda.html#cb26-43" tabindex="-1"></a>      <span class="at">plot.margin =</span> <span class="fu">margin</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>),</span>
+<span id="cb26-44"><a href="análisis-exploratorio-de-datos-eda.html#cb26-44" tabindex="-1"></a>      <span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,</span>
+<span id="cb26-45"><a href="análisis-exploratorio-de-datos-eda.html#cb26-45" tabindex="-1"></a>      <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>),</span>
+<span id="cb26-46"><a href="análisis-exploratorio-de-datos-eda.html#cb26-46" tabindex="-1"></a>      <span class="at">legend.title =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb26-47"><a href="análisis-exploratorio-de-datos-eda.html#cb26-47" tabindex="-1"></a>      <span class="at">legend.key.size =</span> <span class="fu">unit</span>(<span class="fl">0.4</span>, <span class="st">&quot;cm&quot;</span>)</span>
+<span id="cb26-48"><a href="análisis-exploratorio-de-datos-eda.html#cb26-48" tabindex="-1"></a>    )</span>
+<span id="cb26-49"><a href="análisis-exploratorio-de-datos-eda.html#cb26-49" tabindex="-1"></a>}</span>
+<span id="cb26-50"><a href="análisis-exploratorio-de-datos-eda.html#cb26-50" tabindex="-1"></a></span>
+<span id="cb26-51"><a href="análisis-exploratorio-de-datos-eda.html#cb26-51" tabindex="-1"></a><span class="co"># Lista de variables</span></span>
+<span id="cb26-52"><a href="análisis-exploratorio-de-datos-eda.html#cb26-52" tabindex="-1"></a>vars <span class="ot">&lt;-</span> <span class="fu">colnames</span>(datos)[<span class="fu">colnames</span>(datos) <span class="sc">!=</span> <span class="st">&quot;class&quot;</span>]</span>
+<span id="cb26-53"><a href="análisis-exploratorio-de-datos-eda.html#cb26-53" tabindex="-1"></a></span>
+<span id="cb26-54"><a href="análisis-exploratorio-de-datos-eda.html#cb26-54" tabindex="-1"></a><span class="co"># Crear todos los gráficos</span></span>
+<span id="cb26-55"><a href="análisis-exploratorio-de-datos-eda.html#cb26-55" tabindex="-1"></a>lista_graficos <span class="ot">&lt;-</span> <span class="fu">map</span>(vars, graficar_pastel)</span>
+<span id="cb26-56"><a href="análisis-exploratorio-de-datos-eda.html#cb26-56" tabindex="-1"></a></span>
+<span id="cb26-57"><a href="análisis-exploratorio-de-datos-eda.html#cb26-57" tabindex="-1"></a><span class="co"># Dividir en grupos de 4</span></span>
+<span id="cb26-58"><a href="análisis-exploratorio-de-datos-eda.html#cb26-58" tabindex="-1"></a>grupos <span class="ot">&lt;-</span> <span class="fu">split</span>(lista_graficos, <span class="fu">ceiling</span>(<span class="fu">seq_along</span>(lista_graficos) <span class="sc">/</span> <span class="dv">4</span>))</span>
+<span id="cb26-59"><a href="análisis-exploratorio-de-datos-eda.html#cb26-59" tabindex="-1"></a></span>
+<span id="cb26-60"><a href="análisis-exploratorio-de-datos-eda.html#cb26-60" tabindex="-1"></a><span class="co"># Mostrar cada grupo con su leyenda</span></span>
+<span id="cb26-61"><a href="análisis-exploratorio-de-datos-eda.html#cb26-61" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(grupos)) {</span>
+<span id="cb26-62"><a href="análisis-exploratorio-de-datos-eda.html#cb26-62" tabindex="-1"></a>  </span>
+<span id="cb26-63"><a href="análisis-exploratorio-de-datos-eda.html#cb26-63" tabindex="-1"></a>  grobs_list <span class="ot">&lt;-</span> <span class="fu">lapply</span>(grupos[[i]], ggplotGrob)</span>
+<span id="cb26-64"><a href="análisis-exploratorio-de-datos-eda.html#cb26-64" tabindex="-1"></a>  </span>
+<span id="cb26-65"><a href="análisis-exploratorio-de-datos-eda.html#cb26-65" tabindex="-1"></a>  <span class="co"># Ajustar altura para que quepa la leyenda</span></span>
+<span id="cb26-66"><a href="análisis-exploratorio-de-datos-eda.html#cb26-66" tabindex="-1"></a>  <span class="fu">grid.arrange</span>(</span>
+<span id="cb26-67"><a href="análisis-exploratorio-de-datos-eda.html#cb26-67" tabindex="-1"></a>    <span class="at">grobs =</span> grobs_list,</span>
+<span id="cb26-68"><a href="análisis-exploratorio-de-datos-eda.html#cb26-68" tabindex="-1"></a>    <span class="at">ncol =</span> <span class="dv">4</span>,</span>
+<span id="cb26-69"><a href="análisis-exploratorio-de-datos-eda.html#cb26-69" tabindex="-1"></a>    <span class="at">padding =</span> <span class="fu">unit</span>(<span class="fl">0.2</span>, <span class="st">&quot;cm&quot;</span>),</span>
+<span id="cb26-70"><a href="análisis-exploratorio-de-datos-eda.html#cb26-70" tabindex="-1"></a>    <span class="at">margins =</span> <span class="fu">unit</span>(<span class="fl">0.2</span>, <span class="st">&quot;cm&quot;</span>)</span>
+<span id="cb26-71"><a href="análisis-exploratorio-de-datos-eda.html#cb26-71" tabindex="-1"></a>    )</span>
+<span id="cb26-72"><a href="análisis-exploratorio-de-datos-eda.html#cb26-72" tabindex="-1"></a>  </span>
+<span id="cb26-73"><a href="análisis-exploratorio-de-datos-eda.html#cb26-73" tabindex="-1"></a>}</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-16-1.png" alt="" width="672" /><img src="bookdown-demo_files/figure-html/unnamed-chunk-16-2.png" alt="" width="672" /><img src="bookdown-demo_files/figure-html/unnamed-chunk-16-3.png" alt="" width="672" /><img src="bookdown-demo_files/figure-html/unnamed-chunk-16-4.png" alt="" width="672" /><img src="bookdown-demo_files/figure-html/unnamed-chunk-16-5.png" alt="" width="672" /><img src="bookdown-demo_files/figure-html/unnamed-chunk-16-6.png" alt="" width="672" /><img src="bookdown-demo_files/figure-html/unnamed-chunk-16-7.png" alt="" width="672" /><img src="bookdown-demo_files/figure-html/unnamed-chunk-16-8.png" alt="" width="672" /><img src="bookdown-demo_files/figure-html/unnamed-chunk-16-9.png" alt="" width="672" /></p>
+<p><strong>Variables del rey blanco (wk…)</strong>:
+Se observa que el rey blanco rara vez bloquea a su propia torre (wkblk: 88.8% falso) o se encuentra en a8 (wkna8: 96.2% falso). Sin embargo, en un porcentaje significativo de posiciones (36.6%), el rey blanco puede atacar la casilla crítica b7 (wkxcr), lo que indica que las blancas tienen oportunidades de presión sobre el peón negro.</p>
+<p>####.
+whxbp: La torre blanca ataca al peón negro en el 38% de las posiciones .
+wxqsq: Las blancas controlan la casilla de coronación (a8) en el 30.4% de las posiciones.
+cntxt: El rey negro está en el borde del tablero en el 43.1% de las posiciones, lo que lo hace más vulnerable a clavadas.
+También vemos que las tácticas avanzadas son extremadamente raras (Jaque oculto (hdchk) con 0.5%, re-clavada diferida (reskd) con 0.8%, oposición especial (spcop) con 0%, y clavada tras jaques (skach) con 0.3%), sin embargo, la posibilidad de una clavada (skewer) está presente en el 30.7% de las posiciones (skewr), lo que la convierte en una amenaza real.</p>
+<p><strong>Variables del rey negro (bk…)</strong>:
+El rey negro está bajo presión en un porcentaje significativo de posiciones: en el 37.9% está en jaque (bknck), en el 37.2%** está sobrecargado (bkvol), y en el 26.6% está en posición de posible clavada (bkpos).</p>
+</div>
+<div id="análisis-bivariado-class-vs-independientes" class="section level2 hasAnchor" number="2.4">
+<h2><span class="header-section-number">2.4</span> Análisis bivariado class vs independientes<a href="análisis-exploratorio-de-datos-eda.html#an%C3%A1lisis-bivariado-class-vs-independientes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Vamos a usar la librería vcd, Visualizing Categorical Data
+Para cuantificar la relación entre variables categóricas, utilizamos Cramer’s V, una medida estadística que indica la fuerza de la asociación entre dos variables; va de 0 a 1, 0 significa que no hay relación entre las variables (son independientes), y 1 significa que hay una relación perfecta (una variable determina completamente a la otra).
+Cramér’s V se basa en el estadístico chi-cuadrado (χ²) y se calcula como:
+<span class="math display">\[
+V = \sqrt{\frac{\chi^2}{n \times \min(r-1, c-1)}}
+\]</span>
+Donde:
+- <strong>χ²</strong> = estadístico chi-cuadrado (mide la diferencia entre lo observado y lo esperado si fueran independientes)
+- <strong>n</strong> = número total de observaciones
+- <strong>r</strong> = número de filas de la tabla de contingencia
+- <strong>c</strong> = número de columnas de la tabla de contingencia</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="análisis-exploratorio-de-datos-eda.html#cb27-1" tabindex="-1"></a>cramer_v <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y) {</span>
+<span id="cb27-2"><a href="análisis-exploratorio-de-datos-eda.html#cb27-2" tabindex="-1"></a>  tbl <span class="ot">&lt;-</span> <span class="fu">table</span>(x, y)</span>
+<span id="cb27-3"><a href="análisis-exploratorio-de-datos-eda.html#cb27-3" tabindex="-1"></a>  chi2 <span class="ot">&lt;-</span> <span class="fu">chisq.test</span>(tbl, <span class="at">simulate.p.value =</span> <span class="cn">TRUE</span>)<span class="sc">$</span>statistic</span>
+<span id="cb27-4"><a href="análisis-exploratorio-de-datos-eda.html#cb27-4" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">sum</span>(tbl)</span>
+<span id="cb27-5"><a href="análisis-exploratorio-de-datos-eda.html#cb27-5" tabindex="-1"></a>  r <span class="ot">&lt;-</span> <span class="fu">min</span>(<span class="fu">nrow</span>(tbl), <span class="fu">ncol</span>(tbl))</span>
+<span id="cb27-6"><a href="análisis-exploratorio-de-datos-eda.html#cb27-6" tabindex="-1"></a>  <span class="fu">sqrt</span>(<span class="fu">as.numeric</span>(chi2) <span class="sc">/</span> (n <span class="sc">*</span> (r <span class="sc">-</span> <span class="dv">1</span>)))</span>
+<span id="cb27-7"><a href="análisis-exploratorio-de-datos-eda.html#cb27-7" tabindex="-1"></a>}</span>
+<span id="cb27-8"><a href="análisis-exploratorio-de-datos-eda.html#cb27-8" tabindex="-1"></a></span>
+<span id="cb27-9"><a href="análisis-exploratorio-de-datos-eda.html#cb27-9" tabindex="-1"></a>vars_todas <span class="ot">&lt;-</span> <span class="fu">colnames</span>(datos)</span>
+<span id="cb27-10"><a href="análisis-exploratorio-de-datos-eda.html#cb27-10" tabindex="-1"></a>cramer_matrix <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, </span>
+<span id="cb27-11"><a href="análisis-exploratorio-de-datos-eda.html#cb27-11" tabindex="-1"></a>                        <span class="at">nrow =</span> <span class="fu">length</span>(vars_todas), </span>
+<span id="cb27-12"><a href="análisis-exploratorio-de-datos-eda.html#cb27-12" tabindex="-1"></a>                        <span class="at">ncol =</span> <span class="fu">length</span>(vars_todas))</span>
+<span id="cb27-13"><a href="análisis-exploratorio-de-datos-eda.html#cb27-13" tabindex="-1"></a><span class="fu">rownames</span>(cramer_matrix) <span class="ot">&lt;-</span> vars_todas</span>
+<span id="cb27-14"><a href="análisis-exploratorio-de-datos-eda.html#cb27-14" tabindex="-1"></a><span class="fu">colnames</span>(cramer_matrix) <span class="ot">&lt;-</span> vars_todas</span>
+<span id="cb27-15"><a href="análisis-exploratorio-de-datos-eda.html#cb27-15" tabindex="-1"></a></span>
+<span id="cb27-16"><a href="análisis-exploratorio-de-datos-eda.html#cb27-16" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(vars_todas)) {</span>
+<span id="cb27-17"><a href="análisis-exploratorio-de-datos-eda.html#cb27-17" tabindex="-1"></a>  <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(vars_todas)) {</span>
+<span id="cb27-18"><a href="análisis-exploratorio-de-datos-eda.html#cb27-18" tabindex="-1"></a>    cramer_matrix[i, j] <span class="ot">&lt;-</span> <span class="fu">cramer_v</span>(datos[[vars_todas[i]]], </span>
+<span id="cb27-19"><a href="análisis-exploratorio-de-datos-eda.html#cb27-19" tabindex="-1"></a>                                     datos[[vars_todas[j]]])</span>
+<span id="cb27-20"><a href="análisis-exploratorio-de-datos-eda.html#cb27-20" tabindex="-1"></a>  }</span>
+<span id="cb27-21"><a href="análisis-exploratorio-de-datos-eda.html#cb27-21" tabindex="-1"></a>}</span>
+<span id="cb27-22"><a href="análisis-exploratorio-de-datos-eda.html#cb27-22" tabindex="-1"></a></span>
+<span id="cb27-23"><a href="análisis-exploratorio-de-datos-eda.html#cb27-23" tabindex="-1"></a><span class="co"># 2. Crear heatmap y guardarlo como imagen PNG grande</span></span>
+<span id="cb27-24"><a href="análisis-exploratorio-de-datos-eda.html#cb27-24" tabindex="-1"></a><span class="co"># Abrir dispositivo gráfico con tamaño grande</span></span>
+<span id="cb27-25"><a href="análisis-exploratorio-de-datos-eda.html#cb27-25" tabindex="-1"></a><span class="fu">png</span>(<span class="st">&quot;heatmap_cramer_grande.png&quot;</span>, </span>
+<span id="cb27-26"><a href="análisis-exploratorio-de-datos-eda.html#cb27-26" tabindex="-1"></a>    <span class="at">width =</span> <span class="dv">3000</span>,   <span class="co"># 3000 píxeles de ancho</span></span>
+<span id="cb27-27"><a href="análisis-exploratorio-de-datos-eda.html#cb27-27" tabindex="-1"></a>    <span class="at">height =</span> <span class="dv">3000</span>,  <span class="co"># 3000 píxeles de alto</span></span>
+<span id="cb27-28"><a href="análisis-exploratorio-de-datos-eda.html#cb27-28" tabindex="-1"></a>    <span class="at">res =</span> <span class="dv">200</span>)      <span class="co"># 200 dpi de resolución</span></span>
+<span id="cb27-29"><a href="análisis-exploratorio-de-datos-eda.html#cb27-29" tabindex="-1"></a></span>
+<span id="cb27-30"><a href="análisis-exploratorio-de-datos-eda.html#cb27-30" tabindex="-1"></a><span class="co"># Crear el heatmap</span></span>
+<span id="cb27-31"><a href="análisis-exploratorio-de-datos-eda.html#cb27-31" tabindex="-1"></a>cramer_matrix <span class="sc">%&gt;%</span></span>
+<span id="cb27-32"><a href="análisis-exploratorio-de-datos-eda.html#cb27-32" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb27-33"><a href="análisis-exploratorio-de-datos-eda.html#cb27-33" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="st">&quot;var1&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb27-34"><a href="análisis-exploratorio-de-datos-eda.html#cb27-34" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>var1, <span class="at">names_to =</span> <span class="st">&quot;var2&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;cramer&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb27-35"><a href="análisis-exploratorio-de-datos-eda.html#cb27-35" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> var1, <span class="at">y =</span> var2, <span class="at">fill =</span> cramer)) <span class="sc">+</span></span>
+<span id="cb27-36"><a href="análisis-exploratorio-de-datos-eda.html#cb27-36" tabindex="-1"></a>  <span class="fu">geom_tile</span>(<span class="at">color =</span> <span class="st">&quot;white&quot;</span>, <span class="at">size =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb27-37"><a href="análisis-exploratorio-de-datos-eda.html#cb27-37" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">round</span>(cramer, <span class="dv">2</span>)), </span>
+<span id="cb27-38"><a href="análisis-exploratorio-de-datos-eda.html#cb27-38" tabindex="-1"></a>            <span class="at">size =</span> <span class="fl">3.5</span>, </span>
+<span id="cb27-39"><a href="análisis-exploratorio-de-datos-eda.html#cb27-39" tabindex="-1"></a>            <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
+<span id="cb27-40"><a href="análisis-exploratorio-de-datos-eda.html#cb27-40" tabindex="-1"></a>  <span class="fu">scale_fill_gradient2</span>(</span>
+<span id="cb27-41"><a href="análisis-exploratorio-de-datos-eda.html#cb27-41" tabindex="-1"></a>    <span class="at">low =</span> <span class="st">&quot;white&quot;</span>,</span>
+<span id="cb27-42"><a href="análisis-exploratorio-de-datos-eda.html#cb27-42" tabindex="-1"></a>    <span class="at">mid =</span> <span class="st">&quot;lightblue&quot;</span>,</span>
+<span id="cb27-43"><a href="análisis-exploratorio-de-datos-eda.html#cb27-43" tabindex="-1"></a>    <span class="at">high =</span> <span class="st">&quot;steelblue&quot;</span>,</span>
+<span id="cb27-44"><a href="análisis-exploratorio-de-datos-eda.html#cb27-44" tabindex="-1"></a>    <span class="at">midpoint =</span> <span class="fl">0.3</span>,</span>
+<span id="cb27-45"><a href="análisis-exploratorio-de-datos-eda.html#cb27-45" tabindex="-1"></a>    <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),</span>
+<span id="cb27-46"><a href="análisis-exploratorio-de-datos-eda.html#cb27-46" tabindex="-1"></a>    <span class="at">name =</span> <span class="st">&quot;Cramér&#39;s V&quot;</span></span>
+<span id="cb27-47"><a href="análisis-exploratorio-de-datos-eda.html#cb27-47" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb27-48"><a href="análisis-exploratorio-de-datos-eda.html#cb27-48" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb27-49"><a href="análisis-exploratorio-de-datos-eda.html#cb27-49" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Matriz de asociación (Cramér&#39;s V) - KRKPA7&quot;</span>,</span>
+<span id="cb27-50"><a href="análisis-exploratorio-de-datos-eda.html#cb27-50" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="fu">paste</span>(<span class="st">&quot;Todas las variables (&quot;</span>, <span class="fu">length</span>(vars_todas), <span class="st">&quot; variables)&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;&quot;</span>),</span>
+<span id="cb27-51"><a href="análisis-exploratorio-de-datos-eda.html#cb27-51" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb27-52"><a href="análisis-exploratorio-de-datos-eda.html#cb27-52" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;&quot;</span></span>
+<span id="cb27-53"><a href="análisis-exploratorio-de-datos-eda.html#cb27-53" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb27-54"><a href="análisis-exploratorio-de-datos-eda.html#cb27-54" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">10</span>) <span class="sc">+</span></span>
+<span id="cb27-55"><a href="análisis-exploratorio-de-datos-eda.html#cb27-55" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb27-56"><a href="análisis-exploratorio-de-datos-eda.html#cb27-56" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, </span>
+<span id="cb27-57"><a href="análisis-exploratorio-de-datos-eda.html#cb27-57" tabindex="-1"></a>                               <span class="at">size =</span> <span class="dv">12</span>), </span>
+<span id="cb27-58"><a href="análisis-exploratorio-de-datos-eda.html#cb27-58" tabindex="-1"></a>    <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>), </span>
+<span id="cb27-59"><a href="análisis-exploratorio-de-datos-eda.html#cb27-59" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">20</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>), </span>
+<span id="cb27-60"><a href="análisis-exploratorio-de-datos-eda.html#cb27-60" tabindex="-1"></a>    <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>), </span>
+<span id="cb27-61"><a href="análisis-exploratorio-de-datos-eda.html#cb27-61" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;right&quot;</span>,</span>
+<span id="cb27-62"><a href="análisis-exploratorio-de-datos-eda.html#cb27-62" tabindex="-1"></a>    <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>),  </span>
+<span id="cb27-63"><a href="análisis-exploratorio-de-datos-eda.html#cb27-63" tabindex="-1"></a>    <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),  </span>
+<span id="cb27-64"><a href="análisis-exploratorio-de-datos-eda.html#cb27-64" tabindex="-1"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>()</span>
+<span id="cb27-65"><a href="análisis-exploratorio-de-datos-eda.html#cb27-65" tabindex="-1"></a>  )</span>
+<span id="cb27-66"><a href="análisis-exploratorio-de-datos-eda.html#cb27-66" tabindex="-1"></a></span>
+<span id="cb27-67"><a href="análisis-exploratorio-de-datos-eda.html#cb27-67" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div>
+<pre><code>## png 
+##   2</code></pre>
+<p><img src="heatmap_cramer_grande.png" alt="" width="1500" /></p>
+<p>El heatmap muestra la fuerza de la asociación entre las variables predictoras y la variable objetivo (<code>class</code>).
+Los valores más altos (azul oscuro) indican una relación más fuerte con el resultado del final de ajedrez. Los valores más bajos (blanco) sugieren que la variable es prácticamente independiente de si la posición es ganable o no.</p>
+<p>Extraemos asociación con class:</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="análisis-exploratorio-de-datos-eda.html#cb29-1" tabindex="-1"></a>asociacion_class <span class="ot">&lt;-</span> cramer_matrix[<span class="st">&quot;class&quot;</span>, ] <span class="sc">%&gt;%</span></span>
+<span id="cb29-2"><a href="análisis-exploratorio-de-datos-eda.html#cb29-2" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb29-3"><a href="análisis-exploratorio-de-datos-eda.html#cb29-3" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="st">&quot;variable&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb29-4"><a href="análisis-exploratorio-de-datos-eda.html#cb29-4" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">cramer =</span> <span class="st">&quot;.&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb29-5"><a href="análisis-exploratorio-de-datos-eda.html#cb29-5" tabindex="-1"></a>  <span class="fu">filter</span>(variable <span class="sc">!=</span> <span class="st">&quot;class&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb29-6"><a href="análisis-exploratorio-de-datos-eda.html#cb29-6" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(cramer))</span>
+<span id="cb29-7"><a href="análisis-exploratorio-de-datos-eda.html#cb29-7" tabindex="-1"></a></span>
+<span id="cb29-8"><a href="análisis-exploratorio-de-datos-eda.html#cb29-8" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">head</span>(asociacion_class, <span class="dv">5</span>))</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">variable</th>
+<th align="right">cramer</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">rimmx</td>
+<td align="right">0.4522840</td>
+</tr>
+<tr class="even">
+<td align="left">wxqsq</td>
+<td align="right">0.3801012</td>
+</tr>
+<tr class="odd">
+<td align="left">bknck</td>
+<td align="right">0.3652651</td>
+</tr>
+<tr class="even">
+<td align="left">wkxbp</td>
+<td align="right">0.2329082</td>
+</tr>
+<tr class="odd">
+<td align="left">katri</td>
+<td align="right">0.2197070</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="análisis-exploratorio-de-datos-eda.html#cb30-1" tabindex="-1"></a>asociacion_class <span class="sc">%&gt;%</span></span>
+<span id="cb30-2"><a href="análisis-exploratorio-de-datos-eda.html#cb30-2" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">10</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb30-3"><a href="análisis-exploratorio-de-datos-eda.html#cb30-3" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(variable, cramer), <span class="at">y =</span> cramer, <span class="at">fill =</span> cramer)) <span class="sc">+</span></span>
+<span id="cb30-4"><a href="análisis-exploratorio-de-datos-eda.html#cb30-4" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">width =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb30-5"><a href="análisis-exploratorio-de-datos-eda.html#cb30-5" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb30-6"><a href="análisis-exploratorio-de-datos-eda.html#cb30-6" tabindex="-1"></a>  <span class="fu">scale_fill_gradient</span>(<span class="at">low =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="at">high =</span> <span class="st">&quot;darkblue&quot;</span>) <span class="sc">+</span></span>
+<span id="cb30-7"><a href="análisis-exploratorio-de-datos-eda.html#cb30-7" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">round</span>(cramer, <span class="dv">3</span>)), <span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.2</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb30-8"><a href="análisis-exploratorio-de-datos-eda.html#cb30-8" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb30-9"><a href="análisis-exploratorio-de-datos-eda.html#cb30-9" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Top 5 factores relacionados con class&quot;</span>,</span>
+<span id="cb30-10"><a href="análisis-exploratorio-de-datos-eda.html#cb30-10" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;Variable&quot;</span>, </span>
+<span id="cb30-11"><a href="análisis-exploratorio-de-datos-eda.html#cb30-11" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Cramer&#39;s V&quot;</span></span>
+<span id="cb30-12"><a href="análisis-exploratorio-de-datos-eda.html#cb30-12" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb30-13"><a href="análisis-exploratorio-de-datos-eda.html#cb30-13" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">13</span>) <span class="sc">+</span></span>
+<span id="cb30-14"><a href="análisis-exploratorio-de-datos-eda.html#cb30-14" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-19-1.png" alt="" width="672" /></p>
+<p>El análisis de asociación con Cramér’s V revela que las variables más relacionadas con el resultado (<code>won</code>/<code>nowin</code>) son:</p>
+<p><code>rimmx</code> (0.45): Captura segura de la torre blanca. Si la torre blanca puede ser capturada de forma segura por las negras, las blancas pierden su principal ventaja.
+<code>wxqsq</code> (0.38): Control blanco de la casilla de coronación (a8). Si las blancas controlan a8, evitan que el peón negro corone.
+<code>bknck</code> (0.365): Rey negro en jaque. Si el rey negro está en jaque, las blancas están haciendo una amenaza directa que puede llevar a la victoria.
+<code>wkxbp</code> (0.233): Rey blanco captura el peón negro. Si el rey blanco puede capturar el peón, las blancas ganan de inmediato.
+<code>katri</code> (0.22): Control del punto de intersección. Si el rey blanco controla el punto de intersección, puede evitar que su propia torre sea clavada.</p>
+<p>Ahora miremos las cuentas de <code>won</code> y <code>nowin</code> para cada variable en una tabla de contingencia:</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="análisis-exploratorio-de-datos-eda.html#cb31-1" tabindex="-1"></a>vars_predictoras <span class="ot">&lt;-</span> <span class="fu">colnames</span>(datos)[<span class="fu">colnames</span>(datos) <span class="sc">!=</span> <span class="st">&quot;class&quot;</span>]</span>
+<span id="cb31-2"><a href="análisis-exploratorio-de-datos-eda.html#cb31-2" tabindex="-1"></a></span>
+<span id="cb31-3"><a href="análisis-exploratorio-de-datos-eda.html#cb31-3" tabindex="-1"></a><span class="co"># Función para crear tabla de contingencia de una variable vs class</span></span>
+<span id="cb31-4"><a href="análisis-exploratorio-de-datos-eda.html#cb31-4" tabindex="-1"></a>tabla_contingencia <span class="ot">&lt;-</span> <span class="cf">function</span>(var) {</span>
+<span id="cb31-5"><a href="análisis-exploratorio-de-datos-eda.html#cb31-5" tabindex="-1"></a>  </span>
+<span id="cb31-6"><a href="análisis-exploratorio-de-datos-eda.html#cb31-6" tabindex="-1"></a>  datos <span class="sc">%&gt;%</span></span>
+<span id="cb31-7"><a href="análisis-exploratorio-de-datos-eda.html#cb31-7" tabindex="-1"></a>    <span class="fu">group_by</span>(class) <span class="sc">%&gt;%</span></span>
+<span id="cb31-8"><a href="análisis-exploratorio-de-datos-eda.html#cb31-8" tabindex="-1"></a>    <span class="fu">count</span>(<span class="sc">!!</span><span class="fu">sym</span>(var), <span class="at">name =</span> <span class="st">&quot;n&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb31-9"><a href="análisis-exploratorio-de-datos-eda.html#cb31-9" tabindex="-1"></a>    <span class="fu">mutate</span>(</span>
+<span id="cb31-10"><a href="análisis-exploratorio-de-datos-eda.html#cb31-10" tabindex="-1"></a>      <span class="at">categoria =</span> <span class="fu">as.character</span>(<span class="sc">!!</span><span class="fu">sym</span>(var)),</span>
+<span id="cb31-11"><a href="análisis-exploratorio-de-datos-eda.html#cb31-11" tabindex="-1"></a>      <span class="at">variable =</span> var,</span>
+<span id="cb31-12"><a href="análisis-exploratorio-de-datos-eda.html#cb31-12" tabindex="-1"></a>      <span class="at">porcentaje =</span> <span class="fu">round</span>((n <span class="sc">/</span> <span class="fu">sum</span>(n)) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">1</span>)</span>
+<span id="cb31-13"><a href="análisis-exploratorio-de-datos-eda.html#cb31-13" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span></span>
+<span id="cb31-14"><a href="análisis-exploratorio-de-datos-eda.html#cb31-14" tabindex="-1"></a>    <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb31-15"><a href="análisis-exploratorio-de-datos-eda.html#cb31-15" tabindex="-1"></a>    <span class="fu">select</span>(class, variable, categoria, n, porcentaje)</span>
+<span id="cb31-16"><a href="análisis-exploratorio-de-datos-eda.html#cb31-16" tabindex="-1"></a>}</span>
+<span id="cb31-17"><a href="análisis-exploratorio-de-datos-eda.html#cb31-17" tabindex="-1"></a></span>
+<span id="cb31-18"><a href="análisis-exploratorio-de-datos-eda.html#cb31-18" tabindex="-1"></a><span class="co"># Aplicar a todas las variables y combinar en una sola tabla</span></span>
+<span id="cb31-19"><a href="análisis-exploratorio-de-datos-eda.html#cb31-19" tabindex="-1"></a>tabla_contingencia_completa <span class="ot">&lt;-</span> <span class="fu">map_dfr</span>(vars_predictoras, tabla_contingencia)</span>
+<span id="cb31-20"><a href="análisis-exploratorio-de-datos-eda.html#cb31-20" tabindex="-1"></a></span>
+<span id="cb31-21"><a href="análisis-exploratorio-de-datos-eda.html#cb31-21" tabindex="-1"></a><span class="co"># Identificar las filas donde cambia la variable (para poner la línea)</span></span>
+<span id="cb31-22"><a href="análisis-exploratorio-de-datos-eda.html#cb31-22" tabindex="-1"></a>filas_cambio <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">duplicated</span>(tabla_contingencia_completa<span class="sc">$</span>variable) <span class="sc">==</span> <span class="cn">FALSE</span>)</span>
+<span id="cb31-23"><a href="análisis-exploratorio-de-datos-eda.html#cb31-23" tabindex="-1"></a></span>
+<span id="cb31-24"><a href="análisis-exploratorio-de-datos-eda.html#cb31-24" tabindex="-1"></a><span class="co"># Mostrar tabla con líneas separadoras entre variables</span></span>
+<span id="cb31-25"><a href="análisis-exploratorio-de-datos-eda.html#cb31-25" tabindex="-1"></a>tabla_contingencia_completa <span class="sc">%&gt;%</span></span>
+<span id="cb31-26"><a href="análisis-exploratorio-de-datos-eda.html#cb31-26" tabindex="-1"></a>  <span class="fu">kable</span>(</span>
+<span id="cb31-27"><a href="análisis-exploratorio-de-datos-eda.html#cb31-27" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">&quot;Tabla de contingencia: class vs variables predictoras&quot;</span>,</span>
+<span id="cb31-28"><a href="análisis-exploratorio-de-datos-eda.html#cb31-28" tabindex="-1"></a>    <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&quot;Class&quot;</span>, <span class="st">&quot;Variable&quot;</span>, <span class="st">&quot;Categoria&quot;</span>, <span class="st">&quot;Frecuencia&quot;</span>, <span class="st">&quot;Porcentaje&quot;</span>),</span>
+<span id="cb31-29"><a href="análisis-exploratorio-de-datos-eda.html#cb31-29" tabindex="-1"></a>    <span class="at">digits =</span> <span class="dv">1</span></span>
+<span id="cb31-30"><a href="análisis-exploratorio-de-datos-eda.html#cb31-30" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb31-31"><a href="análisis-exploratorio-de-datos-eda.html#cb31-31" tabindex="-1"></a>  <span class="fu">kable_styling</span>(</span>
+<span id="cb31-32"><a href="análisis-exploratorio-de-datos-eda.html#cb31-32" tabindex="-1"></a>    <span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">&quot;striped&quot;</span>, <span class="st">&quot;hover&quot;</span>, <span class="st">&quot;condensed&quot;</span>),</span>
+<span id="cb31-33"><a href="análisis-exploratorio-de-datos-eda.html#cb31-33" tabindex="-1"></a>    <span class="at">full_width =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb31-34"><a href="análisis-exploratorio-de-datos-eda.html#cb31-34" tabindex="-1"></a>    <span class="at">font_size =</span> <span class="dv">11</span></span>
+<span id="cb31-35"><a href="análisis-exploratorio-de-datos-eda.html#cb31-35" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb31-36"><a href="análisis-exploratorio-de-datos-eda.html#cb31-36" tabindex="-1"></a>  <span class="fu">row_spec</span>(</span>
+<span id="cb31-37"><a href="análisis-exploratorio-de-datos-eda.html#cb31-37" tabindex="-1"></a>    <span class="at">row =</span> filas_cambio <span class="sc">-</span> <span class="dv">1</span>,</span>
+<span id="cb31-38"><a href="análisis-exploratorio-de-datos-eda.html#cb31-38" tabindex="-1"></a>    <span class="at">extra_css =</span> <span class="st">&quot;border-bottom: 2px solid #666;&quot;</span></span>
+<span id="cb31-39"><a href="análisis-exploratorio-de-datos-eda.html#cb31-39" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb31-40"><a href="análisis-exploratorio-de-datos-eda.html#cb31-40" tabindex="-1"></a>  <span class="fu">scroll_box</span>(<span class="at">width =</span> <span class="st">&quot;100%&quot;</span>, <span class="at">height =</span> <span class="st">&quot;500px&quot;</span>)</span></code></pre></div>
+<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:500px; overflow-x: scroll; width:100%; ">
+<table class="table table-striped table-hover table-condensed" style="font-size: 11px; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+<span id="tab:unnamed-chunk-20">Table 2.1: </span><span id="tab:unnamed-chunk-20">Table 2.2: </span>Tabla de contingencia: class vs variables predictoras
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;border-bottom: 2px solid #666;position: sticky; top:0; background-color: #FFFFFF;">
+Class
+</th>
+<th style="text-align:left;border-bottom: 2px solid #666;position: sticky; top:0; background-color: #FFFFFF;">
+Variable
+</th>
+<th style="text-align:left;border-bottom: 2px solid #666;position: sticky; top:0; background-color: #FFFFFF;">
+Categoria
+</th>
+<th style="text-align:right;border-bottom: 2px solid #666;position: sticky; top:0; background-color: #FFFFFF;">
+Frecuencia
+</th>
+<th style="text-align:right;border-bottom: 2px solid #666;position: sticky; top:0; background-color: #FFFFFF;">
+Porcentaje
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+wkblk
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+1357
+</td>
+<td style="text-align:right;">
+88.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+wkblk
+</td>
+<td style="text-align:left;">
+t
+</td>
+<td style="text-align:right;">
+170
+</td>
+<td style="text-align:right;">
+11.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+won
+</td>
+<td style="text-align:left;">
+wkblk
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+1482
+</td>
+<td style="text-align:right;">
+88.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+won
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+wkblk
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+t
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+187
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+11.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+wknwy
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+1421
+</td>
+<td style="text-align:right;">
+93.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+wknwy
+</td>
+<td style="text-align:left;">
+t
+</td>
+<td style="text-align:right;">
+106
+</td>
+<td style="text-align:right;">
+6.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+won
+</td>
+<td style="text-align:left;">
+wknwy
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+1550
+</td>
+<td style="text-align:right;">
+92.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+won
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+wknwy
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+t
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+119
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+7.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+wkna8
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+1442
+</td>
+<td style="text-align:right;">
+94.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+wkna8
+</td>
+<td style="text-align:left;">
+t
+</td>
+<td style="text-align:right;">
+85
+</td>
+<td style="text-align:right;">
+5.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+won
+</td>
+<td style="text-align:left;">
+wkna8
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+1634
+</td>
+<td style="text-align:right;">
+97.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+won
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+wkna8
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+t
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+35
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+2.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+wkona
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+1367
+</td>
+<td style="text-align:right;">
+89.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+wkona
+</td>
+<td style="text-align:left;">
+t
+</td>
+<td style="text-align:right;">
+160
+</td>
+<td style="text-align:right;">
+10.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+won
+</td>
+<td style="text-align:left;">
+wkona
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+1507
+</td>
+<td style="text-align:right;">
+90.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+won
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+wkona
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+t
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+162
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+9.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+wkspr
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+988
+</td>
+<td style="text-align:right;">
+64.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+wkspr
+</td>
+<td style="text-align:left;">
+t
+</td>
+<td style="text-align:right;">
+539
+</td>
+<td style="text-align:right;">
+35.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+won
+</td>
+<td style="text-align:left;">
+wkspr
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+1141
+</td>
+<td style="text-align:right;">
+68.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+won
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+wkspr
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+t
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+528
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+31.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+wkxbq
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+934
+</td>
+<td style="text-align:right;">
+61.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+wkxbq
+</td>
+<td style="text-align:left;">
+t
+</td>
+<td style="text-align:right;">
+593
+</td>
+<td style="text-align:right;">
+38.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+won
+</td>
+<td style="text-align:left;">
+wkxbq
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+788
+</td>
+<td style="text-align:right;">
+47.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+won
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+wkxbq
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+t
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+881
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+52.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+wkxcr
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+842
+</td>
+<td style="text-align:right;">
+55.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+wkxcr
+</td>
+<td style="text-align:left;">
+t
+</td>
+<td style="text-align:right;">
+685
+</td>
+<td style="text-align:right;">
+44.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+won
+</td>
+<td style="text-align:left;">
+wkxcr
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+1184
+</td>
+<td style="text-align:right;">
+70.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+won
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+wkxcr
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+t
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+485
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+29.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+wkxbp
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+1041
+</td>
+<td style="text-align:right;">
+68.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+wkxbp
+</td>
+<td style="text-align:left;">
+t
+</td>
+<td style="text-align:right;">
+486
+</td>
+<td style="text-align:right;">
+31.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+won
+</td>
+<td style="text-align:left;">
+wkxbp
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+1459
+</td>
+<td style="text-align:right;">
+87.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+won
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+wkxbp
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+t
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+210
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+12.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+whxbp
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+880
+</td>
+<td style="text-align:right;">
+57.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+whxbp
+</td>
+<td style="text-align:left;">
+t
+</td>
+<td style="text-align:right;">
+647
+</td>
+<td style="text-align:right;">
+42.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+won
+</td>
+<td style="text-align:left;">
+whxbp
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+1100
+</td>
+<td style="text-align:right;">
+65.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+won
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+whxbp
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+t
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+569
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+34.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+wxqsq
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+784
+</td>
+<td style="text-align:right;">
+51.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+wxqsq
+</td>
+<td style="text-align:left;">
+t
+</td>
+<td style="text-align:right;">
+743
+</td>
+<td style="text-align:right;">
+48.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+won
+</td>
+<td style="text-align:left;">
+wxqsq
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+1441
+</td>
+<td style="text-align:right;">
+86.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+won
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+wxqsq
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+t
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+228
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+13.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+cntxt
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+922
+</td>
+<td style="text-align:right;">
+60.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+cntxt
+</td>
+<td style="text-align:left;">
+t
+</td>
+<td style="text-align:right;">
+605
+</td>
+<td style="text-align:right;">
+39.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+won
+</td>
+<td style="text-align:left;">
+cntxt
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+895
+</td>
+<td style="text-align:right;">
+53.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+won
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+cntxt
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+t
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+774
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+46.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+dsopp
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+1374
+</td>
+<td style="text-align:right;">
+90.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+dsopp
+</td>
+<td style="text-align:left;">
+t
+</td>
+<td style="text-align:right;">
+153
+</td>
+<td style="text-align:right;">
+10.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+won
+</td>
+<td style="text-align:left;">
+dsopp
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+1486
+</td>
+<td style="text-align:right;">
+89.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+won
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+dsopp
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+t
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+183
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+11.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+dwipd
+</td>
+<td style="text-align:left;">
+g
+</td>
+<td style="text-align:right;">
+547
+</td>
+<td style="text-align:right;">
+35.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+dwipd
+</td>
+<td style="text-align:left;">
+l
+</td>
+<td style="text-align:right;">
+980
+</td>
+<td style="text-align:right;">
+64.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+won
+</td>
+<td style="text-align:left;">
+dwipd
+</td>
+<td style="text-align:left;">
+g
+</td>
+<td style="text-align:right;">
+444
+</td>
+<td style="text-align:right;">
+26.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+won
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+dwipd
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+l
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+1225
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+73.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+hdchk
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+1512
+</td>
+<td style="text-align:right;">
+99.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+hdchk
+</td>
+<td style="text-align:left;">
+t
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+1.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+won
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+hdchk
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+f
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+1669
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+100.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+katri
+</td>
+<td style="text-align:left;">
+b
+</td>
+<td style="text-align:right;">
+145
+</td>
+<td style="text-align:right;">
+9.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+katri
+</td>
+<td style="text-align:left;">
+n
+</td>
+<td style="text-align:right;">
+1284
+</td>
+<td style="text-align:right;">
+84.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+katri
+</td>
+<td style="text-align:left;">
+w
+</td>
+<td style="text-align:right;">
+98
+</td>
+<td style="text-align:right;">
+6.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+won
+</td>
+<td style="text-align:left;">
+katri
+</td>
+<td style="text-align:left;">
+b
+</td>
+<td style="text-align:right;">
+79
+</td>
+<td style="text-align:right;">
+4.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+won
+</td>
+<td style="text-align:left;">
+katri
+</td>
+<td style="text-align:left;">
+n
+</td>
+<td style="text-align:right;">
+1242
+</td>
+<td style="text-align:right;">
+74.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+won
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+katri
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+w
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+348
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+20.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+mulch
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+1398
+</td>
+<td style="text-align:right;">
+91.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+mulch
+</td>
+<td style="text-align:left;">
+t
+</td>
+<td style="text-align:right;">
+129
+</td>
+<td style="text-align:right;">
+8.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+won
+</td>
+<td style="text-align:left;">
+mulch
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+1642
+</td>
+<td style="text-align:right;">
+98.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+won
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+mulch
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+t
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+27
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+1.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+qxmsq
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+1484
+</td>
+<td style="text-align:right;">
+97.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+qxmsq
+</td>
+<td style="text-align:left;">
+t
+</td>
+<td style="text-align:right;">
+43
+</td>
+<td style="text-align:right;">
+2.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+won
+</td>
+<td style="text-align:left;">
+qxmsq
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+1615
+</td>
+<td style="text-align:right;">
+96.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+won
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+qxmsq
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+t
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+54
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+3.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+r2ar8
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+356
+</td>
+<td style="text-align:right;">
+23.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+r2ar8
+</td>
+<td style="text-align:left;">
+t
+</td>
+<td style="text-align:right;">
+1171
+</td>
+<td style="text-align:right;">
+76.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+won
+</td>
+<td style="text-align:left;">
+r2ar8
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+644
+</td>
+<td style="text-align:right;">
+38.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+won
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+r2ar8
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+t
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+1025
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+61.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+reskd
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+1519
+</td>
+<td style="text-align:right;">
+99.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+reskd
+</td>
+<td style="text-align:left;">
+t
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+won
+</td>
+<td style="text-align:left;">
+reskd
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+1651
+</td>
+<td style="text-align:right;">
+98.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+won
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+reskd
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+t
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+18
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+1.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+reskr
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+1301
+</td>
+<td style="text-align:right;">
+85.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+reskr
+</td>
+<td style="text-align:left;">
+t
+</td>
+<td style="text-align:right;">
+226
+</td>
+<td style="text-align:right;">
+14.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+won
+</td>
+<td style="text-align:left;">
+reskr
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+1413
+</td>
+<td style="text-align:right;">
+84.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+won
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+reskr
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+t
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+256
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+15.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+rimmx
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+1527
+</td>
+<td style="text-align:right;">
+100.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+won
+</td>
+<td style="text-align:left;">
+rimmx
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+1085
+</td>
+<td style="text-align:right;">
+65.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+won
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+rimmx
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+t
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+584
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+35.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+rkxwp
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+1286
+</td>
+<td style="text-align:right;">
+84.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+rkxwp
+</td>
+<td style="text-align:left;">
+t
+</td>
+<td style="text-align:right;">
+241
+</td>
+<td style="text-align:right;">
+15.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+won
+</td>
+<td style="text-align:left;">
+rkxwp
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+1270
+</td>
+<td style="text-align:right;">
+76.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+won
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+rkxwp
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+t
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+399
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+23.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+rxmsq
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+1407
+</td>
+<td style="text-align:right;">
+92.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+rxmsq
+</td>
+<td style="text-align:left;">
+t
+</td>
+<td style="text-align:right;">
+120
+</td>
+<td style="text-align:right;">
+7.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+won
+</td>
+<td style="text-align:left;">
+rxmsq
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+1606
+</td>
+<td style="text-align:right;">
+96.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+won
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+rxmsq
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+t
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+63
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+3.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+simpl
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+979
+</td>
+<td style="text-align:right;">
+64.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+simpl
+</td>
+<td style="text-align:left;">
+t
+</td>
+<td style="text-align:right;">
+548
+</td>
+<td style="text-align:right;">
+35.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+won
+</td>
+<td style="text-align:left;">
+simpl
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+996
+</td>
+<td style="text-align:right;">
+59.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+won
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+simpl
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+t
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+673
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+40.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+skach
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+1518
+</td>
+<td style="text-align:right;">
+99.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+skach
+</td>
+<td style="text-align:left;">
+t
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+0.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+won
+</td>
+<td style="text-align:left;">
+skach
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+1667
+</td>
+<td style="text-align:right;">
+99.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+won
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+skach
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+t
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+2
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+0.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+skewr
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+441
+</td>
+<td style="text-align:right;">
+28.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+skewr
+</td>
+<td style="text-align:left;">
+t
+</td>
+<td style="text-align:right;">
+1086
+</td>
+<td style="text-align:right;">
+71.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+won
+</td>
+<td style="text-align:left;">
+skewr
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+539
+</td>
+<td style="text-align:right;">
+32.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+won
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+skewr
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+t
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+1130
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+67.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+skrxp
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+1396
+</td>
+<td style="text-align:right;">
+91.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+skrxp
+</td>
+<td style="text-align:left;">
+t
+</td>
+<td style="text-align:right;">
+131
+</td>
+<td style="text-align:right;">
+8.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+won
+</td>
+<td style="text-align:left;">
+skrxp
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+1625
+</td>
+<td style="text-align:right;">
+97.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+won
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+skrxp
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+t
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+44
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+2.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+spcop
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+1526
+</td>
+<td style="text-align:right;">
+99.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+spcop
+</td>
+<td style="text-align:left;">
+t
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+won
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+spcop
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+f
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+1669
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+100.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+stlmt
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+1480
+</td>
+<td style="text-align:right;">
+96.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+stlmt
+</td>
+<td style="text-align:left;">
+t
+</td>
+<td style="text-align:right;">
+47
+</td>
+<td style="text-align:right;">
+3.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+won
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+stlmt
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+f
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+1669
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+100.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+thrsk
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+1475
+</td>
+<td style="text-align:right;">
+96.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+thrsk
+</td>
+<td style="text-align:left;">
+t
+</td>
+<td style="text-align:right;">
+52
+</td>
+<td style="text-align:right;">
+3.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+won
+</td>
+<td style="text-align:left;">
+thrsk
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+1585
+</td>
+<td style="text-align:right;">
+95.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+won
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+thrsk
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+t
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+84
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+5.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+bkcti
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+1334
+</td>
+<td style="text-align:right;">
+87.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+bkcti
+</td>
+<td style="text-align:left;">
+t
+</td>
+<td style="text-align:right;">
+193
+</td>
+<td style="text-align:right;">
+12.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+won
+</td>
+<td style="text-align:left;">
+bkcti
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+1297
+</td>
+<td style="text-align:right;">
+77.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+won
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+bkcti
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+t
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+372
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+22.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+bkna8
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+1372
+</td>
+<td style="text-align:right;">
+89.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+bkna8
+</td>
+<td style="text-align:left;">
+t
+</td>
+<td style="text-align:right;">
+155
+</td>
+<td style="text-align:right;">
+10.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+won
+</td>
+<td style="text-align:left;">
+bkna8
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+1649
+</td>
+<td style="text-align:right;">
+98.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+won
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+bkna8
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+t
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+20
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+1.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+bknck
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+665
+</td>
+<td style="text-align:right;">
+43.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+bknck
+</td>
+<td style="text-align:left;">
+t
+</td>
+<td style="text-align:right;">
+862
+</td>
+<td style="text-align:right;">
+56.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+won
+</td>
+<td style="text-align:left;">
+bknck
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+1319
+</td>
+<td style="text-align:right;">
+79.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+won
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+bknck
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+t
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+350
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+21.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+bkovl
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+537
+</td>
+<td style="text-align:right;">
+35.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+bkovl
+</td>
+<td style="text-align:left;">
+t
+</td>
+<td style="text-align:right;">
+990
+</td>
+<td style="text-align:right;">
+64.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+won
+</td>
+<td style="text-align:left;">
+bkovl
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+652
+</td>
+<td style="text-align:right;">
+39.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+won
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+bkovl
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+t
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+1017
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+60.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+bkpos
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+510
+</td>
+<td style="text-align:right;">
+33.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+bkpos
+</td>
+<td style="text-align:left;">
+t
+</td>
+<td style="text-align:right;">
+1017
+</td>
+<td style="text-align:right;">
+66.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+won
+</td>
+<td style="text-align:left;">
+bkpos
+</td>
+<td style="text-align:left;">
+f
+</td>
+<td style="text-align:right;">
+341
+</td>
+<td style="text-align:right;">
+20.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+won
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+bkpos
+</td>
+<td style="text-align:left;border-bottom: 2px solid #666;">
+t
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+1328
+</td>
+<td style="text-align:right;border-bottom: 2px solid #666;">
+79.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+btoeg
+</td>
+<td style="text-align:left;">
+n
+</td>
+<td style="text-align:right;">
+1150
+</td>
+<td style="text-align:right;">
+75.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nowin
+</td>
+<td style="text-align:left;">
+btoeg
+</td>
+<td style="text-align:left;">
+t
+</td>
+<td style="text-align:right;">
+377
+</td>
+<td style="text-align:right;">
+24.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+won
+</td>
+<td style="text-align:left;">
+btoeg
+</td>
+<td style="text-align:left;">
+n
+</td>
+<td style="text-align:right;">
+1257
+</td>
+<td style="text-align:right;">
+75.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+won
+</td>
+<td style="text-align:left;">
+btoeg
+</td>
+<td style="text-align:left;">
+t
+</td>
+<td style="text-align:right;">
+412
+</td>
+<td style="text-align:right;">
+24.7
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="análisis-exploratorio-de-datos-eda.html#cb32-1" tabindex="-1"></a>colores_class <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb32-2"><a href="análisis-exploratorio-de-datos-eda.html#cb32-2" tabindex="-1"></a>  <span class="st">&quot;won&quot;</span> <span class="ot">=</span> <span class="st">&quot;#2E86C1&quot;</span>,  </span>
+<span id="cb32-3"><a href="análisis-exploratorio-de-datos-eda.html#cb32-3" tabindex="-1"></a>  <span class="st">&quot;nowin&quot;</span> <span class="ot">=</span> <span class="st">&quot;#E74C3C&quot;</span>  </span>
+<span id="cb32-4"><a href="análisis-exploratorio-de-datos-eda.html#cb32-4" tabindex="-1"></a>)</span>
+<span id="cb32-5"><a href="análisis-exploratorio-de-datos-eda.html#cb32-5" tabindex="-1"></a></span>
+<span id="cb32-6"><a href="análisis-exploratorio-de-datos-eda.html#cb32-6" tabindex="-1"></a>graficar_barras_agrupadas <span class="ot">&lt;-</span> <span class="cf">function</span>(var) {</span>
+<span id="cb32-7"><a href="análisis-exploratorio-de-datos-eda.html#cb32-7" tabindex="-1"></a>  </span>
+<span id="cb32-8"><a href="análisis-exploratorio-de-datos-eda.html#cb32-8" tabindex="-1"></a>  df_plot <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
+<span id="cb32-9"><a href="análisis-exploratorio-de-datos-eda.html#cb32-9" tabindex="-1"></a>    <span class="fu">group_by</span>(class) <span class="sc">%&gt;%</span></span>
+<span id="cb32-10"><a href="análisis-exploratorio-de-datos-eda.html#cb32-10" tabindex="-1"></a>    <span class="fu">count</span>(<span class="sc">!!</span><span class="fu">sym</span>(var), <span class="at">name =</span> <span class="st">&quot;n&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb32-11"><a href="análisis-exploratorio-de-datos-eda.html#cb32-11" tabindex="-1"></a>    <span class="fu">mutate</span>(</span>
+<span id="cb32-12"><a href="análisis-exploratorio-de-datos-eda.html#cb32-12" tabindex="-1"></a>      <span class="at">categoria =</span> <span class="fu">as.character</span>(<span class="sc">!!</span><span class="fu">sym</span>(var)),</span>
+<span id="cb32-13"><a href="análisis-exploratorio-de-datos-eda.html#cb32-13" tabindex="-1"></a>      <span class="at">variable =</span> var,</span>
+<span id="cb32-14"><a href="análisis-exploratorio-de-datos-eda.html#cb32-14" tabindex="-1"></a>      <span class="at">porcentaje =</span> <span class="fu">round</span>((n <span class="sc">/</span> <span class="fu">sum</span>(n)) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">1</span>)</span>
+<span id="cb32-15"><a href="análisis-exploratorio-de-datos-eda.html#cb32-15" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span></span>
+<span id="cb32-16"><a href="análisis-exploratorio-de-datos-eda.html#cb32-16" tabindex="-1"></a>    <span class="fu">ungroup</span>()</span>
+<span id="cb32-17"><a href="análisis-exploratorio-de-datos-eda.html#cb32-17" tabindex="-1"></a>  </span>
+<span id="cb32-18"><a href="análisis-exploratorio-de-datos-eda.html#cb32-18" tabindex="-1"></a>  <span class="fu">ggplot</span>(df_plot, <span class="fu">aes</span>(<span class="at">x =</span> categoria, <span class="at">y =</span> n, <span class="at">fill =</span> class)) <span class="sc">+</span></span>
+<span id="cb32-19"><a href="análisis-exploratorio-de-datos-eda.html#cb32-19" tabindex="-1"></a>    <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="at">width =</span> <span class="fl">0.9</span>)) <span class="sc">+</span></span>
+<span id="cb32-20"><a href="análisis-exploratorio-de-datos-eda.html#cb32-20" tabindex="-1"></a>    <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">paste0</span>(n, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">(&quot;</span>, <span class="fu">round</span>(porcentaje, <span class="dv">1</span>), <span class="st">&quot;%)&quot;</span>)),</span>
+<span id="cb32-21"><a href="análisis-exploratorio-de-datos-eda.html#cb32-21" tabindex="-1"></a>              <span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="at">width =</span> <span class="fl">0.9</span>),</span>
+<span id="cb32-22"><a href="análisis-exploratorio-de-datos-eda.html#cb32-22" tabindex="-1"></a>              <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.3</span>,</span>
+<span id="cb32-23"><a href="análisis-exploratorio-de-datos-eda.html#cb32-23" tabindex="-1"></a>              <span class="at">size =</span> <span class="fl">2.5</span>) <span class="sc">+</span></span>
+<span id="cb32-24"><a href="análisis-exploratorio-de-datos-eda.html#cb32-24" tabindex="-1"></a>    <span class="fu">labs</span>(</span>
+<span id="cb32-25"><a href="análisis-exploratorio-de-datos-eda.html#cb32-25" tabindex="-1"></a>      <span class="at">title =</span> var,</span>
+<span id="cb32-26"><a href="análisis-exploratorio-de-datos-eda.html#cb32-26" tabindex="-1"></a>      <span class="at">x =</span> <span class="cn">NULL</span>,</span>
+<span id="cb32-27"><a href="análisis-exploratorio-de-datos-eda.html#cb32-27" tabindex="-1"></a>      <span class="at">y =</span> <span class="cn">NULL</span>,</span>
+<span id="cb32-28"><a href="análisis-exploratorio-de-datos-eda.html#cb32-28" tabindex="-1"></a>      <span class="at">fill =</span> <span class="st">&quot;&quot;</span></span>
+<span id="cb32-29"><a href="análisis-exploratorio-de-datos-eda.html#cb32-29" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb32-30"><a href="análisis-exploratorio-de-datos-eda.html#cb32-30" tabindex="-1"></a>    <span class="fu">scale_fill_manual</span>(</span>
+<span id="cb32-31"><a href="análisis-exploratorio-de-datos-eda.html#cb32-31" tabindex="-1"></a>      <span class="at">values =</span> colores_class,</span>
+<span id="cb32-32"><a href="análisis-exploratorio-de-datos-eda.html#cb32-32" tabindex="-1"></a>      <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;won&quot;</span> <span class="ot">=</span> <span class="st">&quot;won&quot;</span>, <span class="st">&quot;nowin&quot;</span> <span class="ot">=</span> <span class="st">&quot;nowin&quot;</span>)</span>
+<span id="cb32-33"><a href="análisis-exploratorio-de-datos-eda.html#cb32-33" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb32-34"><a href="análisis-exploratorio-de-datos-eda.html#cb32-34" tabindex="-1"></a>    <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">8</span>) <span class="sc">+</span></span>
+<span id="cb32-35"><a href="análisis-exploratorio-de-datos-eda.html#cb32-35" tabindex="-1"></a>    <span class="fu">theme</span>(</span>
+<span id="cb32-36"><a href="análisis-exploratorio-de-datos-eda.html#cb32-36" tabindex="-1"></a>      <span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,</span>
+<span id="cb32-37"><a href="análisis-exploratorio-de-datos-eda.html#cb32-37" tabindex="-1"></a>      <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">6</span>),</span>
+<span id="cb32-38"><a href="análisis-exploratorio-de-datos-eda.html#cb32-38" tabindex="-1"></a>      <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>),</span>
+<span id="cb32-39"><a href="análisis-exploratorio-de-datos-eda.html#cb32-39" tabindex="-1"></a>      <span class="at">legend.key.size =</span> <span class="fu">unit</span>(<span class="fl">0.37</span>, <span class="st">&quot;cm&quot;</span>),</span>
+<span id="cb32-40"><a href="análisis-exploratorio-de-datos-eda.html#cb32-40" tabindex="-1"></a>      <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">6</span>),</span>
+<span id="cb32-41"><a href="análisis-exploratorio-de-datos-eda.html#cb32-41" tabindex="-1"></a>      <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">6</span>),</span>
+<span id="cb32-42"><a href="análisis-exploratorio-de-datos-eda.html#cb32-42" tabindex="-1"></a>      <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">9</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>),</span>
+<span id="cb32-43"><a href="análisis-exploratorio-de-datos-eda.html#cb32-43" tabindex="-1"></a>      <span class="at">panel.grid.major.x =</span> <span class="fu">element_blank</span>()</span>
+<span id="cb32-44"><a href="análisis-exploratorio-de-datos-eda.html#cb32-44" tabindex="-1"></a>    )</span>
+<span id="cb32-45"><a href="análisis-exploratorio-de-datos-eda.html#cb32-45" tabindex="-1"></a>}</span>
+<span id="cb32-46"><a href="análisis-exploratorio-de-datos-eda.html#cb32-46" tabindex="-1"></a></span>
+<span id="cb32-47"><a href="análisis-exploratorio-de-datos-eda.html#cb32-47" tabindex="-1"></a><span class="co"># Crear gráficos para todas las variables</span></span>
+<span id="cb32-48"><a href="análisis-exploratorio-de-datos-eda.html#cb32-48" tabindex="-1"></a>vars <span class="ot">&lt;-</span> <span class="fu">colnames</span>(datos)[<span class="fu">colnames</span>(datos) <span class="sc">!=</span> <span class="st">&quot;class&quot;</span>]</span>
+<span id="cb32-49"><a href="análisis-exploratorio-de-datos-eda.html#cb32-49" tabindex="-1"></a>lista_graficos <span class="ot">&lt;-</span> <span class="fu">map</span>(vars, graficar_barras_agrupadas)</span>
+<span id="cb32-50"><a href="análisis-exploratorio-de-datos-eda.html#cb32-50" tabindex="-1"></a></span>
+<span id="cb32-51"><a href="análisis-exploratorio-de-datos-eda.html#cb32-51" tabindex="-1"></a><span class="co"># Dividir en grupos de 4</span></span>
+<span id="cb32-52"><a href="análisis-exploratorio-de-datos-eda.html#cb32-52" tabindex="-1"></a>grupos <span class="ot">&lt;-</span> <span class="fu">split</span>(lista_graficos, <span class="fu">ceiling</span>(<span class="fu">seq_along</span>(lista_graficos) <span class="sc">/</span> <span class="dv">4</span>))</span>
+<span id="cb32-53"><a href="análisis-exploratorio-de-datos-eda.html#cb32-53" tabindex="-1"></a></span>
+<span id="cb32-54"><a href="análisis-exploratorio-de-datos-eda.html#cb32-54" tabindex="-1"></a><span class="co"># Mostrar cada grupo</span></span>
+<span id="cb32-55"><a href="análisis-exploratorio-de-datos-eda.html#cb32-55" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(grupos)) {</span>
+<span id="cb32-56"><a href="análisis-exploratorio-de-datos-eda.html#cb32-56" tabindex="-1"></a>  </span>
+<span id="cb32-57"><a href="análisis-exploratorio-de-datos-eda.html#cb32-57" tabindex="-1"></a>  grobs_list <span class="ot">&lt;-</span> <span class="fu">lapply</span>(grupos[[i]], ggplotGrob)</span>
+<span id="cb32-58"><a href="análisis-exploratorio-de-datos-eda.html#cb32-58" tabindex="-1"></a>  </span>
+<span id="cb32-59"><a href="análisis-exploratorio-de-datos-eda.html#cb32-59" tabindex="-1"></a>  <span class="fu">grid.arrange</span>(</span>
+<span id="cb32-60"><a href="análisis-exploratorio-de-datos-eda.html#cb32-60" tabindex="-1"></a>    <span class="at">grobs =</span> grobs_list,</span>
+<span id="cb32-61"><a href="análisis-exploratorio-de-datos-eda.html#cb32-61" tabindex="-1"></a>    <span class="at">ncol =</span> <span class="dv">4</span>,</span>
+<span id="cb32-62"><a href="análisis-exploratorio-de-datos-eda.html#cb32-62" tabindex="-1"></a>    <span class="at">padding =</span> <span class="fu">unit</span>(<span class="fl">0.2</span>, <span class="st">&quot;cm&quot;</span>),</span>
+<span id="cb32-63"><a href="análisis-exploratorio-de-datos-eda.html#cb32-63" tabindex="-1"></a>    <span class="at">margins =</span> <span class="fu">unit</span>(<span class="fl">0.2</span>, <span class="st">&quot;cm&quot;</span>),</span>
+<span id="cb32-64"><a href="análisis-exploratorio-de-datos-eda.html#cb32-64" tabindex="-1"></a>  )</span>
+<span id="cb32-65"><a href="análisis-exploratorio-de-datos-eda.html#cb32-65" tabindex="-1"></a>}</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-21-1.png" alt="" width="672" /><img src="bookdown-demo_files/figure-html/unnamed-chunk-21-2.png" alt="" width="672" /><img src="bookdown-demo_files/figure-html/unnamed-chunk-21-3.png" alt="" width="672" /><img src="bookdown-demo_files/figure-html/unnamed-chunk-21-4.png" alt="" width="672" /><img src="bookdown-demo_files/figure-html/unnamed-chunk-21-5.png" alt="" width="672" /><img src="bookdown-demo_files/figure-html/unnamed-chunk-21-6.png" alt="" width="672" /><img src="bookdown-demo_files/figure-html/unnamed-chunk-21-7.png" alt="" width="672" /><img src="bookdown-demo_files/figure-html/unnamed-chunk-21-8.png" alt="" width="672" /><img src="bookdown-demo_files/figure-html/unnamed-chunk-21-9.png" alt="" width="672" /></p>
+<p><strong>Factores asociados con la victoria (<code>won</code>)</strong>:</p>
+<p><code>katri</code> (w): Cuando el rey blanco controla el punto de intersección (<code>katri = w</code>), la proporción de <code>won</code> (20.9%) es más del triple que en <code>nowin</code> (6.4%). Controlar el punto de intersección impide que la torre blanca sea clavada.</p>
+<p><code>rkxwp</code> (t): Cuando la torre blanca amenaza al peón negro (<code>rkxwp = t</code>), el 23.9% de los casos son <code>won</code> y el 15.8% son <code>nowin</code>. La amenaza de la torre sobre el peón favorece a las blancas, pero no es un factor determinante por sí solo.</p>
+<p><code>bkpos</code> (t): Cuando el rey negro está en posición de posible clavada (<code>bkpos = t</code>), es ligeramente más común en <code>won</code> (79.6%) que en <code>nowin</code> (66.6%). Sin embargo, la diferencia no es muy grande, lo que indica que no es un factor determinante por sí solo. La posición del rey negro en posible clavada puede favorecer a las blancas, pero otros factores son más importantes.</p>
+<p><strong>Factores asociados con la no victoria (<code>nowin</code>)</strong>:</p>
+<p><code>rimmx</code> (f): Cuando la torre blanca no puede ser capturada de forma segura por el rey negro (<code>rimmx = f</code>), se da el 100% de los casos de <code>nowin</code>. Esto significa que, si la torre está segura pero no puede atacar el peón, este corona sin oposición. Esta es la relación más fuerte.</p>
+<p><code>bkna8</code> (t): Cuando el rey negro está en a8 (<code>bkna8 = t</code>), es 5 veces más frecuente en <code>nowin</code> (10.2%) que en <code>won</code> (1.2%). Esto indica que la presencia del rey negro en a8 es un predictor fuerte de <code>nowin</code>, ya que el rey negro defiende la casilla de coronación y protege el peón.</p>
+<p><code>bknck</code> (t): Cuando el rey negro está en jaque (<code>bknck = t</code>), es 2.7 veces más frecuente en <code>nowin</code> (56.5%) que en <code>won</code> (21.0%). Esto indica que el jaque al rey negro no siempre es favorable para las blancas.</p>
+<p><code>wkxbp</code> (t): Cuando el rey blanco puede capturar el peón (<code>wkxbp = t</code>), es 2.5 veces más frecuente en <code>nowin</code> (31.8%) que en <code>won</code> (12.6%). Esto es contra intuitivo, ya que se esperaría que capturar el peón llevara a la victoria, pero los datos muestran lo contrario.</p>
+<p><code>wxqsq</code> (t): Cuando las blancas controlan la casilla de coronación a8 (<code>wxqsq = t</code>), es 3.5 veces más frecuente en <code>nowin</code> (48.7%) que en <code>won</code> (13.7%). Esto es contra intuitivo también.</p>
+<p><strong>Variables con poca diferencia</strong>:</p>
+<p>Las variables <code>wkblk</code>, <code>wknwy</code>, <code>dsopp</code>, <code>qxmsq</code>, <code>reskd</code>, <code>reskr</code> y <code>btoeg</code> presentan distribuciones muy entre <code>won</code> y <code>nowin</code>, lo que indica que podrían no ser útiles para predecir el resultado.</p>
+</div>
+<div id="relaciones-entre-variables-predictoras" class="section level2 hasAnchor" number="2.5">
+<h2><span class="header-section-number">2.5</span> Relaciones entre variables predictoras<a href="análisis-exploratorio-de-datos-eda.html#relaciones-entre-variables-predictoras" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="análisis-exploratorio-de-datos-eda.html#cb33-1" tabindex="-1"></a>vars_predictoras <span class="ot">&lt;-</span> <span class="fu">colnames</span>(datos)[<span class="fu">colnames</span>(datos) <span class="sc">!=</span> <span class="st">&quot;class&quot;</span>]</span>
+<span id="cb33-2"><a href="análisis-exploratorio-de-datos-eda.html#cb33-2" tabindex="-1"></a></span>
+<span id="cb33-3"><a href="análisis-exploratorio-de-datos-eda.html#cb33-3" tabindex="-1"></a><span class="co"># 2. Calcular Cramér&#39;s V solo entre predictoras</span></span>
+<span id="cb33-4"><a href="análisis-exploratorio-de-datos-eda.html#cb33-4" tabindex="-1"></a>cramer_matrix_pred <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, </span>
+<span id="cb33-5"><a href="análisis-exploratorio-de-datos-eda.html#cb33-5" tabindex="-1"></a>                             <span class="at">nrow =</span> <span class="fu">length</span>(vars_predictoras), </span>
+<span id="cb33-6"><a href="análisis-exploratorio-de-datos-eda.html#cb33-6" tabindex="-1"></a>                             <span class="at">ncol =</span> <span class="fu">length</span>(vars_predictoras))</span>
+<span id="cb33-7"><a href="análisis-exploratorio-de-datos-eda.html#cb33-7" tabindex="-1"></a><span class="fu">rownames</span>(cramer_matrix_pred) <span class="ot">&lt;-</span> vars_predictoras</span>
+<span id="cb33-8"><a href="análisis-exploratorio-de-datos-eda.html#cb33-8" tabindex="-1"></a><span class="fu">colnames</span>(cramer_matrix_pred) <span class="ot">&lt;-</span> vars_predictoras</span>
+<span id="cb33-9"><a href="análisis-exploratorio-de-datos-eda.html#cb33-9" tabindex="-1"></a></span>
+<span id="cb33-10"><a href="análisis-exploratorio-de-datos-eda.html#cb33-10" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(vars_predictoras)) {</span>
+<span id="cb33-11"><a href="análisis-exploratorio-de-datos-eda.html#cb33-11" tabindex="-1"></a>  <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(vars_predictoras)) {</span>
+<span id="cb33-12"><a href="análisis-exploratorio-de-datos-eda.html#cb33-12" tabindex="-1"></a>    cramer_matrix_pred[i, j] <span class="ot">&lt;-</span> <span class="fu">cramer_v</span>(datos[[vars_predictoras[i]]], </span>
+<span id="cb33-13"><a href="análisis-exploratorio-de-datos-eda.html#cb33-13" tabindex="-1"></a>                                          datos[[vars_predictoras[j]]])</span>
+<span id="cb33-14"><a href="análisis-exploratorio-de-datos-eda.html#cb33-14" tabindex="-1"></a>  }</span>
+<span id="cb33-15"><a href="análisis-exploratorio-de-datos-eda.html#cb33-15" tabindex="-1"></a>}</span>
+<span id="cb33-16"><a href="análisis-exploratorio-de-datos-eda.html#cb33-16" tabindex="-1"></a></span>
+<span id="cb33-17"><a href="análisis-exploratorio-de-datos-eda.html#cb33-17" tabindex="-1"></a><span class="co"># 3. Guardar heatmap de predictoras (sin class)</span></span>
+<span id="cb33-18"><a href="análisis-exploratorio-de-datos-eda.html#cb33-18" tabindex="-1"></a><span class="fu">png</span>(<span class="st">&quot;heatmap_cramer_predictoras.png&quot;</span>, </span>
+<span id="cb33-19"><a href="análisis-exploratorio-de-datos-eda.html#cb33-19" tabindex="-1"></a>    <span class="at">width =</span> <span class="dv">3000</span>, </span>
+<span id="cb33-20"><a href="análisis-exploratorio-de-datos-eda.html#cb33-20" tabindex="-1"></a>    <span class="at">height =</span> <span class="dv">3000</span>, </span>
+<span id="cb33-21"><a href="análisis-exploratorio-de-datos-eda.html#cb33-21" tabindex="-1"></a>    <span class="at">res =</span> <span class="dv">200</span>)</span>
+<span id="cb33-22"><a href="análisis-exploratorio-de-datos-eda.html#cb33-22" tabindex="-1"></a></span>
+<span id="cb33-23"><a href="análisis-exploratorio-de-datos-eda.html#cb33-23" tabindex="-1"></a>cramer_matrix_pred <span class="sc">%&gt;%</span></span>
+<span id="cb33-24"><a href="análisis-exploratorio-de-datos-eda.html#cb33-24" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb33-25"><a href="análisis-exploratorio-de-datos-eda.html#cb33-25" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="st">&quot;var1&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb33-26"><a href="análisis-exploratorio-de-datos-eda.html#cb33-26" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>var1, <span class="at">names_to =</span> <span class="st">&quot;var2&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;cramer&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb33-27"><a href="análisis-exploratorio-de-datos-eda.html#cb33-27" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> var1, <span class="at">y =</span> var2, <span class="at">fill =</span> cramer)) <span class="sc">+</span></span>
+<span id="cb33-28"><a href="análisis-exploratorio-de-datos-eda.html#cb33-28" tabindex="-1"></a>  <span class="fu">geom_tile</span>(<span class="at">color =</span> <span class="st">&quot;white&quot;</span>, <span class="at">size =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb33-29"><a href="análisis-exploratorio-de-datos-eda.html#cb33-29" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">round</span>(cramer, <span class="dv">2</span>)), </span>
+<span id="cb33-30"><a href="análisis-exploratorio-de-datos-eda.html#cb33-30" tabindex="-1"></a>            <span class="at">size =</span> <span class="fl">3.5</span>, </span>
+<span id="cb33-31"><a href="análisis-exploratorio-de-datos-eda.html#cb33-31" tabindex="-1"></a>            <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
+<span id="cb33-32"><a href="análisis-exploratorio-de-datos-eda.html#cb33-32" tabindex="-1"></a>  <span class="fu">scale_fill_gradient2</span>(</span>
+<span id="cb33-33"><a href="análisis-exploratorio-de-datos-eda.html#cb33-33" tabindex="-1"></a>    <span class="at">low =</span> <span class="st">&quot;white&quot;</span>,</span>
+<span id="cb33-34"><a href="análisis-exploratorio-de-datos-eda.html#cb33-34" tabindex="-1"></a>    <span class="at">mid =</span> <span class="st">&quot;lightblue&quot;</span>,</span>
+<span id="cb33-35"><a href="análisis-exploratorio-de-datos-eda.html#cb33-35" tabindex="-1"></a>    <span class="at">high =</span> <span class="st">&quot;steelblue&quot;</span>,</span>
+<span id="cb33-36"><a href="análisis-exploratorio-de-datos-eda.html#cb33-36" tabindex="-1"></a>    <span class="at">midpoint =</span> <span class="fl">0.3</span>,</span>
+<span id="cb33-37"><a href="análisis-exploratorio-de-datos-eda.html#cb33-37" tabindex="-1"></a>    <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),</span>
+<span id="cb33-38"><a href="análisis-exploratorio-de-datos-eda.html#cb33-38" tabindex="-1"></a>    <span class="at">name =</span> <span class="st">&quot;Cramér&#39;s V&quot;</span></span>
+<span id="cb33-39"><a href="análisis-exploratorio-de-datos-eda.html#cb33-39" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb33-40"><a href="análisis-exploratorio-de-datos-eda.html#cb33-40" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb33-41"><a href="análisis-exploratorio-de-datos-eda.html#cb33-41" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Matriz de asociación entre variables predictoras (Cramér&#39;s V)&quot;</span>,</span>
+<span id="cb33-42"><a href="análisis-exploratorio-de-datos-eda.html#cb33-42" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="fu">paste</span>(<span class="st">&quot;Excluyendo &#39;class&#39; (&quot;</span>, <span class="fu">length</span>(vars_predictoras), <span class="st">&quot; variables)&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;&quot;</span>),</span>
+<span id="cb33-43"><a href="análisis-exploratorio-de-datos-eda.html#cb33-43" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb33-44"><a href="análisis-exploratorio-de-datos-eda.html#cb33-44" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;&quot;</span></span>
+<span id="cb33-45"><a href="análisis-exploratorio-de-datos-eda.html#cb33-45" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb33-46"><a href="análisis-exploratorio-de-datos-eda.html#cb33-46" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">10</span>) <span class="sc">+</span></span>
+<span id="cb33-47"><a href="análisis-exploratorio-de-datos-eda.html#cb33-47" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb33-48"><a href="análisis-exploratorio-de-datos-eda.html#cb33-48" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb33-49"><a href="análisis-exploratorio-de-datos-eda.html#cb33-49" tabindex="-1"></a>    <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb33-50"><a href="análisis-exploratorio-de-datos-eda.html#cb33-50" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">20</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>),</span>
+<span id="cb33-51"><a href="análisis-exploratorio-de-datos-eda.html#cb33-51" tabindex="-1"></a>    <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>),</span>
+<span id="cb33-52"><a href="análisis-exploratorio-de-datos-eda.html#cb33-52" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;right&quot;</span>,</span>
+<span id="cb33-53"><a href="análisis-exploratorio-de-datos-eda.html#cb33-53" tabindex="-1"></a>    <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>),</span>
+<span id="cb33-54"><a href="análisis-exploratorio-de-datos-eda.html#cb33-54" tabindex="-1"></a>    <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb33-55"><a href="análisis-exploratorio-de-datos-eda.html#cb33-55" tabindex="-1"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>()</span>
+<span id="cb33-56"><a href="análisis-exploratorio-de-datos-eda.html#cb33-56" tabindex="-1"></a>  )</span>
+<span id="cb33-57"><a href="análisis-exploratorio-de-datos-eda.html#cb33-57" tabindex="-1"></a></span>
+<span id="cb33-58"><a href="análisis-exploratorio-de-datos-eda.html#cb33-58" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div>
+<pre><code>## png 
+##   2</code></pre>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="análisis-exploratorio-de-datos-eda.html#cb35-1" tabindex="-1"></a><span class="co"># 4. Mostrar heatmap en el documento</span></span>
+<span id="cb35-2"><a href="análisis-exploratorio-de-datos-eda.html#cb35-2" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">&quot;heatmap_cramer_predictoras.png&quot;</span>)</span></code></pre></div>
+<p><img src="heatmap_cramer_predictoras.png" alt="" width="1500" /></p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="análisis-exploratorio-de-datos-eda.html#cb36-1" tabindex="-1"></a>pares <span class="ot">&lt;-</span> cramer_matrix_pred <span class="sc">%&gt;%</span></span>
+<span id="cb36-2"><a href="análisis-exploratorio-de-datos-eda.html#cb36-2" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb36-3"><a href="análisis-exploratorio-de-datos-eda.html#cb36-3" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="st">&quot;var1&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb36-4"><a href="análisis-exploratorio-de-datos-eda.html#cb36-4" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>var1, <span class="at">names_to =</span> <span class="st">&quot;var2&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;cramer&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb36-5"><a href="análisis-exploratorio-de-datos-eda.html#cb36-5" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
+<span id="cb36-6"><a href="análisis-exploratorio-de-datos-eda.html#cb36-6" tabindex="-1"></a>    var1 <span class="sc">!=</span> var2,                  </span>
+<span id="cb36-7"><a href="análisis-exploratorio-de-datos-eda.html#cb36-7" tabindex="-1"></a>    var1 <span class="sc">&lt;</span> var2                     </span>
+<span id="cb36-8"><a href="análisis-exploratorio-de-datos-eda.html#cb36-8" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb36-9"><a href="análisis-exploratorio-de-datos-eda.html#cb36-9" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(cramer))</span>
+<span id="cb36-10"><a href="análisis-exploratorio-de-datos-eda.html#cb36-10" tabindex="-1"></a></span>
+<span id="cb36-11"><a href="análisis-exploratorio-de-datos-eda.html#cb36-11" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">head</span>(pares, <span class="dv">5</span>), </span>
+<span id="cb36-12"><a href="análisis-exploratorio-de-datos-eda.html#cb36-12" tabindex="-1"></a>             <span class="at">caption =</span> <span class="st">&quot;Top 5 pares de variables predictoras con mayor asociación&quot;</span>,</span>
+<span id="cb36-13"><a href="análisis-exploratorio-de-datos-eda.html#cb36-13" tabindex="-1"></a>             <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&quot;Variable 1&quot;</span>, <span class="st">&quot;Variable 2&quot;</span>, <span class="st">&quot;Cramér&#39;s V&quot;</span>),</span>
+<span id="cb36-14"><a href="análisis-exploratorio-de-datos-eda.html#cb36-14" tabindex="-1"></a>             <span class="at">digits =</span> <span class="dv">3</span>)</span></code></pre></div>
+<table>
+<caption><span id="tab:unnamed-chunk-23">Table 2.3: </span>Top 5 pares de variables predictoras con mayor asociación</caption>
+<thead>
+<tr class="header">
+<th align="left">Variable 1</th>
+<th align="left">Variable 2</th>
+<th align="right">Cramér’s V</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">whxbp</td>
+<td align="left">wkxbp</td>
+<td align="right">0.673</td>
+</tr>
+<tr class="even">
+<td align="left">rkxwp</td>
+<td align="left">whxbp</td>
+<td align="right">0.639</td>
+</tr>
+<tr class="odd">
+<td align="left">bkovl</td>
+<td align="left">r2ar8</td>
+<td align="right">0.591</td>
+</tr>
+<tr class="even">
+<td align="left">cntxt</td>
+<td align="left">skewr</td>
+<td align="right">0.579</td>
+</tr>
+<tr class="odd">
+<td align="left">wkxbp</td>
+<td align="left">wkxcr</td>
+<td align="right">0.564</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="análisis-exploratorio-de-datos-eda.html#cb37-1" tabindex="-1"></a>pares <span class="sc">%&gt;%</span></span>
+<span id="cb37-2"><a href="análisis-exploratorio-de-datos-eda.html#cb37-2" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">5</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb37-3"><a href="análisis-exploratorio-de-datos-eda.html#cb37-3" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(<span class="fu">paste</span>(var1, <span class="st">&quot;↔&quot;</span>, var2), cramer), <span class="at">y =</span> cramer, <span class="at">fill =</span> cramer)) <span class="sc">+</span></span>
+<span id="cb37-4"><a href="análisis-exploratorio-de-datos-eda.html#cb37-4" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">width =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb37-5"><a href="análisis-exploratorio-de-datos-eda.html#cb37-5" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb37-6"><a href="análisis-exploratorio-de-datos-eda.html#cb37-6" tabindex="-1"></a>  <span class="fu">scale_fill_gradient</span>(<span class="at">low =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="at">high =</span> <span class="st">&quot;darkblue&quot;</span>) <span class="sc">+</span></span>
+<span id="cb37-7"><a href="análisis-exploratorio-de-datos-eda.html#cb37-7" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">round</span>(cramer, <span class="dv">3</span>)), <span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.2</span>, <span class="at">size =</span> <span class="fl">3.5</span>) <span class="sc">+</span></span>
+<span id="cb37-8"><a href="análisis-exploratorio-de-datos-eda.html#cb37-8" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb37-9"><a href="análisis-exploratorio-de-datos-eda.html#cb37-9" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Top 5 asociaciones entre variables predictoras&quot;</span>,</span>
+<span id="cb37-10"><a href="análisis-exploratorio-de-datos-eda.html#cb37-10" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;Par de variables&quot;</span>,</span>
+<span id="cb37-11"><a href="análisis-exploratorio-de-datos-eda.html#cb37-11" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Cramér&#39;s V&quot;</span></span>
+<span id="cb37-12"><a href="análisis-exploratorio-de-datos-eda.html#cb37-12" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb37-13"><a href="análisis-exploratorio-de-datos-eda.html#cb37-13" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">11</span>) <span class="sc">+</span></span>
+<span id="cb37-14"><a href="análisis-exploratorio-de-datos-eda.html#cb37-14" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-23-1.png" alt="" width="672" /></p>
+<p>Para evaluar si existen variables redundantes (que miden información similar), se calculó la matriz de Cramer’s V excluyendo la variable objetivo <code>class</code>. Los valores más altos indican que dos variables están asociadas entre sí, lo que sugiere que podrían estar midiendo conceptos relacionados:</p>
+<p><code>whxbp</code> ↔︎ <code>wkxbp</code> (0.67) Captura del peón negro por la torre blanca vs captura por el rey blanco. Ambas miden si el peón puede ser capturado, lo que sugiere que están altamente relacionadas.</p>
+<p><code>rkxwp</code> ↔︎ <code>whxbp</code> (0.639) Amenaza de la torre blanca sobre el peón vs ataque de la torre blanca al peón. Miden conceptos similares, ambos de la torre blanca sobre el peón negro.</p>
+<p><code>bkovl</code> ↔︎ <code>r2ar8</code> (0.591) Rey negro sobrecargado vs acceso de la torre blanca a la columna A o fila 8. Si la torre blanca tiene acceso, el rey negro se sobrecarga al tener que defender múltiples amenazas.</p>
+<p><code>cntxt</code> ↔︎ <code>skewr</code> (0.579) Rey negro en el borde (no a8) vs posibilidad de clavada. Si el rey negro está en el borde, es más vulnerable a una clavada de la torre blanca.</p>
+<p><code>wkxbp</code> ↔︎ <code>wkxcr</code> (0.564) Rey blanco captura el peón vs rey blanco ataca b7. Ambas miden la capacidad del rey blanco para presionar al peón negro.</p>
+<p>Ninguno de estos valores superan el 0.7, lo que indica que no hay variables altamente redundantes, es decir, que presenten multicolinealidad muy alta. Sin embargo, las relaciones moderadas (0.5 - 0.67) sugieren que algunos pares de variables miden conceptos relacionados desde diferentes perspectivas.</p>
+</div>
+<div id="conclusiones" class="section level2 hasAnchor" number="2.6">
+<h2><span class="header-section-number">2.6</span> Conclusiones<a href="análisis-exploratorio-de-datos-eda.html#conclusiones" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>El análisis exploratorio permitió identificar los principales factores que determinan el resultado del final de ajedrez Rey+Torre (blancas) vs Rey+Peón (negras) en a7. La variable objetivo class presenta una distribución prácticamente balanceada (52.2% won, 47.8% nowin), lo que indica que no hay sesgo hacia ninguna de las clases. El estudio de las variables predictoras revela que la mayoría son binarias (t/f), con excepción de dwipd (g/l) y katri (la única ternaria: n/b/w). El análisis de frecuencias muestra que tácticas avanzadas como el jaque oculto (hdchk, 0.5%), la re-clavada diferida (reskd, 0.8%), la clavada tras jaques (skach, 0.3%) y la oposición especial (spcop, 0%) son muy raras. En cuanto a la asociación con class, la variable más determinante es rimmx (Cramér’s V = 0.45): cuando la torre blanca no puede ser capturada de forma segura (rimmx = f), se da el 100% de los casos de nowin, lo que indica que la torre blanca es la pieza clave para detener el peón. Otras variables con alta asociación son wxqsq (0.38) y bknck (0.365). El análisis de redundancia entre predictoras muestra que no hay variables altamente redundantes (ninguna comparación supera 0.7 de Cramér’s V), aunque se observaron relaciones moderadas entre conceptos relacionados, como whxbp ↔︎ wkxbp (0.67), que miden presión sobre el peón desde diferentes perspectivas. En conjunto, se concluye que el resultado del final depende de la combinación de múltiples factores, destacando la seguridad de la torre, el control del punto de intersección y la posición del rey negro.</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": "https://github.com/rstudio/bookdown-demo/edit/master/01-intro.Rmd",
+    "text": "Edit"
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["bookdown-demo.pdf", "bookdown-demo.epub"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

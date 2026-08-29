@@ -1,0 +1,674 @@
+# Análisis exploratorio de datos (EDA)
+
+## Librerías 
+
+```{r message=FALSE, warning=FALSE}
+#install.packages("tidyverse")
+#install.packages("GGally")
+#install.packages("gridExtra")
+#install.packages("patchwork")
+#install.packages("viridis")
+#install.packages("tidytext")
+#install.packages("Amelia")
+#install.packages("vcd")
+#install.packages("knitr")
+#install.packages("kableExtra")
+#install.packages("shiny")
+#install.packages("shinyWidgets")
+
+library(tidyverse)
+library(GGally)
+library(gridExtra)
+library(patchwork)
+library(viridis)
+library(tidytext)
+library(Amelia)
+library(reshape2)
+library(vcd)
+library(knitr)
+library(shiny)
+library(shinyWidgets)
+```
+
+Se hace la carga de los datos:
+
+```{r}
+datos <- read.table("kr-vs-kp.data", sep = ",", header = FALSE)
+```
+
+Asignamos nombres de columnas según el archivo .names:
+
+```{r}
+nombres <- c("wkblk", "wknwy", "wkna8", "wkona", "wkspr", "wkxbq", "wkxcr", "wkxbp",
+    "whxbp", "wxqsq", "cntxt", "dsopp", "dwipd", "hdchk", "katri", "mulch",
+    "qxmsq", "r2ar8", "reskd", "reskr", "rimmx", "rkxwp", "rxmsq", "simpl",
+    "skach", "skewr", "skrxp", "spcop", "stlmt", "thrsk", "bkcti", "bkna8",
+    "bknck", "bkovl", "bkpos", "btoeg","class")
+
+colnames(datos) <- nombres
+colnames(datos)
+```
+
+Realizamos una inspección inicial de los datos:
+
+```{r}
+dim(datos)  
+```
+
+```{r}
+str(datos)
+```
+
+```{r}
+summary(datos)
+```
+
+Verificamos que no hayan datos faltantes o casillas vacías (NAs):
+
+```{r}
+colSums(is.na(datos))
+missmap(datos)
+```
+
+No tenemos NAs
+
+Las variables de este dataset son categóricas (representan características del tablero con valores como `t`, `f`, `n`, `b`, `g`, `l`, `w`). Para que R las interprete correctamente como categorías y no como texto plano, las convertimos a factores. 
+
+```{r}
+datos <- datos %>%
+  mutate(across(-class, as.factor),
+         class = as.factor(class))
+str(datos)
+```
+
+
+## Análisis de la variable target "class"
+
+Tabla de frecuencias:
+
+```{r}
+tabla_target <- datos %>%
+  count(class, name = "Frecuencia") %>%
+  mutate(
+    Porcentaje = round((Frecuencia / sum(Frecuencia)) * 100, 1),
+    Etiqueta = paste0(Frecuencia, " (", Porcentaje, "%)")
+  )
+knitr::kable(tabla_target)
+```
+
+Gráfico de barras:
+
+```{r}
+g_target <- ggplot(tabla_target, aes(x = class, y = Frecuencia, fill = class)) +
+  geom_col(width = 0.6) +
+  geom_text(aes(label = Etiqueta), vjust = -0.5, size = 3.5) +
+  scale_fill_manual(values = c("steelblue", "#56B4E9")) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.15))) +
+  labs(
+    x = "Clase",
+    y = "Frecuencia (Porcentaje)"
+  ) +
+  theme_bw(base_size = 12) +
+  theme(
+    legend.position = "none",
+    panel.grid.major.x = element_blank()
+  )
+```
+
+Gráfico de torta para visualizar mejor la proporción:
+
+```{r}
+g_torta <- tabla_target %>%
+  ggplot(aes(x = "", y = Frecuencia, fill = class)) +
+  geom_col(width = 1) +
+  coord_polar(theta = "y") +
+  geom_text(aes(label = Etiqueta), position = position_stack(vjust = 0.5), size = 3.5) +
+  scale_fill_manual(values = c("steelblue", "#56B4E9")) +
+  labs(
+    title = "",
+    x = NULL,
+    y = NULL
+  ) +
+  theme_void(base_size = 12) +
+  theme(legend.position = "bottom")
+```
+
+Observemos los dos gráficos:
+
+```{r}
+(g_target | g_torta) +
+  plot_annotation(
+    title = "Distribución de la variable target",
+    subtitle = paste(nrow(datos), "observaciones")
+  )
+```
+
+En 1669 partidas, el 52.2%, resultó `won`, es decir que las blancas ganaron, y en 1527 partidas, el 47.8%, resultó `nowin`, es decir que el peón negro logró coronar o las negras consiguieron tablas; la diferencia entre ambas clases es de solo 4.4 puntos porcentuales, lo que indica que el dataset no tiene un sesgo significativo hacia ninguna clase.
+
+
+## Análisis de las variables independientes
+
+Número de niveles por variable:
+
+```{r}
+frecuencias <- datos %>%
+  select(-class) %>%
+  pivot_longer(everything(),
+               names_to = "variable",
+               values_to = "valor") %>%
+  count(variable, valor) %>%
+  group_by(variable) %>%
+  mutate(
+    porcentaje = 100 * n / sum(n)
+  )
+```
+
+Variables con 2 niveles:
+
+```{r}
+binarias <- frecuencias %>%
+  group_by(variable) %>%
+  filter(n() == 2) %>%
+  ungroup() %>%
+  select(variable, valor, porcentaje) %>%
+  pivot_wider(names_from = valor, values_from = porcentaje, values_fill = 0)
+
+knitr::kable(binarias)
+```
+
+Se muestra el porcentaje de cada característica (`t`, `f`, `n`, `b`, `g`, `l`) para cada variable, en particular, solo 2 de alguna de las 6, ya que son binarias. Se puede observar que la mayoría poseen `t` y `f`, true y false, a excepción de `dwipd`, con `g` y `l`, y 
+
+Variables con 3 niveles:
+
+```{r}
+ternarias <- frecuencias %>%
+  group_by(variable) %>%
+  filter(n() == 3) %>%
+  ungroup() %>%
+  select(variable, valor, porcentaje) %>%
+  pivot_wider(names_from = valor, values_from = porcentaje, values_fill = 0)
+
+knitr::kable(ternarias)
+```
+
+Se muestra el porcentaje de cada característica (`n`, `b`, `w`) para la variable.
+
+Ahora,
+
+```{r, warning=FALSE} 
+library(kableExtra)
+
+colores_personalizados <- c(
+  "t" = "#2E86C1",   # Azul
+  "f" = "#E74C3C",   # Rojo
+  "n" = "#95A5A6",   # Gris
+  "b" = "#1A1A1A",   # Negro
+  "w" = "#F39C12",   # Naranja
+  "g" = "#27AE60",   # Verde
+  "l" = "#8E44AD"    # Morado
+)
+
+graficar_pastel <- function(var) {
+  
+  tabla <- datos %>%
+    count(!!sym(var)) %>%
+    mutate(
+      Porcentaje = round((n / sum(n)) * 100, 1),
+      Etiqueta = paste0(n, "\n", Porcentaje, "%"),
+      valor = factor(!!sym(var))
+    )
+  
+  valores_existentes <- unique(tabla$valor)
+  colores_usar <- colores_personalizados[names(colores_personalizados) %in% valores_existentes]
+  
+  ggplot(tabla, aes(x = "", y = n, fill = valor)) +
+    geom_col(width = 1) +
+    coord_polar(theta = "y") +
+    geom_text(aes(label = Etiqueta),
+              position = position_stack(vjust = 0.5),
+              size = 2.5) +
+    labs(
+      title = var,
+      x = NULL,
+      y = NULL
+    ) +
+    scale_fill_manual(
+      values = colores_usar,
+      breaks = c("t", "f", "n", "b", "w", "g", "l"),
+      labels = c("t = True", "f = False", "n = None", "b = Black", "w = White", "g = Good", "l = Large")
+    ) +
+    theme_void(base_size = 8) +
+    theme(
+      plot.title = element_text(size = 8, face = "bold", hjust = 0.5),
+      plot.margin = margin(0, 0, 0, 0),
+      legend.position = "bottom",
+      legend.text = element_text(size = 7),
+      legend.title = element_blank(),
+      legend.key.size = unit(0.4, "cm")
+    )
+}
+
+# Lista de variables
+vars <- colnames(datos)[colnames(datos) != "class"]
+
+# Crear todos los gráficos
+lista_graficos <- map(vars, graficar_pastel)
+
+# Dividir en grupos de 4
+grupos <- split(lista_graficos, ceiling(seq_along(lista_graficos) / 4))
+
+# Mostrar cada grupo con su leyenda
+for (i in seq_along(grupos)) {
+  
+  grobs_list <- lapply(grupos[[i]], ggplotGrob)
+  
+  # Ajustar altura para que quepa la leyenda
+  grid.arrange(
+    grobs = grobs_list,
+    ncol = 4,
+    padding = unit(0.2, "cm"),
+    margins = unit(0.2, "cm")
+    )
+  
+}
+```
+
+**Variables del rey blanco (wk...)**:
+Se observa que el rey blanco rara vez bloquea a su propia torre (wkblk: 88.8% falso) o se encuentra en a8 (wkna8: 96.2% falso). Sin embargo, en un porcentaje significativo de posiciones (36.6%), el rey blanco puede atacar la casilla crítica b7 (wkxcr), lo que indica que las blancas tienen oportunidades de presión sobre el peón negro.
+
+####. 
+whxbp: La torre blanca ataca al peón negro en el 38% de las posiciones .
+wxqsq: Las blancas controlan la casilla de coronación (a8) en el 30.4% de las posiciones.
+cntxt: El rey negro está en el borde del tablero en el 43.1% de las posiciones, lo que lo hace más vulnerable a clavadas.
+También vemos que las tácticas avanzadas son extremadamente raras (Jaque oculto (hdchk) con 0.5%, re-clavada diferida (reskd) con 0.8%, oposición especial (spcop) con 0%, y clavada tras jaques (skach) con 0.3%), sin embargo, la posibilidad de una clavada (skewer) está presente en el 30.7% de las posiciones (skewr), lo que la convierte en una amenaza real.
+
+**Variables del rey negro (bk...)**:
+El rey negro está bajo presión en un porcentaje significativo de posiciones: en el 37.9% está en jaque (bknck), en el 37.2%** está sobrecargado (bkvol), y en el 26.6% está en posición de posible clavada (bkpos).
+
+
+## Análisis bivariado class vs independientes
+
+Vamos a usar la librería vcd, Visualizing Categorical Data 
+Para cuantificar la relación entre variables categóricas, utilizamos Cramer's V, una medida estadística que indica la fuerza de la asociación entre dos variables; va de 0 a 1, 0 significa que no hay relación entre las variables (son independientes), y 1 significa que hay una relación perfecta (una variable determina completamente a la otra).
+Cramér's V se basa en el estadístico chi-cuadrado (χ²) y se calcula como:
+\[
+V = \sqrt{\frac{\chi^2}{n \times \min(r-1, c-1)}}
+\]
+Donde:
+- **χ²** = estadístico chi-cuadrado (mide la diferencia entre lo observado y lo esperado si fueran independientes)
+- **n** = número total de observaciones
+- **r** = número de filas de la tabla de contingencia
+- **c** = número de columnas de la tabla de contingencia
+
+```{r message=FALSE, warning=FALSE}
+cramer_v <- function(x, y) {
+  tbl <- table(x, y)
+  chi2 <- chisq.test(tbl, simulate.p.value = TRUE)$statistic
+  n <- sum(tbl)
+  r <- min(nrow(tbl), ncol(tbl))
+  sqrt(as.numeric(chi2) / (n * (r - 1)))
+}
+
+vars_todas <- colnames(datos)
+cramer_matrix <- matrix(0, 
+                        nrow = length(vars_todas), 
+                        ncol = length(vars_todas))
+rownames(cramer_matrix) <- vars_todas
+colnames(cramer_matrix) <- vars_todas
+
+for (i in 1:length(vars_todas)) {
+  for (j in 1:length(vars_todas)) {
+    cramer_matrix[i, j] <- cramer_v(datos[[vars_todas[i]]], 
+                                     datos[[vars_todas[j]]])
+  }
+}
+
+# 2. Crear heatmap y guardarlo como imagen PNG grande
+# Abrir dispositivo gráfico con tamaño grande
+png("heatmap_cramer_grande.png", 
+    width = 3000,   # 3000 píxeles de ancho
+    height = 3000,  # 3000 píxeles de alto
+    res = 200)      # 200 dpi de resolución
+
+# Crear el heatmap
+cramer_matrix %>%
+  as.data.frame() %>%
+  rownames_to_column("var1") %>%
+  pivot_longer(-var1, names_to = "var2", values_to = "cramer") %>%
+  ggplot(aes(x = var1, y = var2, fill = cramer)) +
+  geom_tile(color = "white", size = 0.3) +
+  geom_text(aes(label = round(cramer, 2)), 
+            size = 3.5, 
+            color = "black") +
+  scale_fill_gradient2(
+    low = "white",
+    mid = "lightblue",
+    high = "steelblue",
+    midpoint = 0.3,
+    limits = c(0, 1),
+    name = "Cramér's V"
+  ) +
+  labs(
+    title = "Matriz de asociación (Cramér's V) - KRKPA7",
+    subtitle = paste("Todas las variables (", length(vars_todas), " variables)", sep = ""),
+    x = "",
+    y = ""
+  ) +
+  theme_minimal(base_size = 10) +
+  theme(
+    axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5, 
+                               size = 12), 
+    axis.text.y = element_text(size = 12), 
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5), 
+    plot.subtitle = element_text(size = 16, hjust = 0.5), 
+    legend.position = "right",
+    legend.title = element_text(size = 14),  
+    legend.text = element_text(size = 12),  
+    panel.grid = element_blank()
+  )
+
+dev.off()
+
+```
+```{r, echo=FALSE, fig.fullwidth=TRUE}
+knitr::include_graphics("heatmap_cramer_grande.png")
+```
+
+El heatmap muestra la fuerza de la asociación entre las variables predictoras y la variable objetivo (`class`). 
+Los valores más altos (azul oscuro) indican una relación más fuerte con el resultado del final de ajedrez. Los valores más bajos (blanco) sugieren que la variable es prácticamente independiente de si la posición es ganable o no.
+
+Extraemos asociación con class:
+
+```{r}
+asociacion_class <- cramer_matrix["class", ] %>%
+  as.data.frame() %>%
+  rownames_to_column("variable") %>%
+  rename(cramer = ".") %>%
+  filter(variable != "class") %>%
+  arrange(desc(cramer))
+
+knitr::kable(head(asociacion_class, 5))
+
+asociacion_class %>%
+  head(10) %>%
+  ggplot(aes(x = reorder(variable, cramer), y = cramer, fill = cramer)) +
+  geom_col(width = 0.6) +
+  coord_flip() +
+  scale_fill_gradient(low = "lightblue", high = "darkblue") +
+  geom_text(aes(label = round(cramer, 3)), hjust = -0.2, size = 3) +
+  labs(
+    title = "Top 5 factores relacionados con class",
+    x = "Variable", 
+    y = "Cramer's V"
+  ) +
+  theme_bw(base_size = 13) +
+  theme(legend.position = "none")
+```
+
+El análisis de asociación con Cramér's V revela que las variables más relacionadas con el resultado (`won`/`nowin`) son:
+
+`rimmx` (0.45): Captura segura de la torre blanca. Si la torre blanca puede ser capturada de forma segura por las negras, las blancas pierden su principal ventaja.
+`wxqsq` (0.38): Control blanco de la casilla de coronación (a8). Si las blancas controlan a8, evitan que el peón negro corone.
+`bknck` (0.365): Rey negro en jaque. Si el rey negro está en jaque, las blancas están haciendo una amenaza directa que puede llevar a la victoria.
+`wkxbp` (0.233): Rey blanco captura el peón negro. Si el rey blanco puede capturar el peón, las blancas ganan de inmediato.
+`katri` (0.22): Control del punto de intersección. Si el rey blanco controla el punto de intersección, puede evitar que su propia torre sea clavada.
+
+
+Ahora miremos las cuentas de `won` y `nowin` para cada variable en una tabla de contingencia: 
+
+```{r}
+vars_predictoras <- colnames(datos)[colnames(datos) != "class"]
+
+# Función para crear tabla de contingencia de una variable vs class
+tabla_contingencia <- function(var) {
+  
+  datos %>%
+    group_by(class) %>%
+    count(!!sym(var), name = "n") %>%
+    mutate(
+      categoria = as.character(!!sym(var)),
+      variable = var,
+      porcentaje = round((n / sum(n)) * 100, 1)
+    ) %>%
+    ungroup() %>%
+    select(class, variable, categoria, n, porcentaje)
+}
+
+# Aplicar a todas las variables y combinar en una sola tabla
+tabla_contingencia_completa <- map_dfr(vars_predictoras, tabla_contingencia)
+
+# Identificar las filas donde cambia la variable (para poner la línea)
+filas_cambio <- which(duplicated(tabla_contingencia_completa$variable) == FALSE)
+
+# Mostrar tabla con líneas separadoras entre variables
+tabla_contingencia_completa %>%
+  kable(
+    caption = "Tabla de contingencia: class vs variables predictoras",
+    col.names = c("Class", "Variable", "Categoria", "Frecuencia", "Porcentaje"),
+    digits = 1
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed"),
+    full_width = TRUE,
+    font_size = 11
+  ) %>%
+  row_spec(
+    row = filas_cambio - 1,
+    extra_css = "border-bottom: 2px solid #666;"
+  ) %>%
+  scroll_box(width = "100%", height = "500px")
+```
+
+```{r}
+colores_class <- c(
+  "won" = "#2E86C1",  
+  "nowin" = "#E74C3C"  
+)
+
+graficar_barras_agrupadas <- function(var) {
+  
+  df_plot <- datos %>%
+    group_by(class) %>%
+    count(!!sym(var), name = "n") %>%
+    mutate(
+      categoria = as.character(!!sym(var)),
+      variable = var,
+      porcentaje = round((n / sum(n)) * 100, 1)
+    ) %>%
+    ungroup()
+  
+  ggplot(df_plot, aes(x = categoria, y = n, fill = class)) +
+    geom_bar(stat = "identity", position = position_dodge(width = 0.9)) +
+    geom_text(aes(label = paste0(n, "\n(", round(porcentaje, 1), "%)")),
+              position = position_dodge(width = 0.9),
+              vjust = -0.3,
+              size = 2.5) +
+    labs(
+      title = var,
+      x = NULL,
+      y = NULL,
+      fill = ""
+    ) +
+    scale_fill_manual(
+      values = colores_class,
+      labels = c("won" = "won", "nowin" = "nowin")
+    ) +
+    theme_bw(base_size = 8) +
+    theme(
+      legend.position = "bottom",
+      legend.text = element_text(size = 6),
+      legend.title = element_text(size = 7),
+      legend.key.size = unit(0.37, "cm"),
+      axis.text.x = element_text(angle = 45, hjust = 1, size = 6),
+      axis.text.y = element_text(size = 6),
+      plot.title = element_text(size = 9, face = "bold", hjust = 0.5),
+      panel.grid.major.x = element_blank()
+    )
+}
+
+# Crear gráficos para todas las variables
+vars <- colnames(datos)[colnames(datos) != "class"]
+lista_graficos <- map(vars, graficar_barras_agrupadas)
+
+# Dividir en grupos de 4
+grupos <- split(lista_graficos, ceiling(seq_along(lista_graficos) / 4))
+
+# Mostrar cada grupo
+for (i in seq_along(grupos)) {
+  
+  grobs_list <- lapply(grupos[[i]], ggplotGrob)
+  
+  grid.arrange(
+    grobs = grobs_list,
+    ncol = 4,
+    padding = unit(0.2, "cm"),
+    margins = unit(0.2, "cm"),
+  )
+}
+
+```
+
+**Factores asociados con la victoria (`won`)**:
+
+`katri` (w): Cuando el rey blanco controla el punto de intersección (`katri = w`), la proporción de `won` (20.9%) es más del triple que en `nowin` (6.4%). Controlar el punto de intersección impide que la torre blanca sea clavada.
+
+`rkxwp` (t): Cuando la torre blanca amenaza al peón negro (`rkxwp = t`), el 23.9% de los casos son `won` y el 15.8% son `nowin`. La amenaza de la torre sobre el peón favorece a las blancas, pero no es un factor determinante por sí solo.
+
+`bkpos` (t): Cuando el rey negro está en posición de posible clavada (`bkpos = t`), es ligeramente más común en `won` (79.6%) que en `nowin` (66.6%). Sin embargo, la diferencia no es muy grande, lo que indica que no es un factor determinante por sí solo. La posición del rey negro en posible clavada puede favorecer a las blancas, pero otros factores son más importantes.
+
+**Factores asociados con la no victoria (`nowin`)**:
+
+`rimmx` (f): Cuando la torre blanca no puede ser capturada de forma segura por el rey negro (`rimmx = f`), se da el 100% de los casos de `nowin`. Esto significa que, si la torre está segura pero no puede atacar el peón, este corona sin oposición. Esta es la relación más fuerte.
+
+`bkna8` (t): Cuando el rey negro está en a8 (`bkna8 = t`), es 5 veces más frecuente en `nowin` (10.2%) que en `won` (1.2%). Esto indica que la presencia del rey negro en a8 es un predictor fuerte de `nowin`, ya que el rey negro defiende la casilla de coronación y protege el peón.
+
+`bknck` (t): Cuando el rey negro está en jaque (`bknck = t`), es 2.7 veces más frecuente en `nowin` (56.5%) que en `won` (21.0%). Esto indica que el jaque al rey negro no siempre es favorable para las blancas.
+
+`wkxbp` (t): Cuando el rey blanco puede capturar el peón (`wkxbp = t`), es 2.5 veces más frecuente en `nowin` (31.8%) que en `won` (12.6%). Esto es contra intuitivo, ya que se esperaría que capturar el peón llevara a la victoria, pero los datos muestran lo contrario.
+
+`wxqsq` (t): Cuando las blancas controlan la casilla de coronación a8 (`wxqsq = t`), es 3.5 veces más frecuente en `nowin` (48.7%) que en `won` (13.7%). Esto es contra intuitivo también.
+
+**Variables con poca diferencia**:
+
+Las variables `wkblk`, `wknwy`, `dsopp`, `qxmsq`, `reskd`, `reskr` y `btoeg` presentan distribuciones muy  entre `won` y `nowin`, lo que indica que podrían no ser útiles para predecir el resultado.
+
+
+## Relaciones entre variables predictoras
+
+```{r}
+vars_predictoras <- colnames(datos)[colnames(datos) != "class"]
+
+# 2. Calcular Cramér's V solo entre predictoras
+cramer_matrix_pred <- matrix(0, 
+                             nrow = length(vars_predictoras), 
+                             ncol = length(vars_predictoras))
+rownames(cramer_matrix_pred) <- vars_predictoras
+colnames(cramer_matrix_pred) <- vars_predictoras
+
+for (i in 1:length(vars_predictoras)) {
+  for (j in 1:length(vars_predictoras)) {
+    cramer_matrix_pred[i, j] <- cramer_v(datos[[vars_predictoras[i]]], 
+                                          datos[[vars_predictoras[j]]])
+  }
+}
+
+# 3. Guardar heatmap de predictoras (sin class)
+png("heatmap_cramer_predictoras.png", 
+    width = 3000, 
+    height = 3000, 
+    res = 200)
+
+cramer_matrix_pred %>%
+  as.data.frame() %>%
+  rownames_to_column("var1") %>%
+  pivot_longer(-var1, names_to = "var2", values_to = "cramer") %>%
+  ggplot(aes(x = var1, y = var2, fill = cramer)) +
+  geom_tile(color = "white", size = 0.3) +
+  geom_text(aes(label = round(cramer, 2)), 
+            size = 3.5, 
+            color = "black") +
+  scale_fill_gradient2(
+    low = "white",
+    mid = "lightblue",
+    high = "steelblue",
+    midpoint = 0.3,
+    limits = c(0, 1),
+    name = "Cramér's V"
+  ) +
+  labs(
+    title = "Matriz de asociación entre variables predictoras (Cramér's V)",
+    subtitle = paste("Excluyendo 'class' (", length(vars_predictoras), " variables)", sep = ""),
+    x = "",
+    y = ""
+  ) +
+  theme_minimal(base_size = 10) +
+  theme(
+    axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5, size = 12),
+    axis.text.y = element_text(size = 12),
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5),
+    plot.subtitle = element_text(size = 16, hjust = 0.5),
+    legend.position = "right",
+    legend.title = element_text(size = 14),
+    legend.text = element_text(size = 12),
+    panel.grid = element_blank()
+  )
+
+dev.off()
+
+# 4. Mostrar heatmap en el documento
+knitr::include_graphics("heatmap_cramer_predictoras.png")
+```
+
+```{r}
+pares <- cramer_matrix_pred %>%
+  as.data.frame() %>%
+  rownames_to_column("var1") %>%
+  pivot_longer(-var1, names_to = "var2", values_to = "cramer") %>%
+  filter(
+    var1 != var2,                  
+    var1 < var2                     
+  ) %>%
+  arrange(desc(cramer))
+
+knitr::kable(head(pares, 5), 
+             caption = "Top 5 pares de variables predictoras con mayor asociación",
+             col.names = c("Variable 1", "Variable 2", "Cramér's V"),
+             digits = 3)
+
+pares %>%
+  head(5) %>%
+  ggplot(aes(x = reorder(paste(var1, "↔", var2), cramer), y = cramer, fill = cramer)) +
+  geom_col(width = 0.7) +
+  coord_flip() +
+  scale_fill_gradient(low = "lightblue", high = "darkblue") +
+  geom_text(aes(label = round(cramer, 3)), hjust = -0.2, size = 3.5) +
+  labs(
+    title = "Top 5 asociaciones entre variables predictoras",
+    x = "Par de variables",
+    y = "Cramér's V"
+  ) +
+  theme_bw(base_size = 11) +
+  theme(legend.position = "none")
+```
+
+Para evaluar si existen variables redundantes (que miden información similar), se calculó la matriz de Cramer's V excluyendo la variable objetivo `class`. Los valores más altos indican que dos variables están asociadas entre sí, lo que sugiere que podrían estar midiendo conceptos relacionados:
+
+`whxbp` ↔ `wkxbp` (0.67) Captura del peón negro por la torre blanca vs captura por el rey blanco. Ambas miden si el peón puede ser capturado, lo que sugiere que están altamente relacionadas.
+
+`rkxwp` ↔ `whxbp` (0.639) Amenaza de la torre blanca sobre el peón vs ataque de la torre blanca al peón. Miden conceptos similares, ambos de la torre blanca sobre el peón negro. 
+
+`bkovl` ↔ `r2ar8` (0.591) Rey negro sobrecargado vs acceso de la torre blanca a la columna A o fila 8. Si la torre blanca tiene acceso, el rey negro se sobrecarga al tener que defender múltiples amenazas. 
+
+`cntxt` ↔ `skewr` (0.579) Rey negro en el borde (no a8) vs posibilidad de clavada. Si el rey negro está en el borde, es más vulnerable a una clavada de la torre blanca.
+
+`wkxbp` ↔ `wkxcr` (0.564) Rey blanco captura el peón vs rey blanco ataca b7. Ambas miden la capacidad del rey blanco para presionar al peón negro. 
+
+
+Ninguno de estos valores superan el 0.7, lo que indica que no hay variables altamente redundantes, es decir, que presenten multicolinealidad muy alta. Sin embargo, las relaciones moderadas (0.5 - 0.67) sugieren que algunos pares de variables miden conceptos relacionados desde diferentes perspectivas.
+
+
+## Conclusiones 
+
+El análisis exploratorio permitió identificar los principales factores que determinan el resultado del final de ajedrez Rey+Torre (blancas) vs Rey+Peón (negras) en a7. La variable objetivo class presenta una distribución prácticamente balanceada (52.2% won, 47.8% nowin), lo que indica que no hay sesgo hacia ninguna de las clases. El estudio de las variables predictoras revela que la mayoría son binarias (t/f), con excepción de dwipd (g/l) y katri (la única ternaria: n/b/w). El análisis de frecuencias muestra que tácticas avanzadas como el jaque oculto (hdchk, 0.5%), la re-clavada diferida (reskd, 0.8%), la clavada tras jaques (skach, 0.3%) y la oposición especial (spcop, 0%) son muy raras. En cuanto a la asociación con class, la variable más determinante es rimmx (Cramér's V = 0.45): cuando la torre blanca no puede ser capturada de forma segura (rimmx = f), se da el 100% de los casos de nowin, lo que indica que la torre blanca es la pieza clave para detener el peón. Otras variables con alta asociación son wxqsq (0.38) y bknck (0.365). El análisis de redundancia entre predictoras muestra que no hay variables altamente redundantes (ninguna comparación supera 0.7 de Cramér's V), aunque se observaron relaciones moderadas entre conceptos relacionados, como whxbp ↔ wkxbp (0.67), que miden presión sobre el peón desde diferentes perspectivas. En conjunto, se concluye que el resultado del final depende de la combinación de múltiples factores, destacando la seguridad de la torre, el control del punto de intersección y la posición del rey negro.
+
+

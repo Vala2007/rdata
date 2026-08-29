@@ -1,0 +1,154 @@
+---
+title: "King+Rook vs King+Pawn on a7 (KRKPA7)"
+author: "Valamy Donado y Abraham Navarro"
+date: "2026-08-23"
+site: bookdown::bookdown_site
+output: bookdown::gitbook
+documentclass: book
+bibliography: [book.bib, packages.bib]
+biblio-style: apalike
+link-citations: yes
+github-repo: rstudio/bookdown-demo
+description: ""
+---
+
+
+# Introducción
+
+
+## Contexto
+
+Hay tres fases reconocidas en una partida de ajedrez: opening o apertura, donde predomina el desarrollo de las piezas y el control del centro; middlegame o el medio juego, donde se producen maniobras de defensa y ataque contra el rey del oponente o sus debilidades; y el endgame o final, donde, generalmente después de varios intercambios de piezas, la promoción de peones se convierte en el tema dominante.
+Uno de los aspectos más fascinantes del ajedrez es el estudio de los finales, donde el número de piezas se reduce y el juego se vuelve más teórico y preciso. Uno de ellos es el de Rey+Torre vs Rey+Peón.
+
+## El dataset
+
+El dataset KRKPA7 (**K**ing + **R**ook vs **K**ing + **P**awn on **a7**) contiene las posiciones del endgame de 3,196 partidas de ajedrez, correspondientes al final Rey + Torre (blancas) vs Rey + Peón (negras) en la posición a7, es decir, con el peón negro a punto de coronar (el tablero se mira desde la perspectiva del negro). Fueron generadas y descritas originalmente por Alen D. Shapiro en su tesis doctoral (1983).
+Cada posición está representada por 36 variables categóricas que describen características específicas del tablero.
+La variable objetivo (`class`) indica si las blancas pueden ganar (`won`) o no (`nowin`).
+En la siguiente tabla se presenta toda la información de cada variable:
+
+```{r echo=FALSE}
+tabla_variables <- data.frame(
+  Variable = c(
+    "wkblk", "wknwy", "wkna8", "wkona", "wkspr", "wkxbq", "wkxcr", "wkxbp",
+    "whxbp", "wxqsq", "cntxt", "dsopp", "dwipd", "hdchk", "katri", "mulch",
+    "qxmsq", "r2ar8", "reskd", "reskr", "rimmx", "rkxwp", "rxmsq", "simpl",
+    "skach", "skewr", "skrxp", "spcop", "stlmt", "thrsk", "bkcti", "bkna8",
+    "bknck", "bkovl", "bkpos", "btoeg"
+  ),
+  Nombre_Real = c(
+    "White King in the way", "White King No Way", "White King on a8", "White King on a",
+    "White King Support Rook", "Black King attacked by promoted Pawn", "White King attack Critical square",
+    "White King captures Black Pawn", "White attack Black Pawn", "White control Queen Square",
+    "Context (edge)", "Diagonal Opposite", "Distance to intersect point", "Hidden Check",
+    "King Attack Three", "Multiple Checks", "Queen Square", "Rook to A or Rank 8",
+    "Reskewer Delayed", "Reskewer", "Rook in Middle", "Rook captures Pawn",
+    "Rook attacks mating square", "Simple pattern", "Skewer after Checks", "Skewer", 
+    "Skewer or attack Pawn", "Special Opposition", "Stalemate", "Threat Skewer", 
+    "Black King Control The Intersect", "Black King on a8", "Black King Check", 
+    "Black King Overloaded", "Black King Position (potential skewer)", "Black to Egress"
+  ),
+  Significado = c(
+    "El rey blanco está en el camino de la torre blanca en una situación de doble ataque",
+    "El rey blanco obstruye el movimiento de la torre blanca hacia la casilla de coronación (a8)",
+    "El rey blanco está en la posición a8",
+    "El rey blanco está en la columna 'a'",
+    "Puede el rey blanco apoyar a la torre blanca en una horquilla (fork)",
+    "El rey blanco es atacado por el peón negro promocionado",
+    "Puede el rey blanco atacar la casilla crítica (b7)",
+    "El rey blanco captura el peón negro",
+    "La torre blanca ataca al peón negro en dirección x<0, y=0?",
+    "Una o más piezas blancas controlan la casilla de coronación (a8)",
+    "El rey negro está en un borde del tablero y no en a8",
+    "Están los reyes en oposición normal (separados por una casilla vacía en línea recta)",
+    "Distancia del rey blanco al punto de intersección de la torre blanca",
+    "Hay un jaque oculto sobre las negras",
+    "Algún rey controla el punto de intersección",
+    "Pueden las blancas renovar el jaque con ventaja",
+    "La casilla de mate es atacada por el peón negro promocionado",
+    "La torre blanca tiene acceso seguro a la columna A o a la fila 8",
+    "Puede el rey negro ser re-clavado (reskewered) a través de una clavada diferida",
+    "Puede la torre blanca sola renovar la amenaza de doble ataque?",
+    "Puede la torre blanca ser capturada de forma inmediata y segura",
+    "La torre blanca amenaza al peón negro (solo en dirección x<0, y=0)",
+    "La torre blanca ataca una casilla de mate de forma segura",
+    "Se aplica un patrón muy simple (ahogado, clavada diferida o jaque perpetuo)",
+    "El rey negro puede ser clavado tras uno o más jaques de la torre blanca",
+    "Posibilidad de clavada (skewer)",
+    "La torre blanca logra una clavada o el rey blanco ataca el peón negro",
+    "Hay un patrón de oposición especial presente",
+    "El rey blanco está en ahogado, o el avance del peón negro fuerza el ahogado",
+    "Hay una amenaza de clavada (skewer) acechando",
+    "El rey negro puede controlar el punto de intersección",
+    "El rey negro está en a8",
+    "El rey negro está en jaque",
+    "El rey negro está sobrecargado y no puede cubrir los puntos de intersección de la torre blanca",
+    "El rey negro está en posición de posible clavada (skewer)",
+    "El rey negro está a una casilla del borde relevante"
+  ),
+  Niveles = c(
+    "t, f", "t, f", "t, f", "t, f", "t, f",
+    "t, f", "t, f", "t, f", "t, f", "t, f",
+    "t, f", "t, f", "g, l", "t, f",
+    "n, b, w", "t, f", "t, f", "t, f",
+    "t, f", "t, f", "t, f", "t, f",
+    "t, f", "t, f", "t, f", "t, f",
+    "t, f", "t, f", "t, f", "t, f",
+    "t, f", "t, f", "t, f", "t, f",
+    "t, f", "t, n"
+  ),
+  Significado_Niveles = c(
+    "t=si, f=no",
+    "t=si, f=no",
+    "t=si, f=no",
+    "t=si, f=no",
+    "t=si, f=no",
+    "t=si, f=no",
+    "t=si, f=no",
+    "t=si, f=no",
+    "t=si, f=no",
+    "t=si, f=no",
+    "t=está en un borde (no a8), f=no está en un borde (o está en a8)",
+    "t=si, f=no",
+    "g=distancia ≤ 2 (bueno para blancas), l=distancia > 2 (malo para blancas)",
+    "t=si, f=no",
+    "n=ninguno, b=negro, w=blanco",
+    "t=si, f=no",
+    "t=si, f=no",
+    "t=si, f=no",
+    "t=si, f=no",
+    "t=si, f=no",
+    "t=si, f=no",
+    "t=si, f=no",
+    "t=si, f=no",
+    "t=se aplica, f=no se aplica",
+    "t=puede ser clavado tras jaques, f=no puede",
+    "t=clavada, f=no",
+    "t=si, f=no",
+    "t=hay, f=no hay",
+    "t=hay riesgo de ahogado, f=no hay riesgo de ahogado",
+    "t=hay amenaza de clavada, f=no hay",
+    "t=si, f=no",
+    "t=en a8, f=no",
+    "t=jaque, f=no",
+    "t=sobrecargado, f=no sobrecargado",
+    "t=posición de skewer, f=no",
+    "t=si, n=no"
+  )
+)
+
+knitr::kable(tabla_variables)
+```
+
+Observación:`g` y `w` representan el mismo concepto general (acción o característica de las blancas), pero su uso depende de la variable específica:
+
+- `w` (White): Se usa cuando la variable indica directamente una acción o posición de las blancas.
+
+- `g` (Good): Se usa en la variable `dwipd` para indicar una posición favorable para las blancas (good/ganancia).
+
+
+## Objetivo del análisis
+
+El presente trabajo tiene como objetivo identificar factores y patrones que determinan si las blancas logran capturar al peón o dar mate al rey negro (`won`), o, si las negras logran coronar su peón en a8 (transformarlo en una dama, torre, alfil o caballo), o consiguen tablas por ahogado (cuando el rey blanco no está en jaque, pero su jugador no tiene ningún movimiento legal disponible) (`nowin`), visualizando las relaciones entre las variables y la clase objetivo.
+

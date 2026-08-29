@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>King+Rook vs King+Pawn on a7 (KRKPA7)</title>
+  <meta name="description" content="King+Rook vs King+Pawn on a7 (KRKPA7)" />
+  <meta name="generator" content="bookdown 0.47 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="King+Rook vs King+Pawn on a7 (KRKPA7)" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="King+Rook vs King+Pawn on a7 (KRKPA7)" />
+  
+  
+  
+
+<meta name="author" content="Valamy Donado y Abraham Navarro" />
+
+
+<meta name="date" content="2026-08-23" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+
+<link rel="next" href="análisis-exploratorio-de-datos-eda.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">KRKPA7</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introducción</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#contexto"><i class="fa fa-check"></i><b>1.1</b> Contexto</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#el-dataset"><i class="fa fa-check"></i><b>1.2</b> El dataset</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#objetivo-del-an%C3%A1lisis"><i class="fa fa-check"></i><b>1.3</b> Objetivo del análisis</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html"><i class="fa fa-check"></i><b>2</b> Análisis exploratorio de datos (EDA)</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#librer%C3%ADas"><i class="fa fa-check"></i><b>2.1</b> Librerías</a></li>
+<li class="chapter" data-level="2.2" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#an%C3%A1lisis-de-la-variable-target-class"><i class="fa fa-check"></i><b>2.2</b> Análisis de la variable target “class”</a></li>
+<li class="chapter" data-level="2.3" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#an%C3%A1lisis-de-las-variables-independientes"><i class="fa fa-check"></i><b>2.3</b> Análisis de las variables independientes</a></li>
+<li class="chapter" data-level="2.4" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#an%C3%A1lisis-bivariado-class-vs-independientes"><i class="fa fa-check"></i><b>2.4</b> Análisis bivariado class vs independientes</a></li>
+<li class="chapter" data-level="2.5" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#relaciones-entre-variables-predictoras"><i class="fa fa-check"></i><b>2.5</b> Relaciones entre variables predictoras</a></li>
+<li class="chapter" data-level="2.6" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#conclusiones"><i class="fa fa-check"></i><b>2.6</b> Conclusiones</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">King+Rook vs King+Pawn on a7 (KRKPA7)</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="header">
+<h1 class="title">King+Rook vs King+Pawn on a7 (KRKPA7)</h1>
+<p class="author"><em>Valamy Donado y Abraham Navarro</em></p>
+<p class="date"><em>2026-08-23</em></p>
+</div>
+<div id="introducción" class="section level1 hasAnchor" number="1">
+<h1><span class="header-section-number">Chapter 1</span> Introducción<a href="index.html#introducci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="contexto" class="section level2 hasAnchor" number="1.1">
+<h2><span class="header-section-number">1.1</span> Contexto<a href="index.html#contexto" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Hay tres fases reconocidas en una partida de ajedrez: opening o apertura, donde predomina el desarrollo de las piezas y el control del centro; middlegame o el medio juego, donde se producen maniobras de defensa y ataque contra el rey del oponente o sus debilidades; y el endgame o final, donde, generalmente después de varios intercambios de piezas, la promoción de peones se convierte en el tema dominante.
+Uno de los aspectos más fascinantes del ajedrez es el estudio de los finales, donde el número de piezas se reduce y el juego se vuelve más teórico y preciso. Uno de ellos es el de Rey+Torre vs Rey+Peón.</p>
+</div>
+<div id="el-dataset" class="section level2 hasAnchor" number="1.2">
+<h2><span class="header-section-number">1.2</span> El dataset<a href="index.html#el-dataset" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>El dataset KRKPA7 (<strong>K</strong>ing + <strong>R</strong>ook vs <strong>K</strong>ing + <strong>P</strong>awn on <strong>a7</strong>) contiene las posiciones del endgame de 3,196 partidas de ajedrez, correspondientes al final Rey + Torre (blancas) vs Rey + Peón (negras) en la posición a7, es decir, con el peón negro a punto de coronar (el tablero se mira desde la perspectiva del negro). Fueron generadas y descritas originalmente por Alen D. Shapiro en su tesis doctoral (1983).
+Cada posición está representada por 36 variables categóricas que describen características específicas del tablero.
+La variable objetivo (<code>class</code>) indica si las blancas pueden ganar (<code>won</code>) o no (<code>nowin</code>).
+En la siguiente tabla se presenta toda la información de cada variable:</p>
+<table>
+<colgroup>
+<col width="4%" />
+<col width="17%" />
+<col width="42%" />
+<col width="3%" />
+<col width="32%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Variable</th>
+<th align="left">Nombre_Real</th>
+<th align="left">Significado</th>
+<th align="left">Niveles</th>
+<th align="left">Significado_Niveles</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">wkblk</td>
+<td align="left">White King in the way</td>
+<td align="left">El rey blanco está en el camino de la torre blanca en una situación de doble ataque</td>
+<td align="left">t, f</td>
+<td align="left">t=si, f=no</td>
+</tr>
+<tr class="even">
+<td align="left">wknwy</td>
+<td align="left">White King No Way</td>
+<td align="left">El rey blanco obstruye el movimiento de la torre blanca hacia la casilla de coronación (a8)</td>
+<td align="left">t, f</td>
+<td align="left">t=si, f=no</td>
+</tr>
+<tr class="odd">
+<td align="left">wkna8</td>
+<td align="left">White King on a8</td>
+<td align="left">El rey blanco está en la posición a8</td>
+<td align="left">t, f</td>
+<td align="left">t=si, f=no</td>
+</tr>
+<tr class="even">
+<td align="left">wkona</td>
+<td align="left">White King on a</td>
+<td align="left">El rey blanco está en la columna ‘a’</td>
+<td align="left">t, f</td>
+<td align="left">t=si, f=no</td>
+</tr>
+<tr class="odd">
+<td align="left">wkspr</td>
+<td align="left">White King Support Rook</td>
+<td align="left">Puede el rey blanco apoyar a la torre blanca en una horquilla (fork)</td>
+<td align="left">t, f</td>
+<td align="left">t=si, f=no</td>
+</tr>
+<tr class="even">
+<td align="left">wkxbq</td>
+<td align="left">Black King attacked by promoted Pawn</td>
+<td align="left">El rey blanco es atacado por el peón negro promocionado</td>
+<td align="left">t, f</td>
+<td align="left">t=si, f=no</td>
+</tr>
+<tr class="odd">
+<td align="left">wkxcr</td>
+<td align="left">White King attack Critical square</td>
+<td align="left">Puede el rey blanco atacar la casilla crítica (b7)</td>
+<td align="left">t, f</td>
+<td align="left">t=si, f=no</td>
+</tr>
+<tr class="even">
+<td align="left">wkxbp</td>
+<td align="left">White King captures Black Pawn</td>
+<td align="left">El rey blanco captura el peón negro</td>
+<td align="left">t, f</td>
+<td align="left">t=si, f=no</td>
+</tr>
+<tr class="odd">
+<td align="left">whxbp</td>
+<td align="left">White attack Black Pawn</td>
+<td align="left">La torre blanca ataca al peón negro en dirección x&lt;0, y=0?</td>
+<td align="left">t, f</td>
+<td align="left">t=si, f=no</td>
+</tr>
+<tr class="even">
+<td align="left">wxqsq</td>
+<td align="left">White control Queen Square</td>
+<td align="left">Una o más piezas blancas controlan la casilla de coronación (a8)</td>
+<td align="left">t, f</td>
+<td align="left">t=si, f=no</td>
+</tr>
+<tr class="odd">
+<td align="left">cntxt</td>
+<td align="left">Context (edge)</td>
+<td align="left">El rey negro está en un borde del tablero y no en a8</td>
+<td align="left">t, f</td>
+<td align="left">t=está en un borde (no a8), f=no está en un borde (o está en a8)</td>
+</tr>
+<tr class="even">
+<td align="left">dsopp</td>
+<td align="left">Diagonal Opposite</td>
+<td align="left">Están los reyes en oposición normal (separados por una casilla vacía en línea recta)</td>
+<td align="left">t, f</td>
+<td align="left">t=si, f=no</td>
+</tr>
+<tr class="odd">
+<td align="left">dwipd</td>
+<td align="left">Distance to intersect point</td>
+<td align="left">Distancia del rey blanco al punto de intersección de la torre blanca</td>
+<td align="left">g, l</td>
+<td align="left">g=distancia ≤ 2 (bueno para blancas), l=distancia &gt; 2 (malo para blancas)</td>
+</tr>
+<tr class="even">
+<td align="left">hdchk</td>
+<td align="left">Hidden Check</td>
+<td align="left">Hay un jaque oculto sobre las negras</td>
+<td align="left">t, f</td>
+<td align="left">t=si, f=no</td>
+</tr>
+<tr class="odd">
+<td align="left">katri</td>
+<td align="left">King Attack Three</td>
+<td align="left">Algún rey controla el punto de intersección</td>
+<td align="left">n, b, w</td>
+<td align="left">n=ninguno, b=negro, w=blanco</td>
+</tr>
+<tr class="even">
+<td align="left">mulch</td>
+<td align="left">Multiple Checks</td>
+<td align="left">Pueden las blancas renovar el jaque con ventaja</td>
+<td align="left">t, f</td>
+<td align="left">t=si, f=no</td>
+</tr>
+<tr class="odd">
+<td align="left">qxmsq</td>
+<td align="left">Queen Square</td>
+<td align="left">La casilla de mate es atacada por el peón negro promocionado</td>
+<td align="left">t, f</td>
+<td align="left">t=si, f=no</td>
+</tr>
+<tr class="even">
+<td align="left">r2ar8</td>
+<td align="left">Rook to A or Rank 8</td>
+<td align="left">La torre blanca tiene acceso seguro a la columna A o a la fila 8</td>
+<td align="left">t, f</td>
+<td align="left">t=si, f=no</td>
+</tr>
+<tr class="odd">
+<td align="left">reskd</td>
+<td align="left">Reskewer Delayed</td>
+<td align="left">Puede el rey negro ser re-clavado (reskewered) a través de una clavada diferida</td>
+<td align="left">t, f</td>
+<td align="left">t=si, f=no</td>
+</tr>
+<tr class="even">
+<td align="left">reskr</td>
+<td align="left">Reskewer</td>
+<td align="left">Puede la torre blanca sola renovar la amenaza de doble ataque?</td>
+<td align="left">t, f</td>
+<td align="left">t=si, f=no</td>
+</tr>
+<tr class="odd">
+<td align="left">rimmx</td>
+<td align="left">Rook in Middle</td>
+<td align="left">Puede la torre blanca ser capturada de forma inmediata y segura</td>
+<td align="left">t, f</td>
+<td align="left">t=si, f=no</td>
+</tr>
+<tr class="even">
+<td align="left">rkxwp</td>
+<td align="left">Rook captures Pawn</td>
+<td align="left">La torre blanca amenaza al peón negro (solo en dirección x&lt;0, y=0)</td>
+<td align="left">t, f</td>
+<td align="left">t=si, f=no</td>
+</tr>
+<tr class="odd">
+<td align="left">rxmsq</td>
+<td align="left">Rook attacks mating square</td>
+<td align="left">La torre blanca ataca una casilla de mate de forma segura</td>
+<td align="left">t, f</td>
+<td align="left">t=si, f=no</td>
+</tr>
+<tr class="even">
+<td align="left">simpl</td>
+<td align="left">Simple pattern</td>
+<td align="left">Se aplica un patrón muy simple (ahogado, clavada diferida o jaque perpetuo)</td>
+<td align="left">t, f</td>
+<td align="left">t=se aplica, f=no se aplica</td>
+</tr>
+<tr class="odd">
+<td align="left">skach</td>
+<td align="left">Skewer after Checks</td>
+<td align="left">El rey negro puede ser clavado tras uno o más jaques de la torre blanca</td>
+<td align="left">t, f</td>
+<td align="left">t=puede ser clavado tras jaques, f=no puede</td>
+</tr>
+<tr class="even">
+<td align="left">skewr</td>
+<td align="left">Skewer</td>
+<td align="left">Posibilidad de clavada (skewer)</td>
+<td align="left">t, f</td>
+<td align="left">t=clavada, f=no</td>
+</tr>
+<tr class="odd">
+<td align="left">skrxp</td>
+<td align="left">Skewer or attack Pawn</td>
+<td align="left">La torre blanca logra una clavada o el rey blanco ataca el peón negro</td>
+<td align="left">t, f</td>
+<td align="left">t=si, f=no</td>
+</tr>
+<tr class="even">
+<td align="left">spcop</td>
+<td align="left">Special Opposition</td>
+<td align="left">Hay un patrón de oposición especial presente</td>
+<td align="left">t, f</td>
+<td align="left">t=hay, f=no hay</td>
+</tr>
+<tr class="odd">
+<td align="left">stlmt</td>
+<td align="left">Stalemate</td>
+<td align="left">El rey blanco está en ahogado, o el avance del peón negro fuerza el ahogado</td>
+<td align="left">t, f</td>
+<td align="left">t=hay riesgo de ahogado, f=no hay riesgo de ahogado</td>
+</tr>
+<tr class="even">
+<td align="left">thrsk</td>
+<td align="left">Threat Skewer</td>
+<td align="left">Hay una amenaza de clavada (skewer) acechando</td>
+<td align="left">t, f</td>
+<td align="left">t=hay amenaza de clavada, f=no hay</td>
+</tr>
+<tr class="odd">
+<td align="left">bkcti</td>
+<td align="left">Black King Control The Intersect</td>
+<td align="left">El rey negro puede controlar el punto de intersección</td>
+<td align="left">t, f</td>
+<td align="left">t=si, f=no</td>
+</tr>
+<tr class="even">
+<td align="left">bkna8</td>
+<td align="left">Black King on a8</td>
+<td align="left">El rey negro está en a8</td>
+<td align="left">t, f</td>
+<td align="left">t=en a8, f=no</td>
+</tr>
+<tr class="odd">
+<td align="left">bknck</td>
+<td align="left">Black King Check</td>
+<td align="left">El rey negro está en jaque</td>
+<td align="left">t, f</td>
+<td align="left">t=jaque, f=no</td>
+</tr>
+<tr class="even">
+<td align="left">bkovl</td>
+<td align="left">Black King Overloaded</td>
+<td align="left">El rey negro está sobrecargado y no puede cubrir los puntos de intersección de la torre blanca</td>
+<td align="left">t, f</td>
+<td align="left">t=sobrecargado, f=no sobrecargado</td>
+</tr>
+<tr class="odd">
+<td align="left">bkpos</td>
+<td align="left">Black King Position (potential skewer)</td>
+<td align="left">El rey negro está en posición de posible clavada (skewer)</td>
+<td align="left">t, f</td>
+<td align="left">t=posición de skewer, f=no</td>
+</tr>
+<tr class="even">
+<td align="left">btoeg</td>
+<td align="left">Black to Egress</td>
+<td align="left">El rey negro está a una casilla del borde relevante</td>
+<td align="left">t, n</td>
+<td align="left">t=si, n=no</td>
+</tr>
+</tbody>
+</table>
+<p>Observación:<code>g</code> y <code>w</code> representan el mismo concepto general (acción o característica de las blancas), pero su uso depende de la variable específica:</p>
+<ul>
+<li><p><code>w</code> (White): Se usa cuando la variable indica directamente una acción o posición de las blancas.</p></li>
+<li><p><code>g</code> (Good): Se usa en la variable <code>dwipd</code> para indicar una posición favorable para las blancas (good/ganancia).</p></li>
+</ul>
+</div>
+<div id="objetivo-del-análisis" class="section level2 hasAnchor" number="1.3">
+<h2><span class="header-section-number">1.3</span> Objetivo del análisis<a href="index.html#objetivo-del-an%C3%A1lisis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>El presente trabajo tiene como objetivo identificar factores y patrones que determinan si las blancas logran capturar al peón o dar mate al rey negro (<code>won</code>), o, si las negras logran coronar su peón en a8 (transformarlo en una dama, torre, alfil o caballo), o consiguen tablas por ahogado (cuando el rey blanco no está en jaque, pero su jugador no tiene ningún movimiento legal disponible) (<code>nowin</code>), visualizando las relaciones entre las variables y la clase objetivo.</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+
+<a href="análisis-exploratorio-de-datos-eda.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": "https://github.com/rstudio/bookdown-demo/edit/master/index.Rmd",
+    "text": "Edit"
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["bookdown-demo.pdf", "bookdown-demo.epub"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+</body>
+
+</html>
