@@ -19,6 +19,7 @@
 library(tidyverse)
 library(GGally)
 library(gridExtra)
+library(grid)
 library(patchwork)
 library(viridis)
 library(tidytext)
@@ -28,6 +29,7 @@ library(vcd)
 library(knitr)
 library(shiny)
 library(shinyWidgets)
+library(plotly)
 ```
 
 Se hace la carga de los datos:
@@ -99,48 +101,58 @@ knitr::kable(tabla_target)
 Gráfico de barras:
 
 ```{r}
-g_target <- ggplot(tabla_target, aes(x = class, y = Frecuencia, fill = class)) +
-  geom_col(width = 0.6) +
-  geom_text(aes(label = Etiqueta), vjust = -0.5, size = 3.5) +
-  scale_fill_manual(values = c("steelblue", "#56B4E9")) +
-  scale_y_continuous(expand = expansion(mult = c(0, 0.15))) +
-  labs(
-    x = "Clase",
-    y = "Frecuencia (Porcentaje)"
-  ) +
-  theme_bw(base_size = 12) +
-  theme(
-    legend.position = "none",
-    panel.grid.major.x = element_blank()
-  )
+fig_bar <- plot_ly(
+  data = tabla_target,
+  x = ~class,
+  y = ~Frecuencia,
+  type = "bar",
+  color = ~class,
+  colors = c("steelblue", "#56B4E9"),
+  text = ~Etiqueta,
+  textposition = "outside",
+  hoverinfo = "text",
+  hovertemplate = "<b>%{x}</b><br>Frecuencia: %{y}<br>%{text}<extra></extra>"
+)
+
+fig_bar <- layout(
+  fig_bar,
+  title = "Distribución de la variable target",
+  xaxis = list(title = "Clase"),
+  yaxis = list(title = "Frecuencia", range = c(0, max(tabla_target$Frecuencia) * 1.15)),
+  showlegend = FALSE,
+  margin = list(l = 50, r = 50, t = 60, b = 50)
+)
+
+fig_bar
 ```
 
 Gráfico de torta para visualizar mejor la proporción:
 
 ```{r}
-g_torta <- tabla_target %>%
-  ggplot(aes(x = "", y = Frecuencia, fill = class)) +
-  geom_col(width = 1) +
-  coord_polar(theta = "y") +
-  geom_text(aes(label = Etiqueta), position = position_stack(vjust = 0.5), size = 3.5) +
-  scale_fill_manual(values = c("steelblue", "#56B4E9")) +
-  labs(
-    title = "",
-    x = NULL,
-    y = NULL
-  ) +
-  theme_void(base_size = 12) +
-  theme(legend.position = "bottom")
-```
+fig_pie <- plot_ly(
+  data = tabla_target,
+  labels = ~class,
+  values = ~Frecuencia,
+  type = "pie",
+  text = ~Etiqueta,
+  textposition = "inside",
+  textinfo = "text",
+  hoverinfo = "label+percent+value",
+  hovertemplate = "<b>%{label}</b><br>Frecuencia: %{value}<br>Porcentaje: %{percent}<extra></extra>",
+  marker = list(colors = c("steelblue", "#56B4E9")),
+  pull = c(0.05, 0)
+)
 
-Observemos los dos gráficos:
+fig_pie <- layout(
+  fig_pie,
+  title = "Distribución de la variable target",
+  showlegend = TRUE,
+  legend = list(orientation = "h", y = -0.1, x = 0.5),
+  margin = list(l = 40, r = 40, t = 60, b = 80)
+)
 
-```{r}
-(g_target | g_torta) +
-  plot_annotation(
-    title = "Distribución de la variable target",
-    subtitle = paste(nrow(datos), "observaciones")
-  )
+fig_pie
+
 ```
 
 En 1669 partidas, el 52.2%, resultó `won`, es decir que las blancas ganaron, y en 1527 partidas, el 47.8%, resultó `nowin`, es decir que el peón negro logró coronar o las negras consiguieron tablas; la diferencia entre ambas clases es de solo 4.4 puntos porcentuales, lo que indica que el dataset no tiene un sesgo significativo hacia ninguna clase.
@@ -176,7 +188,7 @@ binarias <- frecuencias %>%
 knitr::kable(binarias)
 ```
 
-Se muestra el porcentaje de cada característica (`t`, `f`, `n`, `b`, `g`, `l`) para cada variable, en particular, solo 2 de alguna de las 6, ya que son binarias. Se puede observar que la mayoría poseen `t` y `f`, true y false, a excepción de `dwipd`, con `g` y `l`, y 
+Se muestra el porcentaje de cada característica (`t`, `f`, `n`, `b`, `g`, `l`) para cada variable, en particular, solo 2 de alguna de las 6, ya que son binarias. Se puede observar que la mayoría poseen `t` y `f`, true y false, a excepción de `dwipd`, con `g` y `l`
 
 Variables con 3 niveles:
 
@@ -193,7 +205,7 @@ knitr::kable(ternarias)
 
 Se muestra el porcentaje de cada característica (`n`, `b`, `w`) para la variable.
 
-Ahora,
+Ahora, gráficos de pastel de cada una de las variables independientes:
 
 ```{r, warning=FALSE} 
 library(kableExtra)
