@@ -399,14 +399,10 @@ asociacion_class <- cramer_matrix["class", ] %>%
 # Top 5
 top5_class <- asociacion_class %>% head(5)
 
-# ============================================
-# GRÁFICO DE BARRAS INTERACTIVO
-# ============================================
-
 fig_top5 <- plot_ly(
   data = top5_class,
   x = ~cramer,
-  y = ~variable,  # <--- SIN reorder() para mantener el orden original
+  y = ~variable,
   type = "bar",
   orientation = "h",
   marker = list(
@@ -439,55 +435,9 @@ fig_top5 <- layout(
   yaxis = list(
     title = "",
     tickfont = list(size = 12),
-    autorange = "reversed",   # <--- Esto coloca el mayor arriba
-    categoryorder = "array",   # <--- Mantiene el orden original
-    categoryarray = top5_class$variable  # <--- Orden específico
-  ),
-  margin = list(l = 100, r = 60, t = 50, b = 40),
-  height = 400,
-  width = 700,
-  showlegend = FALSE
-)
-
-fig_top5fig_top5 <- plot_ly(
-  data = top5_class,
-  x = ~cramer,
-  y = ~variable,  # <--- SIN reorder() para mantener el orden original
-  type = "bar",
-  orientation = "h",
-  marker = list(
-    color = ~cramer,
-    colorscale = list(
-      c(0, "lightblue"),
-      c(1, "darkblue")
-    ),
-    showscale = FALSE,
-    line = list(color = "darkblue", width = 0.5)
-  ),
-  text = ~round(cramer, 3),
-  textposition = "outside",
-  textfont = list(size = 12, color = "black"),
-  hoverinfo = "text",
-  hovertemplate = "<b>%{y}</b><br>Cramér's V: %{x:.3f}<extra></extra>"
-)
-
-fig_top5 <- layout(
-  fig_top5,
-  title = list(
-    text = "Top 5 factores relacionados con class",
-    font = list(size = 16, face = "bold")
-  ),
-  xaxis = list(
-    title = "Cramér's V",
-    range = c(0, 0.5),
-    tickfont = list(size = 11)
-  ),
-  yaxis = list(
-    title = "",
-    tickfont = list(size = 12),
-    autorange = "reversed",   # <--- Esto coloca el mayor arriba
-    categoryorder = "array",   # <--- Mantiene el orden original
-    categoryarray = top5_class$variable  # <--- Orden específico
+    autorange = "reversed",  
+    categoryorder = "array",   
+    categoryarray = top5_class$variable  
   ),
   margin = list(l = 100, r = 60, t = 50, b = 40),
   height = 400,
