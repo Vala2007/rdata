@@ -37,3 +37,4 @@ variables-del-rey-blanco-wk
 variables-del-rey-negro-bk
 tab:unnamed-chunk-22
 conclusiones
+tab:unnamed-chunk-18

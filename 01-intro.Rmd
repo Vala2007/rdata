@@ -322,68 +322,65 @@ cramer_v <- function(x, y) {
 }
 
 vars_todas <- colnames(datos)
-cramer_matrix <- matrix(0, 
-                        nrow = length(vars_todas), 
-                        ncol = length(vars_todas))
+n_vars <- length(vars_todas)
+cramer_matrix <- matrix(0, nrow = n_vars, ncol = n_vars)
 rownames(cramer_matrix) <- vars_todas
 colnames(cramer_matrix) <- vars_todas
 
-for (i in 1:length(vars_todas)) {
-  for (j in 1:length(vars_todas)) {
-    cramer_matrix[i, j] <- cramer_v(datos[[vars_todas[i]]], 
-                                     datos[[vars_todas[j]]])
+for (i in 1:n_vars) {
+  for (j in 1:n_vars) {
+    cramer_matrix[i, j] <- cramer_v(datos[[vars_todas[i]]], datos[[vars_todas[j]]])
   }
 }
 
-# 2. Crear heatmap y guardarlo como imagen PNG grande
-# Abrir dispositivo gráfico con tamaño grande
-png("heatmap_cramer_grande.png", 
-    width = 3000,   # 3000 píxeles de ancho
-    height = 3000,  # 3000 píxeles de alto
-    res = 200)      # 200 dpi de resolución
+fig_heatmap <- plot_ly(
+  z = cramer_matrix,
+  x = colnames(cramer_matrix),
+  y = rownames(cramer_matrix),
+  type = "heatmap",
+  colorscale = list(
+    c(0, "#ffffff"),      # Blanco para 0
+    c(0.3, "#d4e8f5"),    # Azul muy claro
+    c(0.5, "#6baed6"),    # Azul medio
+    c(0.7, "#2171b5"),    # Azul oscuro
+    c(1, "#08306b")       # Azul muy oscuro para valores altos
+  ),
+  zmin = 0,
+  zmax = 1,
+  text = round(cramer_matrix, 2),
+  texttemplate = "%{text:.2f}",
+  textfont = list(size = 8, color = "black"),
+  hoverinfo = "text",
+  hovertemplate = "<b>%{y}</b> ↔ <b>%{x}</b><br>Cramér's V: %{z:.3f}<extra></extra>"
+)
 
-# Crear el heatmap
-cramer_matrix %>%
-  as.data.frame() %>%
-  rownames_to_column("var1") %>%
-  pivot_longer(-var1, names_to = "var2", values_to = "cramer") %>%
-  ggplot(aes(x = var1, y = var2, fill = cramer)) +
-  geom_tile(color = "white", size = 0.3) +
-  geom_text(aes(label = round(cramer, 2)), 
-            size = 3.5, 
-            color = "black") +
-  scale_fill_gradient2(
-    low = "white",
-    mid = "lightblue",
-    high = "steelblue",
-    midpoint = 0.3,
-    limits = c(0, 1),
-    name = "Cramér's V"
-  ) +
-  labs(
-    title = "Matriz de asociación (Cramér's V) - KRKPA7",
-    subtitle = paste("Todas las variables (", length(vars_todas), " variables)", sep = ""),
-    x = "",
-    y = ""
-  ) +
-  theme_minimal(base_size = 10) +
-  theme(
-    axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5, 
-                               size = 12), 
-    axis.text.y = element_text(size = 12), 
-    plot.title = element_text(size = 20, face = "bold", hjust = 0.5), 
-    plot.subtitle = element_text(size = 16, hjust = 0.5), 
-    legend.position = "right",
-    legend.title = element_text(size = 14),  
-    legend.text = element_text(size = 12),  
-    panel.grid = element_blank()
-  )
+fig_heatmap <- layout(
+  fig_heatmap,
+  title = list(
+    text = paste("Matriz de asociación (Cramér's V) - KRKPA7"),
+    font = list(size = 16, face = "bold")
+  ),
+  xaxis = list(
+    title = "",
+    tickangle = 90,
+    tickfont = list(size = 8)
+  ),
+  yaxis = list(
+    title = "",
+    tickfont = list(size = 8)
+  ),
+  margin = list(l = 80, r = 80, b = 120, t = 60),
+  colorbar = list(
+    title = "Cramér's V",
+    tickfont = list(size = 10),
+    tickvals = c(0, 0.25, 0.5, 0.75, 1),
+    ticktext = c("0", "0.25", "0.5", "0.75", "1")
+  ),
+  width = 900,
+  height = 700
+)
 
-dev.off()
-
-```
-```{r, echo=FALSE, fig.fullwidth=TRUE}
-knitr::include_graphics("heatmap_cramer_grande.png")
+fig_heatmap
 ```
 
 El heatmap muestra la fuerza de la asociación entre las variables predictoras y la variable objetivo (`class`). 
@@ -399,22 +396,106 @@ asociacion_class <- cramer_matrix["class", ] %>%
   filter(variable != "class") %>%
   arrange(desc(cramer))
 
-knitr::kable(head(asociacion_class, 5))
+# Top 5
+top5_class <- asociacion_class %>% head(5)
 
-asociacion_class %>%
-  head(10) %>%
-  ggplot(aes(x = reorder(variable, cramer), y = cramer, fill = cramer)) +
-  geom_col(width = 0.6) +
-  coord_flip() +
-  scale_fill_gradient(low = "lightblue", high = "darkblue") +
-  geom_text(aes(label = round(cramer, 3)), hjust = -0.2, size = 3) +
-  labs(
-    title = "Top 5 factores relacionados con class",
-    x = "Variable", 
-    y = "Cramer's V"
-  ) +
-  theme_bw(base_size = 13) +
-  theme(legend.position = "none")
+# ============================================
+# GRÁFICO DE BARRAS INTERACTIVO
+# ============================================
+
+fig_top5 <- plot_ly(
+  data = top5_class,
+  x = ~cramer,
+  y = ~variable,  # <--- SIN reorder() para mantener el orden original
+  type = "bar",
+  orientation = "h",
+  marker = list(
+    color = ~cramer,
+    colorscale = list(
+      c(0, "lightblue"),
+      c(1, "darkblue")
+    ),
+    showscale = FALSE,
+    line = list(color = "darkblue", width = 0.5)
+  ),
+  text = ~round(cramer, 3),
+  textposition = "outside",
+  textfont = list(size = 12, color = "black"),
+  hoverinfo = "text",
+  hovertemplate = "<b>%{y}</b><br>Cramér's V: %{x:.3f}<extra></extra>"
+)
+
+fig_top5 <- layout(
+  fig_top5,
+  title = list(
+    text = "Top 5 factores relacionados con class",
+    font = list(size = 16, face = "bold")
+  ),
+  xaxis = list(
+    title = "Cramér's V",
+    range = c(0, 0.5),
+    tickfont = list(size = 11)
+  ),
+  yaxis = list(
+    title = "",
+    tickfont = list(size = 12),
+    autorange = "reversed",   # <--- Esto coloca el mayor arriba
+    categoryorder = "array",   # <--- Mantiene el orden original
+    categoryarray = top5_class$variable  # <--- Orden específico
+  ),
+  margin = list(l = 100, r = 60, t = 50, b = 40),
+  height = 400,
+  width = 700,
+  showlegend = FALSE
+)
+
+fig_top5fig_top5 <- plot_ly(
+  data = top5_class,
+  x = ~cramer,
+  y = ~variable,  # <--- SIN reorder() para mantener el orden original
+  type = "bar",
+  orientation = "h",
+  marker = list(
+    color = ~cramer,
+    colorscale = list(
+      c(0, "lightblue"),
+      c(1, "darkblue")
+    ),
+    showscale = FALSE,
+    line = list(color = "darkblue", width = 0.5)
+  ),
+  text = ~round(cramer, 3),
+  textposition = "outside",
+  textfont = list(size = 12, color = "black"),
+  hoverinfo = "text",
+  hovertemplate = "<b>%{y}</b><br>Cramér's V: %{x:.3f}<extra></extra>"
+)
+
+fig_top5 <- layout(
+  fig_top5,
+  title = list(
+    text = "Top 5 factores relacionados con class",
+    font = list(size = 16, face = "bold")
+  ),
+  xaxis = list(
+    title = "Cramér's V",
+    range = c(0, 0.5),
+    tickfont = list(size = 11)
+  ),
+  yaxis = list(
+    title = "",
+    tickfont = list(size = 12),
+    autorange = "reversed",   # <--- Esto coloca el mayor arriba
+    categoryorder = "array",   # <--- Mantiene el orden original
+    categoryarray = top5_class$variable  # <--- Orden específico
+  ),
+  margin = list(l = 100, r = 60, t = 50, b = 40),
+  height = 400,
+  width = 700,
+  showlegend = FALSE
+)
+
+fig_top5
 ```
 
 El análisis de asociación con Cramér's V revela que las variables más relacionadas con el resultado (`won`/`nowin`) son:
@@ -471,7 +552,7 @@ tabla_contingencia_completa %>%
   scroll_box(width = "100%", height = "500px")
 ```
 
-```{r}
+```{r message=FALSE, warning=FALSE, results='asis'}
 colores_class <- c(
   "won" = "#2E86C1",  
   "nowin" = "#E74C3C"  
@@ -537,7 +618,6 @@ for (i in seq_along(grupos)) {
     margins = unit(0.2, "cm"),
   )
 }
-
 ```
 
 **Factores asociados con la victoria (`won`)**:
@@ -570,65 +650,82 @@ Las variables `wkblk`, `wknwy`, `dsopp`, `qxmsq`, `reskd`, `reskr` y `btoeg` pre
 ```{r}
 vars_predictoras <- colnames(datos)[colnames(datos) != "class"]
 
-# 2. Calcular Cramér's V solo entre predictoras
-cramer_matrix_pred <- matrix(0, 
-                             nrow = length(vars_predictoras), 
-                             ncol = length(vars_predictoras))
+# Matriz de Cramér's V entre predictoras
+cramer_matrix_pred <- matrix(
+  0,
+  nrow = length(vars_predictoras),
+  ncol = length(vars_predictoras)
+)
+
 rownames(cramer_matrix_pred) <- vars_predictoras
 colnames(cramer_matrix_pred) <- vars_predictoras
 
 for (i in 1:length(vars_predictoras)) {
   for (j in 1:length(vars_predictoras)) {
-    cramer_matrix_pred[i, j] <- cramer_v(datos[[vars_predictoras[i]]], 
-                                          datos[[vars_predictoras[j]]])
+    cramer_matrix_pred[i, j] <- cramer_v(
+      datos[[vars_predictoras[i]]],
+      datos[[vars_predictoras[j]]]
+    )
   }
 }
 
-# 3. Guardar heatmap de predictoras (sin class)
-png("heatmap_cramer_predictoras.png", 
-    width = 3000, 
-    height = 3000, 
-    res = 200)
-
-cramer_matrix_pred %>%
-  as.data.frame() %>%
-  rownames_to_column("var1") %>%
-  pivot_longer(-var1, names_to = "var2", values_to = "cramer") %>%
-  ggplot(aes(x = var1, y = var2, fill = cramer)) +
-  geom_tile(color = "white", size = 0.3) +
-  geom_text(aes(label = round(cramer, 2)), 
-            size = 3.5, 
-            color = "black") +
-  scale_fill_gradient2(
-    low = "white",
-    mid = "lightblue",
-    high = "steelblue",
-    midpoint = 0.3,
-    limits = c(0, 1),
-    name = "Cramér's V"
-  ) +
-  labs(
-    title = "Matriz de asociación entre variables predictoras (Cramér's V)",
-    subtitle = paste("Excluyendo 'class' (", length(vars_predictoras), " variables)", sep = ""),
-    x = "",
-    y = ""
-  ) +
-  theme_minimal(base_size = 10) +
-  theme(
-    axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5, size = 12),
-    axis.text.y = element_text(size = 12),
-    plot.title = element_text(size = 20, face = "bold", hjust = 0.5),
-    plot.subtitle = element_text(size = 16, hjust = 0.5),
-    legend.position = "right",
-    legend.title = element_text(size = 14),
-    legend.text = element_text(size = 12),
-    panel.grid = element_blank()
+# Heatmap interactivo
+fig_heatmap_pred <- plot_ly(
+  z = cramer_matrix_pred,
+  x = colnames(cramer_matrix_pred),
+  y = rownames(cramer_matrix_pred),
+  type = "heatmap",
+  colorscale = list(
+    c(0, "#ffffff"),      # Blanco
+    c(0.3, "#d4e8f5"),    # Azul muy claro
+    c(0.5, "#6baed6"),    # Azul medio
+    c(0.7, "#2171b5"),    # Azul oscuro
+    c(1, "#08306b")       # Azul muy oscuro
+  ),
+  zmin = 0,
+  zmax = 1,
+  text = round(cramer_matrix_pred, 2),
+  texttemplate = "%{text:.2f}",
+  textfont = list(size = 8, color = "black"),
+  hoverinfo = "text",
+  hovertemplate = paste(
+    "<b>%{y}</b> ↔ <b>%{x}</b>",
+    "<br>Cramér's V: %{z:.3f}",
+    "<extra></extra>"
   )
+)
 
-dev.off()
+fig_heatmap_pred <- layout(
+  fig_heatmap_pred,
+  title = list(
+    text = paste(
+      "Matriz de asociación entre variables predictoras",
+      "(Cramér's V)"
+    ),
+    font = list(size = 16)
+  ),
+  xaxis = list(
+    title = "",
+    tickangle = 90,
+    tickfont = list(size = 8)
+  ),
+  yaxis = list(
+    title = "",
+    tickfont = list(size = 8)
+  ),
+  margin = list(
+    l = 100, r = 60, t = 50, b = 40
+  ),
+  colorbar = list(
+    title = "Cramér's V",
+    tickvals = c(0, 0.25, 0.5, 0.75, 1),
+    ticktext = c("0", "0.25", "0.5", "0.75", "1")
+  ),
+  width = 900,
+  height = 700
+)
 
-# 4. Mostrar heatmap en el documento
-knitr::include_graphics("heatmap_cramer_predictoras.png")
+fig_heatmap_pred
 ```
 
 ```{r}
@@ -647,20 +744,45 @@ knitr::kable(head(pares, 5),
              col.names = c("Variable 1", "Variable 2", "Cramér's V"),
              digits = 3)
 
-pares %>%
-  head(5) %>%
-  ggplot(aes(x = reorder(paste(var1, "↔", var2), cramer), y = cramer, fill = cramer)) +
-  geom_col(width = 0.7) +
-  coord_flip() +
-  scale_fill_gradient(low = "lightblue", high = "darkblue") +
-  geom_text(aes(label = round(cramer, 3)), hjust = -0.2, size = 3.5) +
-  labs(
-    title = "Top 5 asociaciones entre variables predictoras",
-    x = "Par de variables",
-    y = "Cramér's V"
-  ) +
-  theme_bw(base_size = 11) +
-  theme(legend.position = "none")
+top5 <- head(pares, 5)
+
+fig_top5 <- plot_ly(
+  data = top5,
+  x = ~cramer,
+  y = ~reorder(paste(var1, "↔", var2), cramer),
+  type = "bar",
+  orientation = "h",
+  text = ~round(cramer, 3),
+  textposition = "outside",
+  marker = list(
+    color = ~cramer,
+    colorscale = list(
+      c(0, "lightblue"),
+      c(1, "darkblue")
+    ),
+    showscale = TRUE,
+    colorbar = list(title = "Cramér's V")
+  ),
+  hovertemplate = paste(
+    "<b>%{y}</b>",
+    "<br>Cramér's V: %{x:.3f}",
+    "<extra></extra>"
+  )
+)
+
+fig_top5 <- layout(
+  fig_top5,
+  title = "Top 5 asociaciones entre variables predictoras",
+  xaxis = list(
+    title = "Cramér's V",
+    range = c(0, max(top5$cramer) * 1.15)
+  ),
+  yaxis = list(title = ""),
+  showlegend = FALSE,
+  height = 500
+)
+
+fig_top5
 ```
 
 Para evaluar si existen variables redundantes (que miden información similar), se calculó la matriz de Cramer's V excluyendo la variable objetivo `class`. Los valores más altos indican que dos variables están asociadas entre sí, lo que sugiere que podrían estar midiendo conceptos relacionados:
