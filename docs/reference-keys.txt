@@ -38,3 +38,14 @@ variables-del-rey-negro-bk
 tab:unnamed-chunk-22
 conclusiones
 tab:unnamed-chunk-18
+objetivos
+objetivo-general
+objetivos-específicos
+marco-teórico
+finales-de-ajedrez
+medidas-de-asociación-entre-variables-categóricas
+metodología
+análisis-exploratorio-de-datos
+visualización-interactiva
+modelado-predictivo
+tab:unnamed-chunk-17

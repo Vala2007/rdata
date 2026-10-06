@@ -79,8 +79,23 @@
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introducción</a>
 <ul>
 <li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#contexto"><i class="fa fa-check"></i><b>1.1</b> Contexto</a></li>
-<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#el-dataset"><i class="fa fa-check"></i><b>1.2</b> El dataset</a></li>
-<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#objetivo-del-an%C3%A1lisis"><i class="fa fa-check"></i><b>1.3</b> Objetivo del análisis</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#objetivos"><i class="fa fa-check"></i><b>1.2</b> Objetivos</a>
+<ul>
+<li class="chapter" data-level="1.2.1" data-path="index.html"><a href="index.html#objetivo-general"><i class="fa fa-check"></i><b>1.2.1</b> Objetivo general</a></li>
+<li class="chapter" data-level="1.2.2" data-path="index.html"><a href="index.html#objetivos-espec%C3%ADficos"><i class="fa fa-check"></i><b>1.2.2</b> Objetivos específicos</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#marco-te%C3%B3rico"><i class="fa fa-check"></i><b>1.3</b> Marco teórico</a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="index.html"><a href="index.html#finales-de-ajedrez"><i class="fa fa-check"></i><b>1.3.1</b> Finales de ajedrez</a></li>
+<li class="chapter" data-level="1.3.2" data-path="index.html"><a href="index.html#medidas-de-asociaci%C3%B3n-entre-variables-categ%C3%B3ricas"><i class="fa fa-check"></i><b>1.3.2</b> Medidas de asociación entre variables categóricas</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#metodolog%C3%ADa"><i class="fa fa-check"></i><b>1.4</b> Metodología</a>
+<ul>
+<li class="chapter" data-level="1.4.1" data-path="index.html"><a href="index.html#an%C3%A1lisis-exploratorio-de-datos"><i class="fa fa-check"></i><b>1.4.1</b> Análisis exploratorio de datos</a></li>
+<li class="chapter" data-level="1.4.2" data-path="index.html"><a href="index.html#visualizaci%C3%B3n-interactiva"><i class="fa fa-check"></i><b>1.4.2</b> Visualización interactiva</a></li>
+<li class="chapter" data-level="1.4.3" data-path="index.html"><a href="index.html#modelado-predictivo"><i class="fa fa-check"></i><b>1.4.3</b> Modelado predictivo</a></li>
+</ul></li>
+<li class="chapter" data-level="1.5" data-path="index.html"><a href="index.html#el-dataset"><i class="fa fa-check"></i><b>1.5</b> El dataset</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html"><i class="fa fa-check"></i><b>2</b> Análisis exploratorio de datos (EDA)</a>
 <ul>
@@ -120,11 +135,62 @@
 <h1><span class="header-section-number">Chapter 1</span> Introducción<a href="index.html#introducci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <div id="contexto" class="section level2 hasAnchor" number="1.1">
 <h2><span class="header-section-number">1.1</span> Contexto<a href="index.html#contexto" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Hay tres fases reconocidas en una partida de ajedrez: opening o apertura, donde predomina el desarrollo de las piezas y el control del centro; middlegame o el medio juego, donde se producen maniobras de defensa y ataque contra el rey del oponente o sus debilidades; y el endgame o final, donde, generalmente después de varios intercambios de piezas, la promoción de peones se convierte en el tema dominante.
-Uno de los aspectos más fascinantes del ajedrez es el estudio de los finales, donde el número de piezas se reduce y el juego se vuelve más teórico y preciso. Uno de ellos es el de Rey+Torre vs Rey+Peón.</p>
+<p>El ajedrez, además de ser un deporte, constituye un dominio clásico para el estudio de la toma de decisiones y el razonamiento automático (Russell y Norvig, 2020). Desde los años cincuenta, se han utilizado los finales de ajedrez como pruebas para algoritmos de aprendizaje automático, ya que poseen un número reducido de piezas, reglas perfectamente definidas y resultados verificables objetivamente: victoria, derrota o tablas (Shapiro, 1983).</p>
+<p>Tradicionalmente se reconocen tres fases en una partida de ajedrez: la apertura, donde predomina el desarrollo de las piezas y el control del centro; el medio juego, donde se producen maniobras de ataque y defensa contra el rey rival o sus debilidades estructurales; y el final, donde tras varios intercambios la promoción de peones se convierte en el tema dominante (Dvoretsky, 2003). Uno de los aspectos más fascinantes del ajedrez es el estudio de los finales, donde el número de piezas se reduce y el juego se vuelve más teórico y preciso (Nunn, 2010). Uno de ellos es el final Rey + Torre vs Rey + Peón, o KRKPA7 (King + Rook vs King + Pawn on a7).</p>
 </div>
-<div id="el-dataset" class="section level2 hasAnchor" number="1.2">
-<h2><span class="header-section-number">1.2</span> El dataset<a href="index.html#el-dataset" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="objetivos" class="section level2 hasAnchor" number="1.2">
+<h2><span class="header-section-number">1.2</span> Objetivos<a href="index.html#objetivos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="objetivo-general" class="section level3 hasAnchor" number="1.2.1">
+<h3><span class="header-section-number">1.2.1</span> Objetivo general<a href="index.html#objetivo-general" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Analizar el comportamiento del final de ajedrez Rey + Torre vs Rey + Peón a partir del dataset KRKPA7, mediante técnicas de análisis exploratorio de datos, visualización interactiva y modelado predictivo, para identificar los patrones que determinan si las blancas ganan o no la partida.</p>
+</div>
+<div id="objetivos-específicos" class="section level3 hasAnchor" number="1.2.2">
+<h3><span class="header-section-number">1.2.2</span> Objetivos específicos<a href="index.html#objetivos-espec%C3%ADficos" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Realizar un análisis que caracterice de forma univariada y bivariada las 36 variables categóricas del dataset, identificando su distribución, asociación con la variable objetivo y relaciones entre predictoras, mediante tablas de frecuencia, matrices de asociación (V de Cramér) y visualizaciones interactivas (Cramér, 1946).</p>
+<p>Construir un modelo predictivo que, a partir de las variables del tablero, que clasifique correctamente si una posición termina en victoria de las blancas (won) o no (nowin), evaluando su desempeño mediante métricas como exactitud, matriz de confusión, F1-score, AUC-ROC, y validación cruzada.</p>
+</div>
+</div>
+<div id="marco-teórico" class="section level2 hasAnchor" number="1.3">
+<h2><span class="header-section-number">1.3</span> Marco teórico<a href="index.html#marco-te%C3%B3rico" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="finales-de-ajedrez" class="section level3 hasAnchor" number="1.3.1">
+<h3><span class="header-section-number">1.3.1</span> Finales de ajedrez<a href="index.html#finales-de-ajedrez" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Los finales de ajedrez han sido estudiados desde dos perspectivas complementarias: la teoría ajedrecística, que establece reglas prácticas sobre cómo ganar o entablar, y la teoría de la computación, que los utiliza como problemas de búsqueda y clasificación (Russell y Norvig, 2020), estos, ya con pocas piezas, permiten definir con precisión qué significa “ganar” y “no ganar” en cada posición, y por lo tanto admiten reglas verificables que pueden ser aprendidas, inducidas o programadas. La teoría clásica, recogida por ejemplo en el manual de finales de Dvoretsky, establece que las blancas ganan si logran detener al peón con la torre y acercar su rey para dar mate. Las negras, en cambio, obtienen tablas o ganan si coronan el peón, ahogan al rey blanco o capturan la torre.</p>
+</div>
+<div id="medidas-de-asociación-entre-variables-categóricas" class="section level3 hasAnchor" number="1.3.2">
+<h3><span class="header-section-number">1.3.2</span> Medidas de asociación entre variables categóricas<a href="index.html#medidas-de-asociaci%C3%B3n-entre-variables-categ%C3%B3ricas" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Dado que todas las variables del dataset KRKPA7 son de naturaleza categórica, no es posible utilizar coeficientes de correlación como el de Pearson o Spearman, que están diseñados para variables cuantitativas. En su lugar, se emplean medidas de asociación específicas para datos cualitativos, siendo la más utilizada en la literatura la V de Cramér, propuesta por Harald Cramér en 1946 (Cramér, 1946). Es una medida estadística que cuantifica la fuerza de la asociación entre dos variables categóricas. Sus valores oscilan entre 0 y 1. Un valor de 0 indica que no existe relación entre las variables, es decir, que son independientes. Un valor de 1 indica una relación perfecta, en la que una variable determina completamente a la otra. Valores intermedios sugieren distintos grados de asociación, donde valores cercanos a 0.1 se consideran asociaciones débiles, cercanos a 0.3 moderadas, cercanos a 0.5 fuertes y superiores a 0.7 muy fuertes (Cohen, 1988).
+<span class="math display">\[
+V = \sqrt{\frac{\chi^2}{n \times \min(r-1, c-1)}}
+\]</span>
+El cálculo se basa en el estadístico chi-cuadrado, que mide la diferencia entre lo observado y lo esperado si las variables fueran independientes. La n representa el número total de observaciones. La r corresponde al número de filas de la tabla de contingencia y la c al número de columnas de la misma tabla.</p>
+<p>Para que la V de Cramér sea válida se requiere que ambas variables sean categóricas, que las observaciones sean independientes y que las frecuencias esperadas de la tabla de contingencia sean adecuadas (al menos el 80 % de las celdas con frecuencia esperada ≥ 5). Cuando alguna celda queda por debajo de ese umbral, se recomienda usar el chi-cuadrado con simulación de Monte Carlo para evitar distorsiones en el cálculo (Agresti, 2002).</p>
+<p>Una ventaja importante de la V de Cramér es que permite comparar la fuerza de asociación entre pares de variables incluso cuando las tablas de contingencia tienen dimensiones distintas, algo que no ocurre con otras medidas como el coeficiente phi, que solo es aplicable a tablas de 2x2 (Agresti, 2002). Esto resulta particularmente útil en el dataset KRKPA7, donde algunas variables son binarias y otras presentan tres o más niveles. En este proyecto, la V de Cramér se utiliza con dos propósitos principales. En primer lugar, para cuantificar la relación entre cada variable predictora y la variable objetivo class, lo cual permite identificar qué atributos del tablero están más asociados con el resultado final de la partida. En segundo lugar, para construir una matriz de asociación entre todas las variables predictoras, con el fin de detectar redundancias, grupos de variables que miden conceptos similares y posibles problemas de multicolinealidad categórica que podrían afectar el desempeño de los modelos predictivos.</p>
+<p>Residuos estandarizados:</p>
+<p>Una vez detectada una asociación significativa con la V de Cramér, es útil identificar qué celdas específicas contribuyen a esa asociación. Para esto se emplean los residuos estandarizados de Pearson, que comparan la frecuencia observada con la esperada bajo independencia:
+<span class="math display">\[
+r_{ij} = \frac{O_{ij} - E_{ij}}{\sqrt{E_{ij}}}
+\]</span>
+Un residuo mayor a 2 en valor absoluto indica que esa celda aporta significativamente a la asociación. Un residuo mayor a 3 señala una desviación fuerte. Los residuos positivos indican que la combinación observada ocurre más de lo esperado, y los negativos que ocurre menos (Agresti, 2002). Existe también la versión ajustada de Haberman, que corrige por el tamaño de la tabla y es preferible cuando hay más de 2 filas o columnas.</p>
+</div>
+</div>
+<div id="metodología" class="section level2 hasAnchor" number="1.4">
+<h2><span class="header-section-number">1.4</span> Metodología<a href="index.html#metodolog%C3%ADa" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="análisis-exploratorio-de-datos" class="section level3 hasAnchor" number="1.4.1">
+<h3><span class="header-section-number">1.4.1</span> Análisis exploratorio de datos<a href="index.html#an%C3%A1lisis-exploratorio-de-datos" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>En el análisis univariado se examina la distribución de niveles y comportamiento individual de cada una de las 36 variables predictoras y de la variable objetivo class mediante tablas de frecuencia, gráficos de barras, y gráficos de pastel. En el análisis bivariado se evalúa la relación entre cada variable predictora y class mediante tablas de contingencia, matriz V de Cramér y gráficos de barras agrupados por nivel y clase. En el análisis multivariado se construye una matriz V de Cramér entre todas las predictoras para detectar posibles variables redundantes, grupos de variables que miden conceptos similares y posibles problemas de multicolinealidad categórica.</p>
+<p>Las herramientas utilizadas en esta fase son R y Python, y el reporte se elabora en Bookdown y Jupyter Book respectivamente.</p>
+</div>
+<div id="visualización-interactiva" class="section level3 hasAnchor" number="1.4.2">
+<h3><span class="header-section-number">1.4.2</span> Visualización interactiva<a href="index.html#visualizaci%C3%B3n-interactiva" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Con base en los patrones identificados en el EDA, se construye un dashboard interactivo que permite filtrar por clase, es decir, por won o nowin, explorar cada variable de forma individual y agrupada, y visualizar las matrices con tooltip. Se implementa en Shiny y en Dash.</p>
+</div>
+<div id="modelado-predictivo" class="section level3 hasAnchor" number="1.4.3">
+<h3><span class="header-section-number">1.4.3</span> Modelado predictivo<a href="index.html#modelado-predictivo" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Se procederá a construir un modelo de predicción, que, a partir de las variables del tablero, clasifique correctamente si una posición termina en victoria de las blancas (won) o no (nowin), evaluando su desempeño mediante métricas como exactitud, matriz de confusión, F1-score, AUC-ROC, y validación cruzada. Además, se implementará un chatbot en ambos dashboards.</p>
+</div>
+</div>
+<div id="el-dataset" class="section level2 hasAnchor" number="1.5">
+<h2><span class="header-section-number">1.5</span> El dataset<a href="index.html#el-dataset" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>El dataset KRKPA7 (<strong>K</strong>ing + <strong>R</strong>ook vs <strong>K</strong>ing + <strong>P</strong>awn on <strong>a7</strong>) contiene las posiciones del endgame de 3,196 partidas de ajedrez, correspondientes al final Rey + Torre (blancas) vs Rey + Peón (negras) en la posición a7, es decir, con el peón negro a punto de coronar (el tablero se mira desde la perspectiva del negro). Fueron generadas y descritas originalmente por Alen D. Shapiro en su tesis doctoral (1983).
 Cada posición está representada por 36 variables categóricas que describen características específicas del tablero.
 La variable objetivo (<code>class</code>) indica si las blancas pueden ganar (<code>won</code>) o no (<code>nowin</code>).
@@ -406,10 +472,6 @@ En la siguiente tabla se presenta toda la información de cada variable:</p>
 <li><p><code>w</code> (White): Se usa cuando la variable indica directamente una acción o posición de las blancas.</p></li>
 <li><p><code>g</code> (Good): Se usa en la variable <code>dwipd</code> para indicar una posición favorable para las blancas (good/ganancia).</p></li>
 </ul>
-</div>
-<div id="objetivo-del-análisis" class="section level2 hasAnchor" number="1.3">
-<h2><span class="header-section-number">1.3</span> Objetivo del análisis<a href="index.html#objetivo-del-an%C3%A1lisis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>El presente trabajo tiene como objetivo identificar factores y patrones que determinan si las blancas logran capturar al peón o dar mate al rey negro (<code>won</code>), o, si las negras logran coronar su peón en a8 (transformarlo en una dama, torre, alfil o caballo), o consiguen tablas por ahogado (cuando el rey blanco no está en jaque, pero su jugador no tiene ningún movimiento legal disponible) (<code>nowin</code>), visualizando las relaciones entre las variables y la clase objetivo.</p>
 
 </div>
 </div>
@@ -473,6 +535,20 @@ gitbook.start({
 });
 </script>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
 
 </html>
