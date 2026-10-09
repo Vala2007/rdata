@@ -18,8 +18,63 @@ description: ""
 
 ## Contexto
 
-Hay tres fases reconocidas en una partida de ajedrez: opening o apertura, donde predomina el desarrollo de las piezas y el control del centro; middlegame o el medio juego, donde se producen maniobras de defensa y ataque contra el rey del oponente o sus debilidades; y el endgame o final, donde, generalmente después de varios intercambios de piezas, la promoción de peones se convierte en el tema dominante.
-Uno de los aspectos más fascinantes del ajedrez es el estudio de los finales, donde el número de piezas se reduce y el juego se vuelve más teórico y preciso. Uno de ellos es el de Rey+Torre vs Rey+Peón.
+El ajedrez, además de ser un deporte, constituye un dominio clásico para el estudio de la toma de decisiones y el razonamiento automático (Russell y Norvig, 2020). Desde los años cincuenta, se han utilizado los finales de ajedrez como pruebas para algoritmos de aprendizaje automático, ya que poseen un número reducido de piezas, reglas perfectamente definidas y resultados verificables objetivamente: victoria, derrota o tablas (Shapiro, 1983).
+
+Tradicionalmente se reconocen tres fases en una partida de ajedrez: la apertura, donde predomina el desarrollo de las piezas y el control del centro; el medio juego, donde se producen maniobras de ataque y defensa contra el rey rival o sus debilidades estructurales; y el final, donde tras varios intercambios la promoción de peones se convierte en el tema dominante (Dvoretsky, 2003). Uno de los aspectos más fascinantes del ajedrez es el estudio de los finales, donde el número de piezas se reduce y el juego se vuelve más teórico y preciso (Nunn, 2010). Uno de ellos es el final Rey + Torre vs Rey + Peón, o KRKPA7 (King + Rook vs King + Pawn on a7).
+
+## Objetivos
+
+### Objetivo general
+
+Analizar el comportamiento del final de ajedrez Rey + Torre vs Rey + Peón a partir del dataset KRKPA7, mediante técnicas de análisis exploratorio de datos, visualización interactiva y modelado predictivo, para identificar los patrones que determinan si las blancas ganan o no la partida.
+
+### Objetivos específicos 
+
+Realizar un análisis que caracterice de forma univariada y bivariada las 36 variables categóricas del dataset, identificando su distribución, asociación con la variable objetivo y relaciones entre predictoras, mediante tablas de frecuencia, matrices de asociación (V de Cramér) y visualizaciones interactivas (Cramér, 1946).
+
+Construir un modelo predictivo que, a partir de las variables del tablero, que clasifique correctamente si una posición termina en victoria de las blancas (won) o no (nowin), evaluando su desempeño mediante métricas como exactitud, matriz de confusión, F1-score, AUC-ROC, y validación cruzada.
+
+## Marco teórico
+
+### Finales de ajedrez
+
+Los finales de ajedrez han sido estudiados desde dos perspectivas complementarias: la teoría ajedrecística, que establece reglas prácticas sobre cómo ganar o entablar, y la teoría de la computación, que los utiliza como problemas de búsqueda y clasificación (Russell y Norvig, 2020), estos, ya con pocas piezas, permiten definir con precisión qué significa “ganar” y “no ganar” en cada posición, y por lo tanto admiten reglas verificables que pueden ser aprendidas, inducidas o programadas. La teoría clásica, recogida por ejemplo en el manual de finales de Dvoretsky, establece que las blancas ganan si logran detener al peón con la torre y acercar su rey para dar mate. Las negras, en cambio, obtienen tablas o ganan si coronan el peón, ahogan al rey blanco o capturan la torre.
+
+### Medidas de asociación entre variables categóricas
+
+Dado que todas las variables del dataset KRKPA7 son de naturaleza categórica, no es posible utilizar coeficientes de correlación como el de Pearson o Spearman, que están diseñados para variables cuantitativas. En su lugar, se emplean medidas de asociación específicas para datos cualitativos, siendo la más utilizada en la literatura la V de Cramér, propuesta por Harald Cramér en 1946 (Cramér, 1946). Es una medida estadística que cuantifica la fuerza de la asociación entre dos variables categóricas. Sus valores oscilan entre 0 y 1. Un valor de 0 indica que no existe relación entre las variables, es decir, que son independientes. Un valor de 1 indica una relación perfecta, en la que una variable determina completamente a la otra. Valores intermedios sugieren distintos grados de asociación, donde valores cercanos a 0.1 se consideran asociaciones débiles, cercanos a 0.3 moderadas, cercanos a 0.5 fuertes y superiores a 0.7 muy fuertes (Cohen, 1988).
+\[
+V = \sqrt{\frac{\chi^2}{n \times \min(r-1, c-1)}}
+\]
+El cálculo se basa en el estadístico chi-cuadrado, que mide la diferencia entre lo observado y lo esperado si las variables fueran independientes. La n representa el número total de observaciones. La r corresponde al número de filas de la tabla de contingencia y la c al número de columnas de la misma tabla. 
+
+Para que la V de Cramér sea válida se requiere que ambas variables sean categóricas, que las observaciones sean independientes y que las frecuencias esperadas de la tabla de contingencia sean adecuadas (al menos el 80 % de las celdas con frecuencia esperada ≥ 5). Cuando alguna celda queda por debajo de ese umbral, se recomienda usar el chi-cuadrado con simulación de Monte Carlo para evitar distorsiones en el cálculo (Agresti, 2002).
+
+Una ventaja importante de la V de Cramér es que permite comparar la fuerza de asociación entre pares de variables incluso cuando las tablas de contingencia tienen dimensiones distintas, algo que no ocurre con otras medidas como el coeficiente phi, que solo es aplicable a tablas de 2x2 (Agresti, 2002). Esto resulta particularmente útil en el dataset KRKPA7, donde algunas variables son binarias y otras presentan tres o más niveles. En este proyecto, la V de Cramér se utiliza con dos propósitos principales. En primer lugar, para cuantificar la relación entre cada variable predictora y la variable objetivo class, lo cual permite identificar qué atributos del tablero están más asociados con el resultado final de la partida. En segundo lugar, para construir una matriz de asociación entre todas las variables predictoras, con el fin de detectar redundancias, grupos de variables que miden conceptos similares y posibles problemas de multicolinealidad categórica que podrían afectar el desempeño de los modelos predictivos.
+
+Residuos estandarizados:
+
+Una vez detectada una asociación significativa con la V de Cramér, es útil identificar qué celdas específicas contribuyen a esa asociación. Para esto se emplean los residuos estandarizados de Pearson, que comparan la frecuencia observada con la esperada bajo independencia:
+$$
+r_{ij} = \frac{O_{ij} - E_{ij}}{\sqrt{E_{ij}}}
+$$
+Un residuo mayor a 2 en valor absoluto indica que esa celda aporta significativamente a la asociación. Un residuo mayor a 3 señala una desviación fuerte. Los residuos positivos indican que la combinación observada ocurre más de lo esperado, y los negativos que ocurre menos (Agresti, 2002). Existe también la versión ajustada de Haberman, que corrige por el tamaño de la tabla y es preferible cuando hay más de 2 filas o columnas.
+
+## Metodología
+
+### Análisis exploratorio de datos
+
+En el análisis univariado se examina la distribución de niveles y comportamiento individual de cada una de las 36 variables predictoras y de la variable objetivo class mediante tablas de frecuencia, gráficos de barras, y gráficos de pastel. En el análisis bivariado se evalúa la relación entre cada variable predictora y class mediante tablas de contingencia, matriz V de Cramér y gráficos de barras agrupados por nivel y clase. En el análisis multivariado se construye una matriz V de Cramér entre todas las predictoras para detectar posibles variables redundantes, grupos de variables que miden conceptos similares y posibles problemas de multicolinealidad categórica.
+
+Las herramientas utilizadas en esta fase son R y Python, y el reporte se elabora en Bookdown y Jupyter Book respectivamente.
+
+### Visualización interactiva
+
+Con base en los patrones identificados en el EDA, se construye un dashboard interactivo que permite filtrar por clase, es decir, por won o nowin, explorar cada variable de forma individual y agrupada, y visualizar las matrices con tooltip. Se implementa en Shiny y en Dash.
+
+### Modelado predictivo
+
+Se procederá a construir un modelo de predicción, que, a partir de las variables del tablero, clasifique correctamente si una posición termina en victoria de las blancas (won) o no (nowin), evaluando su desempeño mediante métricas como exactitud, matriz de confusión, F1-score, AUC-ROC, y validación cruzada. Además, se implementará un chatbot en ambos dashboards.
 
 ## El dataset
 
@@ -147,8 +202,4 @@ Observación:`g` y `w` representan el mismo concepto general (acción o caracter
 
 - `g` (Good): Se usa en la variable `dwipd` para indicar una posición favorable para las blancas (good/ganancia).
 
-
-## Objetivo del análisis
-
-El presente trabajo tiene como objetivo identificar factores y patrones que determinan si las blancas logran capturar al peón o dar mate al rey negro (`won`), o, si las negras logran coronar su peón en a8 (transformarlo en una dama, torre, alfil o caballo), o consiguen tablas por ahogado (cuando el rey blanco no está en jaque, pero su jugador no tiene ningún movimiento legal disponible) (`nowin`), visualizando las relaciones entre las variables y la clase objetivo.
 
