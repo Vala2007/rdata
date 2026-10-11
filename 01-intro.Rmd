@@ -182,33 +182,6 @@ pares_deseados <- list(
   c("g", "l")
 )
 
-estilo_tabla <- function(df, titulo) {
-  knitr::kable(df, digits = 1, align = "c", caption = titulo) %>%
-    kable_styling(
-      bootstrap_options = c("striped", "hover", "condensed"),
-      full_width = FALSE,
-      position = "center"
-    )
-}
-
-for (par in pares_deseados) {
-  clave <- paste(sort(par), collapse = "/")
-  vars_par <- pares_reales$variable[pares_reales$par == clave]
-
-  if (length(vars_par) > 0) {
-    df_tmp <- frecuencias %>%
-      filter(variable %in% vars_par) %>%
-      select(variable, valor, porcentaje) %>%
-      pivot_wider(names_from = valor, values_from = porcentaje, values_fill = 0)
-
-    cols <- par[par %in% colnames(df_tmp)]
-    df_tmp <- df_tmp[, c("variable", cols)]
-    df_tmp <- df_tmp[order(df_tmp$variable), ]
-
-    print(estilo_tabla(df_tmp, paste0("Variables con par ", clave)))
-  }
-}
-
 # Ternarias
 ternarias <- frecuencias %>%
   group_by(variable) %>%
@@ -217,14 +190,7 @@ ternarias <- frecuencias %>%
   select(variable, valor, porcentaje) %>%
   pivot_wider(names_from = valor, values_from = porcentaje, values_fill = 0)
 
-print(estilo_tabla(ternarias, "Variables ternarias"))
 ```
-
-Se muestra el porcentaje de cada característica (`t`, `f`, `n`, `b`, `g`, `l`) para cada variable, en particular, solo 2 de alguna de las 6, ya que son binarias. Se puede observar que la mayoría poseen `t` y `f`, true y false, a excepción de `dwipd`, con `g` y `l`, y `btoeg`, con `n` y `t`.
-
-Se muestra el porcentaje de cada característica (`n`, `b`, `w`) para la variable ternaria katri.
-
-Ahora, gráficos de pastel de cada una de las variables independientes:
 
 ```{r, results='asis', message=FALSE, warning=FALSE} 
 library(kableExtra)
@@ -330,6 +296,10 @@ for (nombre in names(grupos_vars)) {
 }
 ```
 
+Se muestra el porcentaje de cada característica (`t`, `f`, `n`, `b`, `g`, `l`) para cada variable, en particular, solo 2 de alguna de las 6, ya que son binarias. Se puede observar que la mayoría poseen `t` y `f`, true y false, a excepción de `dwipd`, con `g` y `l`, y `btoeg`, con `n` y `t`.
+Se muestra el porcentaje de cada característica (`n`, `b`, `w`) para la variable ternaria katri.
+
+
 Variables del rey blanco (wk...):
 Se observa que el rey blanco rara vez bloquea a su propia torre (wkblk: 88.8% falso) o se encuentra en a8 (wkna8: 96.2% falso). Sin embargo, en un porcentaje significativo de posiciones (36.6%), el rey blanco puede atacar la casilla crítica b7 (wkxcr), lo que indica que las blancas tienen oportunidades de presión sobre el peón negro.
 
@@ -342,14 +312,14 @@ Variables del rey negro (bk...):
 El rey negro está bajo presión en un porcentaje significativo de posiciones: en el 37.9% está en jaque (bknck), en el 37.2%** está sobrecargado (bkvol), y en el 26.6% está en posición de posible clavada (bkpos).
 
 
-## Análisis bivariado class vs independientes
+## Verificación de supuestos
 
 Vamos a usar la librería vcd, Visualizing Categorical Data 
-Para cuantificar la relación entre variables categóricas, utilizamos Cramer's V.
+Para cuantificar la relación entre variables categóricas, utilizamos Cramér's V.
 
-Verifiquemos  los supuestos
+Verifiquemos  los supuestos de Cramér's V
 
-```{r}
+```{r, results='asis', message=FALSE, warning=FALSE}
 library(dplyr)
 library(tidyr)
 library(knitr)
@@ -391,11 +361,30 @@ for (var in vars) {
 }
 verif_class <- do.call(rbind, resultados_class)
 
-kable(verif_class, caption = "Verificación de supuestos: cada predictora vs class")
-
 cumplen <- sum(verif_class$Cumple == "Sí")
 total <- nrow(verif_class)
-cat(cumplen, "de", total, "variables cumplen los supuestos con class\n")
+
+cat(cumplen, "de", total, "variables cumplen los supuestos con class\n\n")
+
+# Mostrar la que no cumple
+no_cumplen <- verif_class[verif_class$Cumple == "No", ]
+
+if (nrow(no_cumplen) > 0) {
+  no_cumplen %>%
+    select(Variable_1, Variable_2) %>%
+    kable(
+      caption = "Variable que no cumple los supuestos frente a class",
+      align = "c",
+      row.names = FALSE
+    ) %>%
+    kable_styling(
+      bootstrap_options = c("striped", "hover", "condensed"),
+      full_width = FALSE,
+      position = "center"
+    )
+} else {
+  cat("Todas las variables cumplen los supuestos frente a class.\n")
+}
 
 resultados_pares <- list()
 for (i in seq_along(vars)) {
@@ -414,22 +403,76 @@ pares_problematicos <- verif_pares[verif_pares$Cumple == "No", ]
 
 cat("Total de pares evaluados:", nrow(verif_pares), "\n")
 cat("Pares que cumplen:", sum(verif_pares$Cumple == "Sí"), "\n")
-cat("Pares que NO cumplen:", nrow(pares_problematicos), "\n")
+cat("Pares que no cumplen:", nrow(pares_problematicos), "\n")
 
 if (nrow(pares_problematicos) > 0) {
   pares_ordenados <- pares_problematicos[order(pares_problematicos$Pct_celdas_OK), ]
-  kable(pares_ordenados, caption = "Pares con problemas de frecuencia esperada")
+  
+  tabla_pares <- pares_ordenados %>%
+    select(Variable_1, Variable_2) %>%
+    as.data.frame()
+  
+  rownames(tabla_pares) <- NULL
+  tabla_pares$N <- seq_len(nrow(tabla_pares))
+  tabla_pares <- tabla_pares[, c("N", "Variable_1", "Variable_2")]
+  
+  kable(
+    tabla_pares,
+    caption = "Pares con problemas de frecuencia esperada",
+    align = "c",
+    row.names = FALSE
+  ) %>%
+    kable_styling(
+      bootstrap_options = c("striped", "hover", "condensed"),
+      full_width = FALSE,
+      position = "center"
+    )
 } else {
   cat("Ningún par presenta problemas de frecuencia esperada.\n")
 }
 ```
 
-Todos cumplen con la condición de que al menos el 80 % de las celdas tengan frecuencia esperada ≥ 5, con excepción de los pares que involucran la variable spcop. Esta variable tiene uno de sus niveles con frecuencia cero en el dataset (0 % de las posiciones), lo que genera celdas vacías en cualquier tabla de contingencia que la incluya. Anteriormente notamos que spcop es en casi un 100% de los casos "f", por lo cual, no es una variable determinante en el resultados de las partidas.
+Variables con niveles de muy baja frecuencia (menos del 1% de las posiciones):
+
+```{r, results='asis', message=FALSE, warning=FALSE}
+frecuencia_minima <- datos %>%
+  select(-class) %>%
+  pivot_longer(everything(), names_to = "variable", values_to = "valor") %>%
+  count(variable, valor) %>%
+  group_by(variable) %>%
+  summarise(
+    nivel_min = valor[which.min(n)],
+    n_min = min(n),
+    pct_min = round(min(n) / nrow(datos) * 100, 3)
+  ) %>%
+  arrange(pct_min)
+
+frecuencia_minima %>%
+  filter(pct_min < 10) %>%
+  kable(
+    col.names = c("Variable", "Nivel", "n", "% del total"),
+    align = "c",
+    digits = 3
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed"),
+    full_width = FALSE,
+    position = "center"
+  )
+```
+
+De las 36 variables predictoras, 35 cumplen con el criterio del 80% de celdas con frecuencia esperada ≥ 5 al cruzarse con class. La única excepción es spcop, cuyo nivel t aparece en solo 1 de las 3.196 posiciones (0.03%). Al ser una variable prácticamente constante, no aporta información al análisis de relación.
+
+En el caso de los pares entre predictoras, se evaluaron 630 pares, de los cuales 508 cumplen los supuestos y 122 no. Los pares que no cumplen involucran sistemáticamente al menos una de las 14 variables con niveles minoritarios (menos del 10% de las posiciones), destacándose cuatro con frecuencias casi nulas: spcop (0.03%), skach (0.34%), hdchk (0.47%) y reskd (0.81%). Al cruzar dos de estas variables raras, las celdas de la tabla de contingencia quedan con frecuencias esperadas muy por debajo de 5, lo que invalida el uso del chi-cuadrado clásico.
+
+Por este motivo, el cálculo de la V de Cramér se va a realizar en todos los casos con simulación de Monte Carlo (B=2000), método que es válido en tablas con celdas de baja frecuencia.
+
+## Análisis bivariado class vs independientes
 
 ```{r message=FALSE, warning=FALSE}
 cramer_v <- function(x, y) {
   tbl <- table(x, y)
-  chi2 <- chisq.test(tbl, simulate.p.value = TRUE)$statistic
+  chi2 <- chisq.test(tbl, simulate.p.value = TRUE, B = 2000)$statistic
   n <- sum(tbl)
   r <- min(nrow(tbl), ncol(tbl))
   sqrt(as.numeric(chi2) / (n * (r - 1)))
@@ -453,11 +496,11 @@ fig_heatmap <- plot_ly(
   y = rownames(cramer_matrix),
   type = "heatmap",
   colorscale = list(
-    c(0, "#ffffff"),      # Blanco para 0
-    c(0.3, "#d4e8f5"),    # Azul muy claro
-    c(0.5, "#6baed6"),    # Azul medio
-    c(0.7, "#2171b5"),    # Azul oscuro
-    c(1, "#08306b")       # Azul muy oscuro para valores altos
+    c(0, "#ffffff"),
+    c(0.3, "#d4e8f5"),
+    c(0.5, "#6baed6"),
+    c(0.7, "#2171b5"),
+    c(1, "#08306b")
   ),
   zmin = 0,
   zmax = 1,
@@ -471,18 +514,11 @@ fig_heatmap <- plot_ly(
 fig_heatmap <- layout(
   fig_heatmap,
   title = list(
-    text = paste("Matriz de asociación (Cramér's V) - KRKPA7"),
+    text = "Matriz de asociación (Cramér's V) - KRKPA7",
     font = list(size = 16, face = "bold")
   ),
-  xaxis = list(
-    title = "",
-    tickangle = 90,
-    tickfont = list(size = 8)
-  ),
-  yaxis = list(
-    title = "",
-    tickfont = list(size = 8)
-  ),
+  xaxis = list(title = "", tickangle = 90, tickfont = list(size = 8)),
+  yaxis = list(title = "", tickfont = list(size = 8)),
   margin = list(l = 80, r = 80, b = 120, t = 60),
   colorbar = list(
     title = "Cramér's V",
@@ -711,10 +747,27 @@ Las variables `wkblk`, `wknwy`, `dsopp`, `qxmsq`, `reskd`, `reskr` y `btoeg` pre
 
 ## Relaciones entre variables predictoras
 
-```{r}
+```{r, results='asis', message=FALSE, warning=FALSE}
 vars_predictoras <- colnames(datos)[colnames(datos) != "class"]
 
 # Matriz de Cramér's V entre predictoras
+cramer_v <- function(x, y) {
+  tbl <- table(x, y)
+  esperadas <- suppressWarnings(chisq.test(tbl)$expected)
+
+  if (any(esperadas < 5)) {
+    chi2 <- chisq.test(tbl, simulate.p.value = TRUE, B = 2000)$statistic
+  } else {
+    chi2 <- chisq.test(tbl)$statistic
+  }
+
+  n <- sum(tbl)
+  r <- min(nrow(tbl), ncol(tbl))
+  sqrt(as.numeric(chi2) / (n * (r - 1)))
+}
+
+vars_predictoras <- colnames(datos)[colnames(datos) != "class"]
+
 cramer_matrix_pred <- matrix(
   0,
   nrow = length(vars_predictoras),
@@ -733,18 +786,17 @@ for (i in 1:length(vars_predictoras)) {
   }
 }
 
-# Heatmap interactivo
 fig_heatmap_pred <- plot_ly(
   z = cramer_matrix_pred,
   x = colnames(cramer_matrix_pred),
   y = rownames(cramer_matrix_pred),
   type = "heatmap",
   colorscale = list(
-    c(0, "#ffffff"),      # Blanco
-    c(0.3, "#d4e8f5"),    # Azul muy claro
-    c(0.5, "#6baed6"),    # Azul medio
-    c(0.7, "#2171b5"),    # Azul oscuro
-    c(1, "#08306b")       # Azul muy oscuro
+    c(0, "#ffffff"),
+    c(0.3, "#d4e8f5"),
+    c(0.5, "#6baed6"),
+    c(0.7, "#2171b5"),
+    c(1, "#08306b")
   ),
   zmin = 0,
   zmax = 1,
@@ -762,10 +814,7 @@ fig_heatmap_pred <- plot_ly(
 fig_heatmap_pred <- layout(
   fig_heatmap_pred,
   title = list(
-    text = paste(
-      "Matriz entre variables predictoras",
-      "(Cramér's V)"
-    ),
+    text = "Matriz entre variables predictoras (Cramér's V)",
     font = list(size = 16)
   ),
   xaxis = list(
@@ -777,9 +826,7 @@ fig_heatmap_pred <- layout(
     title = "",
     tickfont = list(size = 8)
   ),
-  margin = list(
-    l = 100, r = 60, t = 50, b = 40
-  ),
+  margin = list(l = 100, r = 60, t = 50, b = 40),
   colorbar = list(
     title = "Cramér's V",
     tickvals = c(0, 0.25, 0.5, 0.75, 1),
@@ -792,7 +839,7 @@ fig_heatmap_pred <- layout(
 fig_heatmap_pred
 ```
 
-```{r}
+```{r, results='asis', message=FALSE, warning=FALSE}
 pares <- cramer_matrix_pred %>%
   as.data.frame() %>%
   rownames_to_column("var1") %>%
