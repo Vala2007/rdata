@@ -159,20 +159,22 @@ frecuencias <- datos %>%
   )
 ```
 
-```{r}
-binarias <- frecuencias %>%
-  group_by(variable) %>%
-  filter(n() == 2) %>%
-  ungroup() %>%
-  select(variable, valor, porcentaje) %>%
-  pivot_wider(names_from = valor, values_from = porcentaje, values_fill = 0)
+```{r, results='asis', message=FALSE, warning=FALSE}
+library(kableExtra)
+library(dplyr)
+library(tidyr)
+library(knitr)
 
-ternarias <- frecuencias %>%
-  group_by(variable) %>%
-  filter(n() == 3) %>%
-  ungroup() %>%
-  select(variable, valor, porcentaje) %>%
-  pivot_wider(names_from = valor, values_from = porcentaje, values_fill = 0)
+vars <- colnames(datos)[colnames(datos) != "class"]
+
+pares_reales <- data.frame(
+  variable = vars,
+  par = sapply(vars, function(v) {
+    niveles <- sort(unique(as.character(datos[[v]])))
+    paste(niveles, collapse = "/")
+  }),
+  stringsAsFactors = FALSE
+)
 
 pares_deseados <- list(
   c("f", "t"),
@@ -180,63 +182,79 @@ pares_deseados <- list(
   c("g", "l")
 )
 
-pares_reales <- frecuencias %>%
-  group_by(variable) %>%
-  filter(n() == 2) %>%
-  summarise(par = paste(sort(unique(valor)), collapse = "/"))
-
-cols_usados <- unique(unlist(pares_deseados))
+estilo_tabla <- function(df, titulo) {
+  knitr::kable(df, digits = 1, align = "c", caption = titulo) %>%
+    kable_styling(
+      bootstrap_options = c("striped", "hover", "condensed"),
+      full_width = FALSE,
+      position = "center"
+    )
+}
 
 for (par in pares_deseados) {
-  cols <- par[par %in% colnames(binarias)]
-  if (length(cols) == 2) {
-    clave <- paste(sort(par), collapse = "/")
-    vars_par <- pares_reales$variable[pares_reales$par == clave]
-    if (length(vars_par) > 0) {
-      df_tmp <- binarias[binarias$variable %in% vars_par, c("variable", cols)]
-      df_tmp <- df_tmp[order(df_tmp$variable), ]
-      knitr::kable(df_tmp, digits = 1)
-    }
+  clave <- paste(sort(par), collapse = "/")
+  vars_par <- pares_reales$variable[pares_reales$par == clave]
+
+  if (length(vars_par) > 0) {
+    df_tmp <- frecuencias %>%
+      filter(variable %in% vars_par) %>%
+      select(variable, valor, porcentaje) %>%
+      pivot_wider(names_from = valor, values_from = porcentaje, values_fill = 0)
+
+    cols <- par[par %in% colnames(df_tmp)]
+    df_tmp <- df_tmp[, c("variable", cols)]
+    df_tmp <- df_tmp[order(df_tmp$variable), ]
+
+    print(estilo_tabla(df_tmp, paste0("Variables con par ", clave)))
   }
 }
 
-vars_usadas <- unlist(lapply(pares_deseados, function(par) {
-  clave <- paste(sort(par), collapse = "/")
-  pares_reales$variable[pares_reales$par == clave]
-}))
+# Ternarias
+ternarias <- frecuencias %>%
+  group_by(variable) %>%
+  filter(n() == 3) %>%
+  ungroup() %>%
+  select(variable, valor, porcentaje) %>%
+  pivot_wider(names_from = valor, values_from = porcentaje, values_fill = 0)
 
-resto_vars <- setdiff(binarias$variable, vars_usadas)
-
-if (length(resto_vars) > 0) {
-  df_tmp <- binarias[binarias$variable %in% resto_vars, ]
-  df_tmp <- df_tmp[order(df_tmp$variable), ]
-  knitr::kable(df_tmp, digits = 1)
-}
-
-knitr::kable(ternarias, digits = 1)
+print(estilo_tabla(ternarias, "Variables ternarias"))
 ```
 
-Se muestra el porcentaje de cada característica (`t`, `f`, `n`, `b`, `g`, `l`) para cada variable, en particular, solo 2 de alguna de las 6, ya que son binarias. Se puede observar que la mayoría poseen `t` y `f`, true y false, a excepción de `dwipd`, con `g` y `l`
+Se muestra el porcentaje de cada característica (`t`, `f`, `n`, `b`, `g`, `l`) para cada variable, en particular, solo 2 de alguna de las 6, ya que son binarias. Se puede observar que la mayoría poseen `t` y `f`, true y false, a excepción de `dwipd`, con `g` y `l`, y `btoeg`, con `n` y `t`.
 
-Se muestra el porcentaje de cada característica (`n`, `b`, `w`) para la variable katri.
+Se muestra el porcentaje de cada característica (`n`, `b`, `w`) para la variable ternaria katri.
 
 Ahora, gráficos de pastel de cada una de las variables independientes:
 
-```{r, warning=FALSE} 
+```{r, results='asis', message=FALSE, warning=FALSE} 
 library(kableExtra)
 
+vars <- colnames(datos)[colnames(datos) != "class"]
+
 colores_personalizados <- c(
-  "b" = "#B5EAD7",   # Verde menta pastel
-  "t" = "#FFEAA7",   # Amarillo pastel
-  "g" = "#A8D8EA",   # Azul pastel
-  "l" = "#FBC5A2",   # Durazno pastel
-  "n" = "#C7CEEA",   # Lavanda pastel
-  "f" = "#E2BEF1",   # Lila pastel
-  "w" = "#FFB6B9"    # Rosa pastel
-)  
+  "b" = "#B5EAD7",
+  "t" = "#FFEAA7",
+  "g" = "#A8D8EA",
+  "l" = "#FBC5A2",
+  "n" = "#C7CEEA",
+  "f" = "#E2BEF1",
+  "w" = "#FFB6B9"
+)
+
+# Detectar el par de niveles de cada variable
+pares_reales <- sapply(vars, function(v) {
+  niveles <- sort(unique(as.character(datos[[v]])))
+  paste(niveles, collapse = "/")
+})
+
+grupos_vars <- list(
+  "f / t"     = vars[pares_reales == "f/t"],
+  "n / t"     = vars[pares_reales == "n/t"],
+  "g / l"     = vars[pares_reales == "g/l"],
+  "b / n / w" = vars[pares_reales == "b/n/w"]
+)
 
 graficar_pastel <- function(var) {
-  
   tabla <- datos %>%
     count(!!sym(var)) %>%
     mutate(
@@ -244,25 +262,22 @@ graficar_pastel <- function(var) {
       Etiqueta = paste0(n, "\n", Porcentaje, "%"),
       valor = factor(!!sym(var))
     )
-  
+
   valores_existentes <- unique(tabla$valor)
   colores_usar <- colores_personalizados[names(colores_personalizados) %in% valores_existentes]
-  
+
   ggplot(tabla, aes(x = "", y = n, fill = valor)) +
     geom_col(width = 1) +
     coord_polar(theta = "y") +
     geom_text(aes(label = Etiqueta),
               position = position_stack(vjust = 0.5),
               size = 3.2) +
-    labs(
-      title = var,
-      x = NULL,
-      y = NULL
-    ) +
+    labs(title = var, x = NULL, y = NULL) +
     scale_fill_manual(
       values = colores_usar,
       breaks = c("t", "f", "n", "b", "w", "g", "l"),
-      labels = c("t = True", "f = False", "n = None", "b = Black", "w = White", "g = Good", "l = Large")
+      labels = c("t = True", "f = False", "n = None", "b = Black",
+                 "w = White", "g = Good", "l = Large")
     ) +
     theme_void(base_size = 8) +
     theme(
@@ -275,26 +290,43 @@ graficar_pastel <- function(var) {
     )
 }
 
-# Lista de variables
-vars <- colnames(datos)[colnames(datos) != "class"]
+graficar_grupo_donas <- function(vars_grupo, titulo) {
+  if (length(vars_grupo) == 0) return(NULL)
 
-# Crear todos los gráficos
-lista_graficos <- map(vars, graficar_pastel)
+  lista_graficos <- lapply(vars_grupo, graficar_pastel)
+  grobs_list <- lapply(lista_graficos, ggplotGrob)
 
-# Dividir en grupos de 2
-grupos <- split(lista_graficos, ceiling(seq_along(lista_graficos) / 2))
-
-# Mostrar cada grupo con su leyenda
-for (i in seq_along(grupos)) {
-  
-  grobs_list <- lapply(grupos[[i]], ggplotGrob)
-  
   grid.arrange(
     grobs = grobs_list,
     ncol = 2,
+    top = titulo,
     padding = unit(0.2, "cm"),
     margins = unit(0.2, "cm")
   )
+}
+
+for (nombre in names(grupos_vars)) {
+  vars_grupo <- grupos_vars[[nombre]]
+  if (length(vars_grupo) == 0) next
+
+  cat(sprintf(
+    "<h3 style='text-align:center; color:#4A6FA5;
+     margin-top:40px; margin-bottom:20px;'>%s (%d variables)</h3>",
+    nombre, length(vars_grupo)
+  ))
+
+  for (i in seq(1, length(vars_grupo), by = 2)) {
+    par_vars <- vars_grupo[i:min(i + 1, length(vars_grupo))]
+    lista_par <- lapply(par_vars, graficar_pastel)
+    grobs_par <- lapply(lista_par, ggplotGrob)
+
+    grid.arrange(
+      grobs = grobs_par,
+      ncol = 2,
+      padding = unit(0.4, "cm"),
+      margins = unit(0.4, "cm")
+    )
+  }
 }
 ```
 
