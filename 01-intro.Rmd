@@ -465,14 +465,13 @@ De las 36 variables predictoras, 35 cumplen con el criterio del 80% de celdas co
 
 En el caso de los pares entre predictoras, se evaluaron 630 pares, de los cuales 508 cumplen los supuestos y 122 no. Los pares que no cumplen involucran sistemáticamente al menos una de las 14 variables con niveles minoritarios (menos del 10% de las posiciones), destacándose cuatro con frecuencias casi nulas: spcop (0.03%), skach (0.34%), hdchk (0.47%) y reskd (0.81%). Al cruzar dos de estas variables raras, las celdas de la tabla de contingencia quedan con frecuencias esperadas muy por debajo de 5, lo que invalida el uso del chi-cuadrado clásico.
 
-Por este motivo, el cálculo de la V de Cramér se va a realizar en todos los casos con simulación de Monte Carlo (B=2000), método que es válido en tablas con celdas de baja frecuencia.
 
 ## Análisis bivariado class vs independientes
 
 ```{r message=FALSE, warning=FALSE}
 cramer_v <- function(x, y) {
   tbl <- table(x, y)
-  chi2 <- chisq.test(tbl, simulate.p.value = TRUE, B = 2000)$statistic
+  chi2 <- suppressWarnings(chisq.test(tbl)$statistic)
   n <- sum(tbl)
   r <- min(nrow(tbl), ncol(tbl))
   sqrt(as.numeric(chi2) / (n * (r - 1)))
@@ -605,6 +604,50 @@ El análisis de asociación con Cramér's V revela que las variables más relaci
 `bknck` (0.365): Rey negro en jaque. Si el rey negro está en jaque, las blancas están haciendo una amenaza directa que puede llevar a la victoria.
 `wkxbp` (0.233): Rey blanco captura el peón negro. Si el rey blanco puede capturar el peón, las blancas ganan de inmediato.
 `katri` (0.22): Control del punto de intersección. Si el rey blanco controla el punto de intersección, puede evitar que su propia torre sea clavada.
+
+
+Ahora calculemos los residuos estandarizados de Pearson para las 5 variables con mayor V de Cramér. Mientras que la V de Cramér indica la fuerza de la asociación, los residuos indican en qué celdas específicas de la tabla se concentra esa asociación y en qué dirección (positiva o negativa).
+
+```{r, results='asis', message=FALSE, warning=FALSE}
+residuos_pearson <- function(x, y) {
+  tabla <- table(x, y)
+  chi <- suppressWarnings(chisq.test(tabla))
+  residuos <- (tabla - chi$expected) / sqrt(chi$expected)
+  round(residuos, 2)
+}
+
+top_vars <- c("rimmx", "wxqsq", "bknck", "wkxbp", "katri")
+
+for (var in top_vars) {
+  res <- residuos_pearson(datos[[var]], datos$class)
+  
+  res %>%
+    as.data.frame.matrix() %>%
+    kable(
+      caption = paste("Residuos estandarizados de", var, "vs class"),
+      align = "c",
+      digits = 2
+    ) %>%
+    kable_styling(
+      bootstrap_options = c("striped", "hover", "condensed"),
+      full_width = FALSE,
+      position = "center"
+    ) %>%
+    print()
+  
+  cat("\n\n")
+}
+```
+
+En rimmx, los residuos son positivos en la celda f × nowin (+7.9) y negativos en f × won (-7.55). Esto significa que cuando la torre blanca no puede ser capturada de forma segura, hay más posiciones de no victoria de las esperadas.
+
+En wxqsq, los residuos son positivos en t × nowin (+12.96) y negativos en t × won (-12.39). Cuando las blancas controlan la casilla de coronación, tiende a no ganar. Esto es contraintuitivo, pero tiene sentido, controlar a8 suele indicar una posición defensiva, no ganadora.
+
+En bknck, los residuos son positivos en t × nowin (+11.76). Cuando el rey negro está en jaque, hay más no victorias de las esperadas. El jaque no siempre es señal de ventaja blanca.
+
+En wkxbp, los residuos son positivos en t × nowin (+8.42). Cuando el rey blanco puede capturar el peón, hay más no victorias. Capturar el peón no garantiza ganar.
+
+En katri, los residuos son positivos en w × won (+7.54) y negativos en w × nowin (-7.88). Cuando el rey blanco controla el punto de intersección, hay más victorias de las esperadas. 
 
 
 Ahora miremos las cuentas de `won` y `nowin` para cada variable en una tabla de contingencia: 
@@ -745,7 +788,7 @@ Factores relacionados con la no victoria (`nowin`):
 Las variables `wkblk`, `wknwy`, `dsopp`, `qxmsq`, `reskd`, `reskr` y `btoeg` presentan distribuciones muy  entre `won` y `nowin`, lo que indica que podrían no ser útiles para predecir el resultado.
 
 
-## Relaciones entre variables predictoras
+## Bivariado entre predictoras
 
 ```{r, results='asis', message=FALSE, warning=FALSE}
 vars_predictoras <- colnames(datos)[colnames(datos) != "class"]
@@ -753,14 +796,7 @@ vars_predictoras <- colnames(datos)[colnames(datos) != "class"]
 # Matriz de Cramér's V entre predictoras
 cramer_v <- function(x, y) {
   tbl <- table(x, y)
-  esperadas <- suppressWarnings(chisq.test(tbl)$expected)
-
-  if (any(esperadas < 5)) {
-    chi2 <- chisq.test(tbl, simulate.p.value = TRUE, B = 2000)$statistic
-  } else {
-    chi2 <- chisq.test(tbl)$statistic
-  }
-
+  chi2 <- suppressWarnings(chisq.test(tbl)$statistic)
   n <- sum(tbl)
   r <- min(nrow(tbl), ncol(tbl))
   sqrt(as.numeric(chi2) / (n * (r - 1)))

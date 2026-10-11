@@ -53,3 +53,4 @@ tab:unnamed-chunk-14
 tab:unnamed-chunk-13
 tab:unnamed-chunk-12
 verificación-de-supuestos
+bivariado-entre-predictoras
