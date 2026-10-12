@@ -477,22 +477,19 @@ cramer_v <- function(x, y) {
   sqrt(as.numeric(chi2) / (n * (r - 1)))
 }
 
-vars_todas <- colnames(datos)
-n_vars <- length(vars_todas)
-cramer_matrix <- matrix(0, nrow = n_vars, ncol = n_vars)
-rownames(cramer_matrix) <- vars_todas
-colnames(cramer_matrix) <- vars_todas
+vars_predictoras <- setdiff(colnames(datos), "class")
 
-for (i in 1:n_vars) {
-  for (j in 1:n_vars) {
-    cramer_matrix[i, j] <- cramer_v(datos[[vars_todas[i]]], datos[[vars_todas[j]]])
-  }
-}
+# Solo class vs predictoras
+asociacion_class <- sapply(vars_predictoras, function(var) {
+  cramer_v(datos[[var]], datos[["class"]])
+})
+
+asociacion_class <- sort(asociacion_class, decreasing = TRUE)
 
 fig_heatmap <- plot_ly(
-  z = cramer_matrix,
-  x = colnames(cramer_matrix),
-  y = rownames(cramer_matrix),
+  z = matrix(asociacion_class, nrow = 1),
+  x = names(asociacion_class),
+  y = "class",
   type = "heatmap",
   colorscale = list(
     c(0, "#ffffff"),
@@ -503,30 +500,30 @@ fig_heatmap <- plot_ly(
   ),
   zmin = 0,
   zmax = 1,
-  text = round(cramer_matrix, 2),
+  text = matrix(round(asociacion_class, 2), nrow = 1),
   texttemplate = "%{text:.2f}",
   textfont = list(size = 8, color = "black"),
   hoverinfo = "text",
-  hovertemplate = "<b>%{y}</b> ↔ <b>%{x}</b><br>Cramér's V: %{z:.3f}<extra></extra>"
+  hovertemplate = "<b>%{x}</b><br>Cramér's V: %{z:.3f}<extra></extra>"
 )
 
 fig_heatmap <- layout(
   fig_heatmap,
   title = list(
-    text = "Matriz de asociación (Cramér's V) - KRKPA7",
+    text = "Asociación de cada variable predictora con class (Cramér's V)",
     font = list(size = 16, face = "bold")
   ),
-  xaxis = list(title = "", tickangle = 90, tickfont = list(size = 8)),
-  yaxis = list(title = "", tickfont = list(size = 8)),
-  margin = list(l = 80, r = 80, b = 120, t = 60),
+  xaxis = list(title = "", tickangle = 90, tickfont = list(size = 9)),
+  yaxis = list(title = "", tickfont = list(size = 11)),
+  margin = list(l = 80, r = 40, b = 120, t = 60),
   colorbar = list(
     title = "Cramér's V",
     tickfont = list(size = 10),
     tickvals = c(0, 0.25, 0.5, 0.75, 1),
     ticktext = c("0", "0.25", "0.5", "0.75", "1")
   ),
-  width = 900,
-  height = 700
+  width = 1400,
+  height = 300
 )
 
 fig_heatmap
@@ -534,68 +531,6 @@ fig_heatmap
 
 El heatmap muestra la fuerza de la asociación entre las variables predictoras y la variable objetivo (`class`). 
 Los valores más altos (azul oscuro) indican una relación más fuerte con el resultado del final de ajedrez. Los valores más bajos (blanco) sugieren que la variable es prácticamente independiente de si la posición es ganable o no.
-
-Extraemos relación con class:
-
-```{r}
-asociacion_class <- cramer_matrix["class", ] %>%
-  as.data.frame() %>%
-  rownames_to_column("variable") %>%
-  rename(cramer = ".") %>%
-  filter(variable != "class") %>%
-  arrange(desc(cramer))
-
-# Top 5
-top5_class <- asociacion_class %>% head(5)
-
-fig_top5 <- plot_ly(
-  data = top5_class,
-  x = ~cramer,
-  y = ~variable,
-  type = "bar",
-  orientation = "h",
-  marker = list(
-    color = ~cramer,
-    colorscale = list(
-      c(0, "lightblue"),
-      c(1, "darkblue")
-    ),
-    showscale = FALSE,
-    line = list(color = "darkblue", width = 0.5)
-  ),
-  text = ~round(cramer, 3),
-  textposition = "outside",
-  textfont = list(size = 12, color = "black"),
-  hoverinfo = "text",
-  hovertemplate = "<b>%{y}</b><br>Cramér's V: %{x:.3f}<extra></extra>"
-)
-
-fig_top5 <- layout(
-  fig_top5,
-  title = list(
-    text = "Top 5 factores relacionados con class",
-    font = list(size = 16, face = "bold")
-  ),
-  xaxis = list(
-    title = "Cramér's V",
-    range = c(0, 0.5),
-    tickfont = list(size = 11)
-  ),
-  yaxis = list(
-    title = "",
-    tickfont = list(size = 12),
-    autorange = "reversed",  
-    categoryorder = "array",   
-    categoryarray = top5_class$variable  
-  ),
-  margin = list(l = 100, r = 60, t = 50, b = 40),
-  height = 400,
-  width = 700,
-  showlegend = FALSE
-)
-
-fig_top5
-```
 
 El análisis de asociación con Cramér's V revela que las variables más relacionadas con el resultado (`won`/`nowin`) son:
 
