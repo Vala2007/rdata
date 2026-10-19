@@ -194,18 +194,17 @@ ternarias <- frecuencias %>%
 
 ```{r, results='asis', message=FALSE, warning=FALSE} 
 library(kableExtra)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(gridExtra)
+library(grid)
 
 vars <- colnames(datos)[colnames(datos) != "class"]
 
-colores_personalizados <- c(
-  "b" = "#B5EAD7",
-  "t" = "#FFEAA7",
-  "g" = "#A8D8EA",
-  "l" = "#FBC5A2",
-  "n" = "#C7CEEA",
-  "f" = "#E2BEF1",
-  "w" = "#FFB6B9"
-)
+# Colores fijos por grupo
+colores_binarias <- c("#E2BEF1", "#FFEAA7")            # moradito y amarillo
+colores_ternarias <- c("#E2BEF1", "#FFEAA7", "#B5EAD7") # + verde menta
 
 # Detectar el par de niveles de cada variable
 pares_reales <- sapply(vars, function(v) {
@@ -220,17 +219,18 @@ grupos_vars <- list(
   "b / n / w" = vars[pares_reales == "b/n/w"]
 )
 
-graficar_pastel <- function(var) {
+graficar_pastel <- function(var, paleta) {
   tabla <- datos %>%
     count(!!sym(var)) %>%
     mutate(
       Porcentaje = round((n / sum(n)) * 100, 1),
       Etiqueta = paste0(n, "\n", Porcentaje, "%"),
       valor = factor(!!sym(var))
-    )
+    ) %>%
+    arrange(valor)  # ahora 'valor' ya existe porque lo creaste en el mutate
 
-  valores_existentes <- unique(tabla$valor)
-  colores_usar <- colores_personalizados[names(colores_personalizados) %in% valores_existentes]
+  # Asignar colores de la paleta por orden
+  colores_usar <- paleta[1:length(unique(tabla$valor))]
 
   ggplot(tabla, aes(x = "", y = n, fill = valor)) +
     geom_col(width = 1) +
@@ -239,12 +239,7 @@ graficar_pastel <- function(var) {
               position = position_stack(vjust = 0.5),
               size = 3.2) +
     labs(title = var, x = NULL, y = NULL) +
-    scale_fill_manual(
-      values = colores_usar,
-      breaks = c("t", "f", "n", "b", "w", "g", "l"),
-      labels = c("t = True", "f = False", "n = None", "b = Black",
-                 "w = White", "g = Good", "l = Large")
-    ) +
+    scale_fill_manual(values = colores_usar) +
     theme_void(base_size = 8) +
     theme(
       plot.title = element_text(size = 8, face = "bold", hjust = 0.5),
@@ -256,24 +251,12 @@ graficar_pastel <- function(var) {
     )
 }
 
-graficar_grupo_donas <- function(vars_grupo, titulo) {
-  if (length(vars_grupo) == 0) return(NULL)
-
-  lista_graficos <- lapply(vars_grupo, graficar_pastel)
-  grobs_list <- lapply(lista_graficos, ggplotGrob)
-
-  grid.arrange(
-    grobs = grobs_list,
-    ncol = 2,
-    top = titulo,
-    padding = unit(0.2, "cm"),
-    margins = unit(0.2, "cm")
-  )
-}
-
 for (nombre in names(grupos_vars)) {
   vars_grupo <- grupos_vars[[nombre]]
   if (length(vars_grupo) == 0) next
+  
+  # Elegir paleta según grupo
+  paleta <- if (nombre == "b / n / w") colores_ternarias else colores_binarias
 
   cat(sprintf(
     "<h3 style='text-align:center; color:#4A6FA5;
@@ -283,7 +266,7 @@ for (nombre in names(grupos_vars)) {
 
   for (i in seq(1, length(vars_grupo), by = 2)) {
     par_vars <- vars_grupo[i:min(i + 1, length(vars_grupo))]
-    lista_par <- lapply(par_vars, graficar_pastel)
+    lista_par <- lapply(par_vars, function(v) graficar_pastel(v, paleta))
     grobs_par <- lapply(lista_par, ggplotGrob)
 
     grid.arrange(
