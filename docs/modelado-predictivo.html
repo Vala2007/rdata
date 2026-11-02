@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 3 Modelado Predictivo | King+Rook vs King+Pawn on a7 (KRKPA7)</title>
+  <meta name="description" content="Chapter 3 Modelado Predictivo | King+Rook vs King+Pawn on a7 (KRKPA7)" />
+  <meta name="generator" content="bookdown 0.47 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 3 Modelado Predictivo | King+Rook vs King+Pawn on a7 (KRKPA7)" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 3 Modelado Predictivo | King+Rook vs King+Pawn on a7 (KRKPA7)" />
+  
+  
+  
+
+<meta name="author" content="Valamy Donado y Abraham Navarro" />
+
+
+<meta name="date" content="2026-08-23" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="análisis-exploratorio-de-datos-eda.html"/>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">KRKPA7</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introducción</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#finales-de-ajedrez"><i class="fa fa-check"></i><b>1.1</b> Finales de ajedrez</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#medidas-de-asociaci%C3%B3n-entre-variables-categ%C3%B3ricas"><i class="fa fa-check"></i><b>1.2</b> Medidas de asociación entre variables categóricas</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html"><i class="fa fa-check"></i><b>2</b> Análisis exploratorio de datos (EDA)</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#librer%C3%ADas"><i class="fa fa-check"></i><b>2.1</b> Librerías</a></li>
+<li class="chapter" data-level="2.2" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#an%C3%A1lisis-de-la-variable-target-class"><i class="fa fa-check"></i><b>2.2</b> Análisis de la variable target “class”</a></li>
+<li class="chapter" data-level="2.3" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#an%C3%A1lisis-de-las-variables-independientes"><i class="fa fa-check"></i><b>2.3</b> Análisis de las variables independientes</a></li>
+<li class="chapter" data-level="2.4" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#verificaci%C3%B3n-de-supuestos"><i class="fa fa-check"></i><b>2.4</b> Verificación de supuestos</a></li>
+<li class="chapter" data-level="2.5" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#an%C3%A1lisis-bivariado-class-vs-independientes"><i class="fa fa-check"></i><b>2.5</b> Análisis bivariado class vs independientes</a></li>
+<li class="chapter" data-level="2.6" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#bivariado-entre-predictoras"><i class="fa fa-check"></i><b>2.6</b> Bivariado entre predictoras</a></li>
+<li class="chapter" data-level="2.7" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#conclusiones"><i class="fa fa-check"></i><b>2.7</b> Conclusiones</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="modelado-predictivo.html"><a href="modelado-predictivo.html"><i class="fa fa-check"></i><b>3</b> Modelado Predictivo</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="modelado-predictivo.html"><a href="modelado-predictivo.html#m%C3%A9tricas"><i class="fa fa-check"></i><b>3.1</b> Métricas</a></li>
+<li class="chapter" data-level="3.2" data-path="modelado-predictivo.html"><a href="modelado-predictivo.html#estrategia-de-validaci%C3%B3n"><i class="fa fa-check"></i><b>3.2</b> Estrategia de validación</a></li>
+<li class="chapter" data-level="3.3" data-path="modelado-predictivo.html"><a href="modelado-predictivo.html#librer%C3%ADas-1"><i class="fa fa-check"></i><b>3.3</b> Librerías</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="modelado-predictivo.html"><a href="modelado-predictivo.html#funciones-auxiliares"><i class="fa fa-check"></i><b>3.3.1</b> Funciones auxiliares</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="modelado-predictivo.html"><a href="modelado-predictivo.html#preparaci%C3%B3n-de-los-datos"><i class="fa fa-check"></i><b>3.4</b> Preparación de los datos</a></li>
+<li class="chapter" data-level="3.5" data-path="modelado-predictivo.html"><a href="modelado-predictivo.html#comparaci%C3%B3n-preliminar-de-los-modelos"><i class="fa fa-check"></i><b>3.5</b> Comparación preliminar de los modelos</a></li>
+<li class="chapter" data-level="3.6" data-path="modelado-predictivo.html"><a href="modelado-predictivo.html#validaci%C3%B3n-cruzada"><i class="fa fa-check"></i><b>3.6</b> Validación cruzada</a>
+<ul>
+<li class="chapter" data-level="3.6.1" data-path="modelado-predictivo.html"><a href="modelado-predictivo.html#las-diferencias-entre-modelos-son-reales-o-son-ruido"><i class="fa fa-check"></i><b>3.6.1</b> ¿Las diferencias entre modelos son reales o son ruido?</a></li>
+</ul></li>
+<li class="chapter" data-level="3.7" data-path="modelado-predictivo.html"><a href="modelado-predictivo.html#modelo-final"><i class="fa fa-check"></i><b>3.7</b> Modelo final</a></li>
+<li class="chapter" data-level="3.8" data-path="modelado-predictivo.html"><a href="modelado-predictivo.html#evaluaci%C3%B3n-en-el-conjunto-de-prueba"><i class="fa fa-check"></i><b>3.8</b> Evaluación en el conjunto de prueba</a></li>
+<li class="chapter" data-level="3.9" data-path="modelado-predictivo.html"><a href="modelado-predictivo.html#interpretabilidad-qu%C3%A9-variables-usa-el-modelo"><i class="fa fa-check"></i><b>3.9</b> Interpretabilidad: ¿qué variables usa el modelo?</a>
+<ul>
+<li class="chapter" data-level="3.9.1" data-path="modelado-predictivo.html"><a href="modelado-predictivo.html#coincide-con-lo-que-mostr%C3%B3-el-eda"><i class="fa fa-check"></i><b>3.9.1</b> ¿Coincide con lo que mostró el EDA?</a></li>
+</ul></li>
+<li class="chapter" data-level="3.10" data-path="modelado-predictivo.html"><a href="modelado-predictivo.html#estabilidad-ante-distintas-particiones"><i class="fa fa-check"></i><b>3.10</b> Estabilidad ante distintas particiones</a></li>
+<li class="chapter" data-level="3.11" data-path="modelado-predictivo.html"><a href="modelado-predictivo.html#guardado-del-modelo"><i class="fa fa-check"></i><b>3.11</b> Guardado del modelo</a></li>
+<li class="chapter" data-level="3.12" data-path="modelado-predictivo.html"><a href="modelado-predictivo.html#conclusiones-1"><i class="fa fa-check"></i><b>3.12</b> Conclusiones</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">King+Rook vs King+Pawn on a7 (KRKPA7)</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="modelado-predictivo" class="section level1 hasAnchor" number="3">
+<h1><span class="header-section-number">Chapter 3</span> Modelado Predictivo<a href="modelado-predictivo.html#modelado-predictivo" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Probaremos la Accuracy y el F1-Score entre 4 modelos para escoger el más apropiado: Regresión Logística, Árbol de Decisión, Random Forest y CatBoost.</p>
+<div id="métricas" class="section level2 hasAnchor" number="3.1">
+<h2><span class="header-section-number">3.1</span> Métricas<a href="modelado-predictivo.html#m%C3%A9tricas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Con <code>won</code> (victoria del bando del peón) como clase positiva, y <span class="math inline">\(TP\)</span>, <span class="math inline">\(FP\)</span>, <span class="math inline">\(FN\)</span> los verdaderos positivos, falsos positivos y falsos negativos:</p>
+<p><span class="math display">\[
+\text{Precisión}=\frac{TP}{TP+FP},\qquad
+\text{Recall}=\frac{TP}{TP+FN},\qquad
+F_1=\frac{2\cdot \text{Precisión}\cdot\text{Recall}}{\text{Precisión}+\text{Recall}}
+\]</span></p>
+<p>El AUC-ROC es la probabilidad de que el modelo asigne mayor probabilidad de <code>won</code> a una posición <code>won</code> que a una <code>nowin</code>, tomadas al azar.</p>
+</div>
+<div id="estrategia-de-validación" class="section level2 hasAnchor" number="3.2">
+<h2><span class="header-section-number">3.2</span> Estrategia de validación<a href="modelado-predictivo.html#estrategia-de-validaci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Comparar modelos con una sola partición entrenamiento/prueba puede llevar a elegir un modelo por azar. Por eso el procedimiento es el siguiente:</p>
+<ol style="list-style-type: decimal">
+<li>Se separa un 20 % de las posiciones como conjunto de prueba, de forma estratificada para conservar la proporción de clases.</li>
+<li>La codificación <em>One-Hot</em> usa los niveles definidos de cada variable y no emplea la variable objetivo, por lo que no hay fuga de información hacia la prueba.</li>
+<li>Los cuatro candidatos se entrenan con el 80 % restante, con sus hiperparámetros por defecto, y se comparan en el conjunto de prueba mediante Accuracy y F1-Score de la clase <code>won</code>.</li>
+<li>La decisión se confirma con validación cruzada estratificada repetida (5 particiones × 3 repeticiones = 15 evaluaciones por modelo) usando solo el 80 % de entrenamiento, junto con una línea base que siempre predice la clase mayoritaria y una prueba de Wilcoxon entre modelos.</li>
+<li>El modelo seleccionado se reentrena, se evalúa en la prueba con la matriz de confusión, la curva ROC y un intervalo de confianza para la exactitud, se interpreta mediante la importancia por permutación, y se comprueba su estabilidad con otras particiones. El modelo se guarda para el dashboard.</li>
+</ol>
+</div>
+<div id="librerías-1" class="section level2 hasAnchor" number="3.3">
+<h2><span class="header-section-number">3.3</span> Librerías<a href="modelado-predictivo.html#librer%C3%ADas-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="modelado-predictivo.html#cb1-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="modelado-predictivo.html#cb1-2" tabindex="-1"></a><span class="fu">library</span>(glmnet)      <span class="co"># regresión logística regularizada (equivale a la L2 de scikit-learn)</span></span>
+<span id="cb1-3"><a href="modelado-predictivo.html#cb1-3" tabindex="-1"></a><span class="fu">library</span>(rpart)       <span class="co"># árbol de decisión</span></span>
+<span id="cb1-4"><a href="modelado-predictivo.html#cb1-4" tabindex="-1"></a><span class="fu">library</span>(ranger)      <span class="co"># random forest</span></span>
+<span id="cb1-5"><a href="modelado-predictivo.html#cb1-5" tabindex="-1"></a><span class="fu">library</span>(catboost)    <span class="co"># CatBoost</span></span>
+<span id="cb1-6"><a href="modelado-predictivo.html#cb1-6" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb1-7"><a href="modelado-predictivo.html#cb1-7" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span>
+<span id="cb1-8"><a href="modelado-predictivo.html#cb1-8" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
+<span id="cb1-9"><a href="modelado-predictivo.html#cb1-9" tabindex="-1"></a><span class="fu">library</span>(jsonlite)</span>
+<span id="cb1-10"><a href="modelado-predictivo.html#cb1-10" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="modelado-predictivo.html#cb1-11" tabindex="-1"></a>SEED <span class="ot">&lt;-</span> <span class="dv">42</span></span>
+<span id="cb1-12"><a href="modelado-predictivo.html#cb1-12" tabindex="-1"></a>POS  <span class="ot">&lt;-</span> <span class="st">&quot;won&quot;</span>                                   <span class="co"># clase positiva</span></span>
+<span id="cb1-13"><a href="modelado-predictivo.html#cb1-13" tabindex="-1"></a>COLOR_WON <span class="ot">&lt;-</span> <span class="st">&quot;#008080&quot;</span>; COLOR_NOWIN <span class="ot">&lt;-</span> <span class="st">&quot;#40B5A0&quot;</span></span>
+<span id="cb1-14"><a href="modelado-predictivo.html#cb1-14" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="modelado-predictivo.html#cb1-15" tabindex="-1"></a>fmt4 <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="fu">sprintf</span>(<span class="st">&quot;%.4f&quot;</span>, x)</span>
+<span id="cb1-16"><a href="modelado-predictivo.html#cb1-16" tabindex="-1"></a>fmt3 <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="fu">sprintf</span>(<span class="st">&quot;%.3f&quot;</span>, x)</span>
+<span id="cb1-17"><a href="modelado-predictivo.html#cb1-17" tabindex="-1"></a>fp   <span class="ot">&lt;-</span> <span class="cf">function</span>(p) <span class="fu">ifelse</span>(p <span class="sc">&lt;</span> <span class="fl">0.001</span>, <span class="st">&quot;&lt; 0.001&quot;</span>, <span class="fu">sprintf</span>(<span class="st">&quot;%.3f&quot;</span>, p))</span>
+<span id="cb1-18"><a href="modelado-predictivo.html#cb1-18" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="modelado-predictivo.html#cb1-19" tabindex="-1"></a>tabla_bonita <span class="ot">&lt;-</span> <span class="cf">function</span>(d, ...) {</span>
+<span id="cb1-20"><a href="modelado-predictivo.html#cb1-20" tabindex="-1"></a>  <span class="fu">kable</span>(d, <span class="at">align =</span> <span class="st">&quot;c&quot;</span>, ...) <span class="sc">%&gt;%</span></span>
+<span id="cb1-21"><a href="modelado-predictivo.html#cb1-21" tabindex="-1"></a>    <span class="fu">kable_styling</span>(<span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">&quot;striped&quot;</span>, <span class="st">&quot;hover&quot;</span>, <span class="st">&quot;condensed&quot;</span>),</span>
+<span id="cb1-22"><a href="modelado-predictivo.html#cb1-22" tabindex="-1"></a>                  <span class="at">full_width =</span> <span class="cn">FALSE</span>, <span class="at">position =</span> <span class="st">&quot;center&quot;</span>)</span>
+<span id="cb1-23"><a href="modelado-predictivo.html#cb1-23" tabindex="-1"></a>}</span></code></pre></div>
+<div id="funciones-auxiliares" class="section level3 hasAnchor" number="3.3.1">
+<h3><span class="header-section-number">3.3.1</span> Funciones auxiliares<a href="modelado-predictivo.html#funciones-auxiliares" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Se definen una sola vez: la codificación <em>One-Hot</em>, las métricas, la partición estratificada, y una función que ajusta y otra que predice, de modo que los cuatro modelos (y la línea base) se tratan exactamente igual.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="modelado-predictivo.html#cb2-1" tabindex="-1"></a><span class="co"># One-Hot de todas las predictoras (equivale al OneHotEncoder de scikit-learn).</span></span>
+<span id="cb2-2"><a href="modelado-predictivo.html#cb2-2" tabindex="-1"></a><span class="co"># Los niveles de cada factor quedan fijos, así que las columnas son las mismas en cualquier subconjunto.</span></span>
+<span id="cb2-3"><a href="modelado-predictivo.html#cb2-3" tabindex="-1"></a>codificar <span class="ot">&lt;-</span> <span class="cf">function</span>(d) {</span>
+<span id="cb2-4"><a href="modelado-predictivo.html#cb2-4" tabindex="-1"></a>  m <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> . <span class="sc">-</span> <span class="dv">1</span>, <span class="at">data =</span> d,</span>
+<span id="cb2-5"><a href="modelado-predictivo.html#cb2-5" tabindex="-1"></a>                    <span class="at">contrasts.arg =</span> <span class="fu">lapply</span>(d, contrasts, <span class="at">contrasts =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb2-6"><a href="modelado-predictivo.html#cb2-6" tabindex="-1"></a>  <span class="fu">colnames</span>(m) <span class="ot">&lt;-</span> <span class="fu">make.names</span>(<span class="fu">colnames</span>(m))</span>
+<span id="cb2-7"><a href="modelado-predictivo.html#cb2-7" tabindex="-1"></a>  m</span>
+<span id="cb2-8"><a href="modelado-predictivo.html#cb2-8" tabindex="-1"></a>}</span>
+<span id="cb2-9"><a href="modelado-predictivo.html#cb2-9" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="modelado-predictivo.html#cb2-10" tabindex="-1"></a><span class="co"># AUC-ROC = P(prob. de won de un won &gt; prob. de won de un nowin)</span></span>
+<span id="cb2-11"><a href="modelado-predictivo.html#cb2-11" tabindex="-1"></a>auc_rank <span class="ot">&lt;-</span> <span class="cf">function</span>(y, p) {</span>
+<span id="cb2-12"><a href="modelado-predictivo.html#cb2-12" tabindex="-1"></a>  pos <span class="ot">&lt;-</span> y <span class="sc">==</span> POS</span>
+<span id="cb2-13"><a href="modelado-predictivo.html#cb2-13" tabindex="-1"></a>  n1 <span class="ot">&lt;-</span> <span class="fu">sum</span>(pos); n0 <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="sc">!</span>pos)</span>
+<span id="cb2-14"><a href="modelado-predictivo.html#cb2-14" tabindex="-1"></a>  (<span class="fu">sum</span>(<span class="fu">rank</span>(p)[pos]) <span class="sc">-</span> n1 <span class="sc">*</span> (n1 <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">/</span> <span class="dv">2</span>) <span class="sc">/</span> (n1 <span class="sc">*</span> n0)</span>
+<span id="cb2-15"><a href="modelado-predictivo.html#cb2-15" tabindex="-1"></a>}</span>
+<span id="cb2-16"><a href="modelado-predictivo.html#cb2-16" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="modelado-predictivo.html#cb2-17" tabindex="-1"></a>metricas <span class="ot">&lt;-</span> <span class="cf">function</span>(y, p) {</span>
+<span id="cb2-18"><a href="modelado-predictivo.html#cb2-18" tabindex="-1"></a>  pred <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(p <span class="sc">&gt;=</span> <span class="fl">0.5</span>, <span class="st">&quot;won&quot;</span>, <span class="st">&quot;nowin&quot;</span>)</span>
+<span id="cb2-19"><a href="modelado-predictivo.html#cb2-19" tabindex="-1"></a>  tp <span class="ot">&lt;-</span> <span class="fu">sum</span>(pred <span class="sc">==</span> <span class="st">&quot;won&quot;</span>   <span class="sc">&amp;</span> y <span class="sc">==</span> <span class="st">&quot;won&quot;</span>)</span>
+<span id="cb2-20"><a href="modelado-predictivo.html#cb2-20" tabindex="-1"></a>  fp <span class="ot">&lt;-</span> <span class="fu">sum</span>(pred <span class="sc">==</span> <span class="st">&quot;won&quot;</span>   <span class="sc">&amp;</span> y <span class="sc">==</span> <span class="st">&quot;nowin&quot;</span>)</span>
+<span id="cb2-21"><a href="modelado-predictivo.html#cb2-21" tabindex="-1"></a>  fn <span class="ot">&lt;-</span> <span class="fu">sum</span>(pred <span class="sc">==</span> <span class="st">&quot;nowin&quot;</span> <span class="sc">&amp;</span> y <span class="sc">==</span> <span class="st">&quot;won&quot;</span>)</span>
+<span id="cb2-22"><a href="modelado-predictivo.html#cb2-22" tabindex="-1"></a>  prec <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(tp <span class="sc">+</span> fp <span class="sc">==</span> <span class="dv">0</span>, <span class="dv">0</span>, tp <span class="sc">/</span> (tp <span class="sc">+</span> fp))</span>
+<span id="cb2-23"><a href="modelado-predictivo.html#cb2-23" tabindex="-1"></a>  rec  <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(tp <span class="sc">+</span> fn <span class="sc">==</span> <span class="dv">0</span>, <span class="dv">0</span>, tp <span class="sc">/</span> (tp <span class="sc">+</span> fn))</span>
+<span id="cb2-24"><a href="modelado-predictivo.html#cb2-24" tabindex="-1"></a>  f1   <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(prec <span class="sc">+</span> rec <span class="sc">==</span> <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">2</span> <span class="sc">*</span> prec <span class="sc">*</span> rec <span class="sc">/</span> (prec <span class="sc">+</span> rec))</span>
+<span id="cb2-25"><a href="modelado-predictivo.html#cb2-25" tabindex="-1"></a>  <span class="fu">c</span>(<span class="at">accuracy =</span> <span class="fu">mean</span>(pred <span class="sc">==</span> y), <span class="at">precision =</span> prec, <span class="at">recall =</span> rec, <span class="at">f1 =</span> f1, <span class="at">auc =</span> <span class="fu">auc_rank</span>(y, p))</span>
+<span id="cb2-26"><a href="modelado-predictivo.html#cb2-26" tabindex="-1"></a>}</span>
+<span id="cb2-27"><a href="modelado-predictivo.html#cb2-27" tabindex="-1"></a></span>
+<span id="cb2-28"><a href="modelado-predictivo.html#cb2-28" tabindex="-1"></a><span class="co"># Partición estratificada: devuelve los índices de prueba</span></span>
+<span id="cb2-29"><a href="modelado-predictivo.html#cb2-29" tabindex="-1"></a>particion <span class="ot">&lt;-</span> <span class="cf">function</span>(y, <span class="at">prop_test =</span> <span class="fl">0.2</span>, seed) {</span>
+<span id="cb2-30"><a href="modelado-predictivo.html#cb2-30" tabindex="-1"></a>  <span class="fu">set.seed</span>(seed)</span>
+<span id="cb2-31"><a href="modelado-predictivo.html#cb2-31" tabindex="-1"></a>  <span class="fu">sort</span>(<span class="fu">unlist</span>(<span class="fu">lapply</span>(<span class="fu">split</span>(<span class="fu">seq_along</span>(y), y),</span>
+<span id="cb2-32"><a href="modelado-predictivo.html#cb2-32" tabindex="-1"></a>                     <span class="cf">function</span>(i) <span class="fu">sample</span>(i, <span class="at">size =</span> <span class="fu">round</span>(<span class="fu">length</span>(i) <span class="sc">*</span> prop_test)))))</span>
+<span id="cb2-33"><a href="modelado-predictivo.html#cb2-33" tabindex="-1"></a>}</span>
+<span id="cb2-34"><a href="modelado-predictivo.html#cb2-34" tabindex="-1"></a></span>
+<span id="cb2-35"><a href="modelado-predictivo.html#cb2-35" tabindex="-1"></a><span class="co"># Ajusta un modelo con los valores por defecto de cada algoritmo</span></span>
+<span id="cb2-36"><a href="modelado-predictivo.html#cb2-36" tabindex="-1"></a>ajustar <span class="ot">&lt;-</span> <span class="cf">function</span>(modelo, Xtr, ytr) {</span>
+<span id="cb2-37"><a href="modelado-predictivo.html#cb2-37" tabindex="-1"></a>  Xm <span class="ot">&lt;-</span> <span class="fu">codificar</span>(Xtr)</span>
+<span id="cb2-38"><a href="modelado-predictivo.html#cb2-38" tabindex="-1"></a>  <span class="cf">switch</span>(modelo,</span>
+<span id="cb2-39"><a href="modelado-predictivo.html#cb2-39" tabindex="-1"></a>    <span class="st">&quot;Baseline: clase mayoritaria&quot;</span> <span class="ot">=</span> <span class="fu">list</span>(<span class="at">tipo =</span> <span class="st">&quot;base&quot;</span>, <span class="at">p =</span> <span class="fu">mean</span>(ytr <span class="sc">==</span> POS)),</span>
+<span id="cb2-40"><a href="modelado-predictivo.html#cb2-40" tabindex="-1"></a>    <span class="st">&quot;Regresión Logística&quot;</span> <span class="ot">=</span> <span class="fu">list</span>(<span class="at">tipo =</span> <span class="st">&quot;glm&quot;</span>,</span>
+<span id="cb2-41"><a href="modelado-predictivo.html#cb2-41" tabindex="-1"></a>       <span class="co"># ridge con lambda = 1/n: equivale a la regularización L2 por defecto (C = 1) de scikit-learn</span></span>
+<span id="cb2-42"><a href="modelado-predictivo.html#cb2-42" tabindex="-1"></a>       <span class="at">fit =</span> <span class="fu">glmnet</span>(Xm, ytr, <span class="at">family =</span> <span class="st">&quot;binomial&quot;</span>, <span class="at">alpha =</span> <span class="dv">0</span>,</span>
+<span id="cb2-43"><a href="modelado-predictivo.html#cb2-43" tabindex="-1"></a>                    <span class="at">lambda =</span> <span class="dv">1</span> <span class="sc">/</span> <span class="fu">nrow</span>(Xm), <span class="at">standardize =</span> <span class="cn">FALSE</span>)),</span>
+<span id="cb2-44"><a href="modelado-predictivo.html#cb2-44" tabindex="-1"></a>    <span class="st">&quot;Árbol de Decisión&quot;</span> <span class="ot">=</span> <span class="fu">list</span>(<span class="at">tipo =</span> <span class="st">&quot;tree&quot;</span>,</span>
+<span id="cb2-45"><a href="modelado-predictivo.html#cb2-45" tabindex="-1"></a>       <span class="co"># árbol sin podar ni limitar la profundidad, como el de scikit-learn por defecto</span></span>
+<span id="cb2-46"><a href="modelado-predictivo.html#cb2-46" tabindex="-1"></a>       <span class="at">fit =</span> <span class="fu">rpart</span>(y <span class="sc">~</span> ., <span class="at">data =</span> <span class="fu">data.frame</span>(<span class="at">y =</span> ytr, Xm), <span class="at">method =</span> <span class="st">&quot;class&quot;</span>,</span>
+<span id="cb2-47"><a href="modelado-predictivo.html#cb2-47" tabindex="-1"></a>                   <span class="at">control =</span> <span class="fu">rpart.control</span>(<span class="at">cp =</span> <span class="dv">0</span>, <span class="at">minsplit =</span> <span class="dv">2</span>, <span class="at">minbucket =</span> <span class="dv">1</span>, <span class="at">xval =</span> <span class="dv">0</span>))),</span>
+<span id="cb2-48"><a href="modelado-predictivo.html#cb2-48" tabindex="-1"></a>    <span class="st">&quot;Random Forest&quot;</span> <span class="ot">=</span> <span class="fu">list</span>(<span class="at">tipo =</span> <span class="st">&quot;rf&quot;</span>,</span>
+<span id="cb2-49"><a href="modelado-predictivo.html#cb2-49" tabindex="-1"></a>       <span class="at">fit =</span> <span class="fu">ranger</span>(y <span class="sc">~</span> ., <span class="at">data =</span> <span class="fu">data.frame</span>(<span class="at">y =</span> ytr, Xm), <span class="at">num.trees =</span> <span class="dv">100</span>,</span>
+<span id="cb2-50"><a href="modelado-predictivo.html#cb2-50" tabindex="-1"></a>                    <span class="at">probability =</span> <span class="cn">TRUE</span>, <span class="at">seed =</span> SEED)),</span>
+<span id="cb2-51"><a href="modelado-predictivo.html#cb2-51" tabindex="-1"></a>    <span class="st">&quot;CatBoost&quot;</span> <span class="ot">=</span> <span class="fu">list</span>(<span class="at">tipo =</span> <span class="st">&quot;cb&quot;</span>,</span>
+<span id="cb2-52"><a href="modelado-predictivo.html#cb2-52" tabindex="-1"></a>       <span class="at">fit =</span> <span class="fu">catboost.train</span>(</span>
+<span id="cb2-53"><a href="modelado-predictivo.html#cb2-53" tabindex="-1"></a>         <span class="fu">catboost.load_pool</span>(Xm, <span class="at">label =</span> <span class="fu">as.integer</span>(ytr <span class="sc">==</span> POS)),</span>
+<span id="cb2-54"><a href="modelado-predictivo.html#cb2-54" tabindex="-1"></a>         <span class="at">params =</span> <span class="fu">list</span>(<span class="at">loss_function =</span> <span class="st">&quot;Logloss&quot;</span>, <span class="at">random_seed =</span> SEED,</span>
+<span id="cb2-55"><a href="modelado-predictivo.html#cb2-55" tabindex="-1"></a>                       <span class="at">logging_level =</span> <span class="st">&quot;Silent&quot;</span>, <span class="at">allow_writing_files =</span> <span class="cn">FALSE</span>))),</span>
+<span id="cb2-56"><a href="modelado-predictivo.html#cb2-56" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">&quot;Modelo desconocido: &quot;</span>, modelo))</span>
+<span id="cb2-57"><a href="modelado-predictivo.html#cb2-57" tabindex="-1"></a>}</span>
+<span id="cb2-58"><a href="modelado-predictivo.html#cb2-58" tabindex="-1"></a></span>
+<span id="cb2-59"><a href="modelado-predictivo.html#cb2-59" tabindex="-1"></a><span class="co"># Probabilidad de &#39;won&#39; para posiciones nuevas</span></span>
+<span id="cb2-60"><a href="modelado-predictivo.html#cb2-60" tabindex="-1"></a>prob_won <span class="ot">&lt;-</span> <span class="cf">function</span>(m, Xnew) {</span>
+<span id="cb2-61"><a href="modelado-predictivo.html#cb2-61" tabindex="-1"></a>  Xm <span class="ot">&lt;-</span> <span class="fu">codificar</span>(Xnew)</span>
+<span id="cb2-62"><a href="modelado-predictivo.html#cb2-62" tabindex="-1"></a>  <span class="cf">switch</span>(m<span class="sc">$</span>tipo,</span>
+<span id="cb2-63"><a href="modelado-predictivo.html#cb2-63" tabindex="-1"></a>    <span class="at">base =</span> <span class="fu">rep</span>(m<span class="sc">$</span>p, <span class="fu">nrow</span>(Xm)),</span>
+<span id="cb2-64"><a href="modelado-predictivo.html#cb2-64" tabindex="-1"></a>    <span class="at">glm  =</span> <span class="fu">as.numeric</span>(<span class="fu">predict</span>(m<span class="sc">$</span>fit, Xm, <span class="at">type =</span> <span class="st">&quot;response&quot;</span>)),</span>
+<span id="cb2-65"><a href="modelado-predictivo.html#cb2-65" tabindex="-1"></a>    <span class="at">tree =</span> <span class="fu">as.numeric</span>(<span class="fu">predict</span>(m<span class="sc">$</span>fit, <span class="fu">data.frame</span>(Xm), <span class="at">type =</span> <span class="st">&quot;prob&quot;</span>)[, POS]),</span>
+<span id="cb2-66"><a href="modelado-predictivo.html#cb2-66" tabindex="-1"></a>    <span class="at">rf   =</span> <span class="fu">as.numeric</span>(<span class="fu">predict</span>(m<span class="sc">$</span>fit, <span class="fu">data.frame</span>(Xm))<span class="sc">$</span>predictions[, POS]),</span>
+<span id="cb2-67"><a href="modelado-predictivo.html#cb2-67" tabindex="-1"></a>    <span class="at">cb   =</span> <span class="fu">as.numeric</span>(<span class="fu">catboost.predict</span>(m<span class="sc">$</span>fit, <span class="fu">catboost.load_pool</span>(Xm),</span>
+<span id="cb2-68"><a href="modelado-predictivo.html#cb2-68" tabindex="-1"></a>                                       <span class="at">prediction_type =</span> <span class="st">&quot;Probability&quot;</span>)))</span>
+<span id="cb2-69"><a href="modelado-predictivo.html#cb2-69" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+</div>
+<div id="preparación-de-los-datos" class="section level2 hasAnchor" number="3.4">
+<h2><span class="header-section-number">3.4</span> Preparación de los datos<a href="modelado-predictivo.html#preparaci%C3%B3n-de-los-datos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Se parte del conjunto depurado, con <strong>32 variables predictoras</strong> categóricas y la variable objetivo <code>class</code>. Se separan las predictoras (<code>X</code>) del objetivo (<code>y</code>) y se dividen los datos en 80 % entrenamiento y 20 % prueba, de forma estratificada.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="modelado-predictivo.html#cb3-1" tabindex="-1"></a><span class="co"># El conjunto depurado viene del capítulo de EDA. Si se compila este capítulo solo:</span></span>
+<span id="cb3-2"><a href="modelado-predictivo.html#cb3-2" tabindex="-1"></a><span class="co"># (al final del EDA: saveRDS(datos, &quot;datos_limpios.rds&quot;))</span></span>
+<span id="cb3-3"><a href="modelado-predictivo.html#cb3-3" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">exists</span>(<span class="st">&quot;datos&quot;</span>)) datos <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;datos_limpios.rds&quot;</span>)</span>
+<span id="cb3-4"><a href="modelado-predictivo.html#cb3-4" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="modelado-predictivo.html#cb3-5" tabindex="-1"></a>df <span class="ot">&lt;-</span> datos</span>
+<span id="cb3-6"><a href="modelado-predictivo.html#cb3-6" tabindex="-1"></a>X  <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>class) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), as.factor))</span>
+<span id="cb3-7"><a href="modelado-predictivo.html#cb3-7" tabindex="-1"></a>y  <span class="ot">&lt;-</span> <span class="fu">factor</span>(df<span class="sc">$</span>class, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;nowin&quot;</span>, <span class="st">&quot;won&quot;</span>))</span>
+<span id="cb3-8"><a href="modelado-predictivo.html#cb3-8" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="modelado-predictivo.html#cb3-9" tabindex="-1"></a>idx_test <span class="ot">&lt;-</span> <span class="fu">particion</span>(y, <span class="fl">0.2</span>, SEED)</span>
+<span id="cb3-10"><a href="modelado-predictivo.html#cb3-10" tabindex="-1"></a>X_train <span class="ot">&lt;-</span> X[<span class="sc">-</span>idx_test, ]; X_test <span class="ot">&lt;-</span> X[idx_test, ]</span>
+<span id="cb3-11"><a href="modelado-predictivo.html#cb3-11" tabindex="-1"></a>y_train <span class="ot">&lt;-</span> y[<span class="sc">-</span>idx_test];   y_test <span class="ot">&lt;-</span> y[idx_test]</span>
+<span id="cb3-12"><a href="modelado-predictivo.html#cb3-12" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="modelado-predictivo.html#cb3-13" tabindex="-1"></a><span class="fu">data.frame</span>(</span>
+<span id="cb3-14"><a href="modelado-predictivo.html#cb3-14" tabindex="-1"></a>  <span class="at">Clase =</span> <span class="fu">levels</span>(y),</span>
+<span id="cb3-15"><a href="modelado-predictivo.html#cb3-15" tabindex="-1"></a>  <span class="at">Entrenamiento =</span> <span class="fu">round</span>(<span class="fu">as.numeric</span>(<span class="fu">prop.table</span>(<span class="fu">table</span>(y_train))), <span class="dv">3</span>),</span>
+<span id="cb3-16"><a href="modelado-predictivo.html#cb3-16" tabindex="-1"></a>  <span class="at">Prueba =</span> <span class="fu">round</span>(<span class="fu">as.numeric</span>(<span class="fu">prop.table</span>(<span class="fu">table</span>(y_test))), <span class="dv">3</span>),</span>
+<span id="cb3-17"><a href="modelado-predictivo.html#cb3-17" tabindex="-1"></a>  <span class="at">n_train =</span> <span class="fu">as.numeric</span>(<span class="fu">table</span>(y_train)),</span>
+<span id="cb3-18"><a href="modelado-predictivo.html#cb3-18" tabindex="-1"></a>  <span class="at">n_test =</span> <span class="fu">as.numeric</span>(<span class="fu">table</span>(y_test))</span>
+<span id="cb3-19"><a href="modelado-predictivo.html#cb3-19" tabindex="-1"></a>) <span class="sc">%&gt;%</span> <span class="fu">tabla_bonita</span>()</span></code></pre></div>
+<table class="table table-striped table-hover table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;">
+Clase
+</th>
+<th style="text-align:center;">
+Entrenamiento
+</th>
+<th style="text-align:center;">
+Prueba
+</th>
+<th style="text-align:center;">
+n_train
+</th>
+<th style="text-align:center;">
+n_test
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+nowin
+</td>
+<td style="text-align:center;">
+0.478
+</td>
+<td style="text-align:center;">
+0.477
+</td>
+<td style="text-align:center;">
+1222
+</td>
+<td style="text-align:center;">
+305
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+won
+</td>
+<td style="text-align:center;">
+0.522
+</td>
+<td style="text-align:center;">
+0.523
+</td>
+<td style="text-align:center;">
+1335
+</td>
+<td style="text-align:center;">
+334
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="comparación-preliminar-de-los-modelos" class="section level2 hasAnchor" number="3.5">
+<h2><span class="header-section-number">3.5</span> Comparación preliminar de los modelos<a href="modelado-predictivo.html#comparaci%C3%B3n-preliminar-de-los-modelos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Los cuatro candidatos se entrenan con el 80 % de entrenamiento y se evalúan una vez en el conjunto de prueba. La tabla ordena los modelos por F1-Score.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="modelado-predictivo.html#cb4-1" tabindex="-1"></a>nombres_modelos <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Regresión Logística&quot;</span>, <span class="st">&quot;Árbol de Decisión&quot;</span>, <span class="st">&quot;Random Forest&quot;</span>, <span class="st">&quot;CatBoost&quot;</span>)</span>
+<span id="cb4-2"><a href="modelado-predictivo.html#cb4-2" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="modelado-predictivo.html#cb4-3" tabindex="-1"></a>df_resultados <span class="ot">&lt;-</span> <span class="fu">map_dfr</span>(nombres_modelos, <span class="cf">function</span>(nm) {</span>
+<span id="cb4-4"><a href="modelado-predictivo.html#cb4-4" tabindex="-1"></a>  m  <span class="ot">&lt;-</span> <span class="fu">ajustar</span>(nm, X_train, y_train)</span>
+<span id="cb4-5"><a href="modelado-predictivo.html#cb4-5" tabindex="-1"></a>  mt <span class="ot">&lt;-</span> <span class="fu">metricas</span>(y_test, <span class="fu">prob_won</span>(m, X_test))</span>
+<span id="cb4-6"><a href="modelado-predictivo.html#cb4-6" tabindex="-1"></a>  <span class="fu">tibble</span>(<span class="at">Modelo =</span> nm, <span class="at">Accuracy =</span> <span class="fu">unname</span>(mt[<span class="st">&quot;accuracy&quot;</span>]), <span class="st">`</span><span class="at">F1-Score</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">unname</span>(mt[<span class="st">&quot;f1&quot;</span>]))</span>
+<span id="cb4-7"><a href="modelado-predictivo.html#cb4-7" tabindex="-1"></a>}) <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(<span class="fu">desc</span>(<span class="st">`</span><span class="at">F1-Score</span><span class="st">`</span>))</span>
+<span id="cb4-8"><a href="modelado-predictivo.html#cb4-8" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="modelado-predictivo.html#cb4-9" tabindex="-1"></a><span class="fu">tabla_bonita</span>(df_resultados, <span class="at">digits =</span> <span class="dv">4</span>)</span></code></pre></div>
+<table class="table table-striped table-hover table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;">
+Modelo
+</th>
+<th style="text-align:center;">
+Accuracy
+</th>
+<th style="text-align:center;">
+F1-Score
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+Árbol de Decisión
+</td>
+<td style="text-align:center;">
+0.9953
+</td>
+<td style="text-align:center;">
+0.9955
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+CatBoost
+</td>
+<td style="text-align:center;">
+0.9890
+</td>
+<td style="text-align:center;">
+0.9895
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Random Forest
+</td>
+<td style="text-align:center;">
+0.9844
+</td>
+<td style="text-align:center;">
+0.9850
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Regresión Logística
+</td>
+<td style="text-align:center;">
+0.9671
+</td>
+<td style="text-align:center;">
+0.9683
+</td>
+</tr>
+</tbody>
+</table>
+<p>En la partición de prueba, CatBoost obtiene el mejor resultado (Accuracy = 0.9890, F1-Score = 0.9895), seguido del Árbol de Decisión (0.9953; 0.9955), Random Forest (0.9844; 0.9850) y la Regresión Logística (0.9671; 0.9683). La diferencia entre CatBoost y el árbol equivale a unas 4 posición(es) de las 639 de prueba, por lo que no es concluyente. La brecha con la regresión logística (≈ 2.2 puntos de exactitud) sí es amplia. Todos los modelos superan con holgura la referencia del 52 % de la clase mayoritaria.</p>
+</div>
+<div id="validación-cruzada" class="section level2 hasAnchor" number="3.6">
+<h2><span class="header-section-number">3.6</span> Validación cruzada<a href="modelado-predictivo.html#validaci%C3%B3n-cruzada" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Para que la elección no dependa de una sola partición, cada modelo se evalúa 15 veces (validación cruzada estratificada de 5 particiones, repetida 3 veces) usando únicamente el 80 % de entrenamiento. Se añade una línea base que siempre predice la clase mayoritaria. Puede tardar unos minutos (CatBoost es el más lento).</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="modelado-predictivo.html#cb5-1" tabindex="-1"></a><span class="co"># Validación cruzada estratificada repetida: devuelve los índices de VALIDACIÓN de cada partición</span></span>
+<span id="cb5-2"><a href="modelado-predictivo.html#cb5-2" tabindex="-1"></a>estratificado_repetido <span class="ot">&lt;-</span> <span class="cf">function</span>(y, <span class="at">k =</span> <span class="dv">5</span>, <span class="at">repeticiones =</span> <span class="dv">3</span>, <span class="at">seed =</span> SEED) {</span>
+<span id="cb5-3"><a href="modelado-predictivo.html#cb5-3" tabindex="-1"></a>  folds <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb5-4"><a href="modelado-predictivo.html#cb5-4" tabindex="-1"></a>  <span class="cf">for</span> (r <span class="cf">in</span> <span class="fu">seq_len</span>(repeticiones)) {</span>
+<span id="cb5-5"><a href="modelado-predictivo.html#cb5-5" tabindex="-1"></a>    <span class="fu">set.seed</span>(seed <span class="sc">+</span> r)</span>
+<span id="cb5-6"><a href="modelado-predictivo.html#cb5-6" tabindex="-1"></a>    asignado <span class="ot">&lt;-</span> <span class="fu">integer</span>(<span class="fu">length</span>(y))</span>
+<span id="cb5-7"><a href="modelado-predictivo.html#cb5-7" tabindex="-1"></a>    <span class="cf">for</span> (cl <span class="cf">in</span> <span class="fu">levels</span>(y)) {</span>
+<span id="cb5-8"><a href="modelado-predictivo.html#cb5-8" tabindex="-1"></a>      i <span class="ot">&lt;-</span> <span class="fu">which</span>(y <span class="sc">==</span> cl)</span>
+<span id="cb5-9"><a href="modelado-predictivo.html#cb5-9" tabindex="-1"></a>      asignado[i] <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">rep_len</span>(<span class="fu">seq_len</span>(k), <span class="fu">length</span>(i)))</span>
+<span id="cb5-10"><a href="modelado-predictivo.html#cb5-10" tabindex="-1"></a>    }</span>
+<span id="cb5-11"><a href="modelado-predictivo.html#cb5-11" tabindex="-1"></a>    <span class="cf">for</span> (f <span class="cf">in</span> <span class="fu">seq_len</span>(k)) folds[[<span class="fu">length</span>(folds) <span class="sc">+</span> <span class="dv">1</span>]] <span class="ot">&lt;-</span> <span class="fu">which</span>(asignado <span class="sc">==</span> f)</span>
+<span id="cb5-12"><a href="modelado-predictivo.html#cb5-12" tabindex="-1"></a>  }</span>
+<span id="cb5-13"><a href="modelado-predictivo.html#cb5-13" tabindex="-1"></a>  folds</span>
+<span id="cb5-14"><a href="modelado-predictivo.html#cb5-14" tabindex="-1"></a>}</span>
+<span id="cb5-15"><a href="modelado-predictivo.html#cb5-15" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="modelado-predictivo.html#cb5-16" tabindex="-1"></a>candidatos <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Baseline: clase mayoritaria&quot;</span>, nombres_modelos)</span>
+<span id="cb5-17"><a href="modelado-predictivo.html#cb5-17" tabindex="-1"></a>folds <span class="ot">&lt;-</span> <span class="fu">estratificado_repetido</span>(y_train)          <span class="co"># 15 evaluaciones por modelo</span></span>
+<span id="cb5-18"><a href="modelado-predictivo.html#cb5-18" tabindex="-1"></a></span>
+<span id="cb5-19"><a href="modelado-predictivo.html#cb5-19" tabindex="-1"></a>cv_res <span class="ot">&lt;-</span> <span class="fu">map</span>(candidatos, <span class="cf">function</span>(nm) {</span>
+<span id="cb5-20"><a href="modelado-predictivo.html#cb5-20" tabindex="-1"></a>  res <span class="ot">&lt;-</span> <span class="fu">map_dfr</span>(folds, <span class="cf">function</span>(val_idx) {</span>
+<span id="cb5-21"><a href="modelado-predictivo.html#cb5-21" tabindex="-1"></a>    m  <span class="ot">&lt;-</span> <span class="fu">ajustar</span>(nm, X_train[<span class="sc">-</span>val_idx, ], y_train[<span class="sc">-</span>val_idx])</span>
+<span id="cb5-22"><a href="modelado-predictivo.html#cb5-22" tabindex="-1"></a>    mv <span class="ot">&lt;-</span> <span class="fu">metricas</span>(y_train[val_idx],  <span class="fu">prob_won</span>(m, X_train[val_idx, ]))</span>
+<span id="cb5-23"><a href="modelado-predictivo.html#cb5-23" tabindex="-1"></a>    mt <span class="ot">&lt;-</span> <span class="fu">metricas</span>(y_train[<span class="sc">-</span>val_idx], <span class="fu">prob_won</span>(m, X_train[<span class="sc">-</span>val_idx, ]))</span>
+<span id="cb5-24"><a href="modelado-predictivo.html#cb5-24" tabindex="-1"></a>    <span class="fu">tibble</span>(<span class="at">accuracy =</span> <span class="fu">unname</span>(mv[<span class="st">&quot;accuracy&quot;</span>]), <span class="at">f1 =</span> <span class="fu">unname</span>(mv[<span class="st">&quot;f1&quot;</span>]),</span>
+<span id="cb5-25"><a href="modelado-predictivo.html#cb5-25" tabindex="-1"></a>           <span class="at">auc =</span> <span class="fu">unname</span>(mv[<span class="st">&quot;auc&quot;</span>]), <span class="at">acc_train =</span> <span class="fu">unname</span>(mt[<span class="st">&quot;accuracy&quot;</span>]))</span>
+<span id="cb5-26"><a href="modelado-predictivo.html#cb5-26" tabindex="-1"></a>  })</span>
+<span id="cb5-27"><a href="modelado-predictivo.html#cb5-27" tabindex="-1"></a>  <span class="fu">message</span>(<span class="fu">sprintf</span>(<span class="st">&quot;%-30s F1 = %.4f&quot;</span>, nm, <span class="fu">mean</span>(res<span class="sc">$</span>f1)))</span>
+<span id="cb5-28"><a href="modelado-predictivo.html#cb5-28" tabindex="-1"></a>  res</span>
+<span id="cb5-29"><a href="modelado-predictivo.html#cb5-29" tabindex="-1"></a>})</span>
+<span id="cb5-30"><a href="modelado-predictivo.html#cb5-30" tabindex="-1"></a><span class="fu">names</span>(cv_res) <span class="ot">&lt;-</span> candidatos</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="modelado-predictivo.html#cb6-1" tabindex="-1"></a>tabla_cv <span class="ot">&lt;-</span> <span class="fu">imap_dfr</span>(cv_res, <span class="cf">function</span>(r, nm) {</span>
+<span id="cb6-2"><a href="modelado-predictivo.html#cb6-2" tabindex="-1"></a>  <span class="fu">tibble</span>(</span>
+<span id="cb6-3"><a href="modelado-predictivo.html#cb6-3" tabindex="-1"></a>    <span class="at">Modelo =</span> nm,</span>
+<span id="cb6-4"><a href="modelado-predictivo.html#cb6-4" tabindex="-1"></a>    <span class="at">Accuracy =</span> <span class="fu">sprintf</span>(<span class="st">&quot;%.4f ± %.4f&quot;</span>, <span class="fu">mean</span>(r<span class="sc">$</span>accuracy), <span class="fu">sd</span>(r<span class="sc">$</span>accuracy)),</span>
+<span id="cb6-5"><a href="modelado-predictivo.html#cb6-5" tabindex="-1"></a>    <span class="st">`</span><span class="at">F1 (won)</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sprintf</span>(<span class="st">&quot;%.4f ± %.4f&quot;</span>, <span class="fu">mean</span>(r<span class="sc">$</span>f1), <span class="fu">sd</span>(r<span class="sc">$</span>f1)),</span>
+<span id="cb6-6"><a href="modelado-predictivo.html#cb6-6" tabindex="-1"></a>    <span class="st">`</span><span class="at">AUC-ROC</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sprintf</span>(<span class="st">&quot;%.4f ± %.4f&quot;</span>, <span class="fu">mean</span>(r<span class="sc">$</span>auc), <span class="fu">sd</span>(r<span class="sc">$</span>auc)),</span>
+<span id="cb6-7"><a href="modelado-predictivo.html#cb6-7" tabindex="-1"></a>    <span class="st">`</span><span class="at">Brecha train − val (acc)</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">round</span>(<span class="fu">mean</span>(r<span class="sc">$</span>acc_train <span class="sc">-</span> r<span class="sc">$</span>accuracy), <span class="dv">4</span>),</span>
+<span id="cb6-8"><a href="modelado-predictivo.html#cb6-8" tabindex="-1"></a>    <span class="at">.f1 =</span> <span class="fu">mean</span>(r<span class="sc">$</span>f1))</span>
+<span id="cb6-9"><a href="modelado-predictivo.html#cb6-9" tabindex="-1"></a>}) <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(<span class="fu">desc</span>(.f1)) <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>.f1)</span>
+<span id="cb6-10"><a href="modelado-predictivo.html#cb6-10" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="modelado-predictivo.html#cb6-11" tabindex="-1"></a><span class="fu">tabla_bonita</span>(tabla_cv)</span></code></pre></div>
+<table class="table table-striped table-hover table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;">
+Modelo
+</th>
+<th style="text-align:center;">
+Accuracy
+</th>
+<th style="text-align:center;">
+F1 (won)
+</th>
+<th style="text-align:center;">
+AUC-ROC
+</th>
+<th style="text-align:center;">
+Brecha train − val (acc)
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+Árbol de Decisión
+</td>
+<td style="text-align:center;">
+0.9937 ± 0.0033
+</td>
+<td style="text-align:center;">
+0.9940 ± 0.0032
+</td>
+<td style="text-align:center;">
+0.9940 ± 0.0034
+</td>
+<td style="text-align:center;">
+0.0059
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+CatBoost
+</td>
+<td style="text-align:center;">
+0.9926 ± 0.0038
+</td>
+<td style="text-align:center;">
+0.9929 ± 0.0036
+</td>
+<td style="text-align:center;">
+0.9993 ± 0.0005
+</td>
+<td style="text-align:center;">
+0.0059
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Random Forest
+</td>
+<td style="text-align:center;">
+0.9879 ± 0.0065
+</td>
+<td style="text-align:center;">
+0.9884 ± 0.0062
+</td>
+<td style="text-align:center;">
+0.9990 ± 0.0007
+</td>
+<td style="text-align:center;">
+0.0076
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Regresión Logística
+</td>
+<td style="text-align:center;">
+0.9644 ± 0.0086
+</td>
+<td style="text-align:center;">
+0.9658 ± 0.0083
+</td>
+<td style="text-align:center;">
+0.9931 ± 0.0019
+</td>
+<td style="text-align:center;">
+0.0032
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Baseline: clase mayoritaria
+</td>
+<td style="text-align:center;">
+0.5221 ± 0.0005
+</td>
+<td style="text-align:center;">
+0.6860 ± 0.0004
+</td>
+<td style="text-align:center;">
+0.5000 ± 0.0000
+</td>
+<td style="text-align:center;">
+0.0000
+</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="modelado-predictivo.html#cb7-1" tabindex="-1"></a><span class="co"># Distribución de los 15 valores de F1 de cada modelo (un punto = una partición)</span></span>
+<span id="cb7-2"><a href="modelado-predictivo.html#cb7-2" tabindex="-1"></a>df_f1 <span class="ot">&lt;-</span> <span class="fu">imap_dfr</span>(cv_res, <span class="sc">~</span> <span class="fu">tibble</span>(<span class="at">Modelo =</span> .y, <span class="at">f1 =</span> .x<span class="sc">$</span>f1))</span>
+<span id="cb7-3"><a href="modelado-predictivo.html#cb7-3" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="modelado-predictivo.html#cb7-4" tabindex="-1"></a><span class="fu">ggplot</span>(df_f1, <span class="fu">aes</span>(<span class="at">x =</span> f1, <span class="at">y =</span> <span class="fu">factor</span>(Modelo, <span class="at">levels =</span> <span class="fu">rev</span>(tabla_cv<span class="sc">$</span>Modelo)))) <span class="sc">+</span></span>
+<span id="cb7-5"><a href="modelado-predictivo.html#cb7-5" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">height =</span> .<span class="dv">15</span>, <span class="at">alpha =</span> .<span class="dv">55</span>, <span class="at">size =</span> <span class="fl">1.8</span>, <span class="at">color =</span> COLOR_NOWIN) <span class="sc">+</span></span>
+<span id="cb7-6"><a href="modelado-predictivo.html#cb7-6" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">&quot;point&quot;</span>, <span class="at">shape =</span> <span class="dv">18</span>, <span class="at">size =</span> <span class="fl">4.5</span>, <span class="at">color =</span> COLOR_WON) <span class="sc">+</span></span>
+<span id="cb7-7"><a href="modelado-predictivo.html#cb7-7" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;F1 de la clase won (validación cruzada)&quot;</span>, <span class="at">y =</span> <span class="cn">NULL</span>,</span>
+<span id="cb7-8"><a href="modelado-predictivo.html#cb7-8" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">&quot;Desempeño por modelo (◆ = media)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb7-9"><a href="modelado-predictivo.html#cb7-9" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">11</span>) <span class="sc">+</span></span>
+<span id="cb7-10"><a href="modelado-predictivo.html#cb7-10" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-8-1.png" alt="" width="816" style="display: block; margin: auto;" /></p>
+<p>En validación cruzada, CatBoost vuelve a obtener el mayor F1 medio (0.9929 ± 0.0036), seguido del Árbol de Decisión (0.9940 ± 0.0032), Random Forest (0.9884 ± 0.0062) y la Regresión Logística (0.9658 ± 0.0083). La línea base de la clase mayoritaria queda en una exactitud de 0.522 y un AUC de 0.500, de modo que los cuatro modelos capturan señal real. Las brechas entre entrenamiento y validación son pequeñas en todos (entre 0.003 y 0.008), así que no hay sobreajuste preocupante. En el gráfico, los tres modelos basados en árboles se solapan casi por completo y la regresión logística queda claramente por debajo. CatBoost tiene además el AUC-ROC más alto y estable (0.9993 ± 0.0005, frente a 0.9940 ± 0.0034 del árbol).</p>
+<div id="las-diferencias-entre-modelos-son-reales-o-son-ruido" class="section level3 hasAnchor" number="3.6.1">
+<h3><span class="header-section-number">3.6.1</span> ¿Las diferencias entre modelos son reales o son ruido?<a href="modelado-predictivo.html#las-diferencias-entre-modelos-son-reales-o-son-ruido" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Como todos los modelos se evalúan sobre <strong>las mismas 15 particiones</strong>, se puede comparar el F1 de CatBoost con el de cada uno de los demás, partición por partición (prueba de rangos con signo de Wilcoxon). Es una guía, no una prueba exacta: las particiones de la validación cruzada comparten datos entre sí, lo que hace los p-valores algo optimistas. Cuando dos modelos empatan en todas las particiones, el p-valor se reporta como 1.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="modelado-predictivo.html#cb8-1" tabindex="-1"></a>MODELO <span class="ot">&lt;-</span> <span class="st">&quot;CatBoost&quot;</span></span>
+<span id="cb8-2"><a href="modelado-predictivo.html#cb8-2" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="modelado-predictivo.html#cb8-3" tabindex="-1"></a>comp <span class="ot">&lt;-</span> <span class="fu">map_dfr</span>(<span class="fu">setdiff</span>(reales, MODELO), <span class="cf">function</span>(n) {</span>
+<span id="cb8-4"><a href="modelado-predictivo.html#cb8-4" tabindex="-1"></a>  d <span class="ot">&lt;-</span> cv_res[[MODELO]]<span class="sc">$</span>f1 <span class="sc">-</span> cv_res[[n]]<span class="sc">$</span>f1</span>
+<span id="cb8-5"><a href="modelado-predictivo.html#cb8-5" tabindex="-1"></a>  p <span class="ot">&lt;-</span> <span class="fu">tryCatch</span>(<span class="fu">suppressWarnings</span>(<span class="fu">wilcox.test</span>(d, <span class="at">mu =</span> <span class="dv">0</span>, <span class="at">exact =</span> <span class="cn">FALSE</span>)<span class="sc">$</span>p.value),</span>
+<span id="cb8-6"><a href="modelado-predictivo.html#cb8-6" tabindex="-1"></a>                <span class="at">error =</span> <span class="cf">function</span>(e) <span class="dv">1</span>)          <span class="co"># todas las diferencias son exactamente cero</span></span>
+<span id="cb8-7"><a href="modelado-predictivo.html#cb8-7" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.na</span>(p)) p <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb8-8"><a href="modelado-predictivo.html#cb8-8" tabindex="-1"></a>  <span class="fu">tibble</span>(<span class="at">Modelo =</span> n, <span class="at">dif =</span> <span class="fu">mean</span>(d), <span class="at">gana =</span> <span class="fu">mean</span>(d <span class="sc">&gt;=</span> <span class="dv">0</span>) <span class="sc">*</span> <span class="dv">100</span>, <span class="at">p =</span> p)</span>
+<span id="cb8-9"><a href="modelado-predictivo.html#cb8-9" tabindex="-1"></a>})</span>
+<span id="cb8-10"><a href="modelado-predictivo.html#cb8-10" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="modelado-predictivo.html#cb8-11" tabindex="-1"></a>comp <span class="sc">%&gt;%</span></span>
+<span id="cb8-12"><a href="modelado-predictivo.html#cb8-12" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">c</span>(dif, p), <span class="sc">~</span> <span class="fu">round</span>(.x, <span class="dv">4</span>)), <span class="at">gana =</span> <span class="fu">round</span>(gana, <span class="dv">1</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb8-13"><a href="modelado-predictivo.html#cb8-13" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">`</span><span class="at">Dif. media de F1 (CatBoost − modelo)</span><span class="st">`</span> <span class="ot">=</span> dif,</span>
+<span id="cb8-14"><a href="modelado-predictivo.html#cb8-14" tabindex="-1"></a>         <span class="st">`</span><span class="at">% de particiones donde CatBoost gana o empata</span><span class="st">`</span> <span class="ot">=</span> gana,</span>
+<span id="cb8-15"><a href="modelado-predictivo.html#cb8-15" tabindex="-1"></a>         <span class="st">`</span><span class="at">p (Wilcoxon)</span><span class="st">`</span> <span class="ot">=</span> p) <span class="sc">%&gt;%</span></span>
+<span id="cb8-16"><a href="modelado-predictivo.html#cb8-16" tabindex="-1"></a>  <span class="fu">tabla_bonita</span>()</span></code></pre></div>
+<table class="table table-striped table-hover table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;">
+Modelo
+</th>
+<th style="text-align:center;">
+Dif. media de F1 (CatBoost − modelo)
+</th>
+<th style="text-align:center;">
+% de particiones donde CatBoost gana o empata
+</th>
+<th style="text-align:center;">
+p (Wilcoxon)
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+Regresión Logística
+</td>
+<td style="text-align:center;">
+0.0271
+</td>
+<td style="text-align:center;">
+100.0
+</td>
+<td style="text-align:center;">
+0.0007
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Árbol de Decisión
+</td>
+<td style="text-align:center;">
+-0.0011
+</td>
+<td style="text-align:center;">
+40.0
+</td>
+<td style="text-align:center;">
+0.2443
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Random Forest
+</td>
+<td style="text-align:center;">
+0.0044
+</td>
+<td style="text-align:center;">
+93.3
+</td>
+<td style="text-align:center;">
+0.0026
+</td>
+</tr>
+</tbody>
+</table>
+<p>CatBoost supera de forma significativa a la Regresión Logística (diferencia media de F1 de 0.0271; gana o empata en el 100 % de las particiones; p = &lt; 0.001) y, con un margen mínimo, a Random Forest (0.0044; p = 0.003). No se distingue del Árbol de Decisión (-0.0011; p = 0.244). Como las particiones comparten datos, los p-valores son algo optimistas, y la ventaja sobre Random Forest debe tomarse como marginal. Lo que sí indican los resultados es que la señal no es puramente aditiva: la regresión logística, que suma efectos independientes, queda unos 3 puntos de F1 por debajo de los modelos de árboles, que pueden representar combinaciones de condiciones tácticas. Entre los modelos de árboles las diferencias son demasiado pequeñas para declarar un ganador claro. Se selecciona CatBoost por tener el F1 medio más alto con la menor variabilidad entre particiones y el mejor AUC, algo útil porque el dashboard mostrará probabilidades.</p>
+</div>
+</div>
+<div id="modelo-final" class="section level2 hasAnchor" number="3.7">
+<h2><span class="header-section-number">3.7</span> Modelo final<a href="modelado-predictivo.html#modelo-final" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Con CatBoost seleccionado, se entrena el modelo sobre el conjunto de entrenamiento y se guarda (más abajo) en el formato nativo de CatBoost. Como en R la codificación <em>One-Hot</em> es una función (<code>codificar()</code>), el dashboard debe aplicarla a las categorías originales (<code>t</code>, <code>f</code>, <code>g</code>, <code>l</code>, …) antes de predecir; por eso se guardan también los niveles de cada variable.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="modelado-predictivo.html#cb9-1" tabindex="-1"></a>pipeline_ganador <span class="ot">&lt;-</span> <span class="fu">ajustar</span>(<span class="st">&quot;CatBoost&quot;</span>, X_train, y_train)</span></code></pre></div>
+</div>
+<div id="evaluación-en-el-conjunto-de-prueba" class="section level2 hasAnchor" number="3.8">
+<h2><span class="header-section-number">3.8</span> Evaluación en el conjunto de prueba<a href="modelado-predictivo.html#evaluaci%C3%B3n-en-el-conjunto-de-prueba" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Hasta aquí el conjunto de prueba solo sirvió para la comparación preliminar. Se evalúa ahora el modelo final: la <strong>matriz de confusión</strong> muestra cuántas posiciones de cada clase se clasifican bien y en qué dirección se equivoca el modelo (un falso <em>won</em> es una victoria del peón que el modelo anticipa y no ocurre; un falso <em>nowin</em> es la contraria), y la <strong>curva ROC</strong> resume el desempeño para todos los umbrales de decisión. Como el conjunto de prueba es pequeño, la exactitud se acompaña de un intervalo bootstrap al 95 %.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="modelado-predictivo.html#cb10-1" tabindex="-1"></a>p_test <span class="ot">&lt;-</span> <span class="fu">prob_won</span>(pipeline_ganador, X_test)</span>
+<span id="cb10-2"><a href="modelado-predictivo.html#cb10-2" tabindex="-1"></a>y_pred <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">ifelse</span>(p_test <span class="sc">&gt;=</span> <span class="fl">0.5</span>, <span class="st">&quot;won&quot;</span>, <span class="st">&quot;nowin&quot;</span>), <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;nowin&quot;</span>, <span class="st">&quot;won&quot;</span>))</span>
+<span id="cb10-3"><a href="modelado-predictivo.html#cb10-3" tabindex="-1"></a>mask_err <span class="ot">&lt;-</span> y_pred <span class="sc">!=</span> y_test</span>
+<span id="cb10-4"><a href="modelado-predictivo.html#cb10-4" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="modelado-predictivo.html#cb10-5" tabindex="-1"></a>mt_test <span class="ot">&lt;-</span> <span class="fu">metricas</span>(y_test, p_test)</span>
+<span id="cb10-6"><a href="modelado-predictivo.html#cb10-6" tabindex="-1"></a>metricas_test <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">Accuracy =</span> mt_test[[<span class="st">&quot;accuracy&quot;</span>]], Precisión <span class="ot">=</span> mt_test[[<span class="st">&quot;precision&quot;</span>]],</span>
+<span id="cb10-7"><a href="modelado-predictivo.html#cb10-7" tabindex="-1"></a>                   <span class="at">Recall =</span> mt_test[[<span class="st">&quot;recall&quot;</span>]], <span class="at">F1 =</span> mt_test[[<span class="st">&quot;f1&quot;</span>]], <span class="st">`</span><span class="at">AUC-ROC</span><span class="st">`</span> <span class="ot">=</span> mt_test[[<span class="st">&quot;auc&quot;</span>]])</span>
+<span id="cb10-8"><a href="modelado-predictivo.html#cb10-8" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="modelado-predictivo.html#cb10-9" tabindex="-1"></a><span class="fu">as.data.frame</span>(<span class="fu">t</span>(<span class="fu">round</span>(metricas_test, <span class="dv">4</span>)), <span class="at">row.names =</span> <span class="st">&quot;CatBoost (prueba)&quot;</span>) <span class="sc">%&gt;%</span> <span class="fu">tabla_bonita</span>()</span></code></pre></div>
+<table class="table table-striped table-hover table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:center;">
+Accuracy
+</th>
+<th style="text-align:center;">
+Precisión
+</th>
+<th style="text-align:center;">
+Recall
+</th>
+<th style="text-align:center;">
+F1
+</th>
+<th style="text-align:center;">
+AUC-ROC
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+CatBoost (prueba)
+</td>
+<td style="text-align:center;">
+0.989
+</td>
+<td style="text-align:center;">
+0.991
+</td>
+<td style="text-align:center;">
+0.988
+</td>
+<td style="text-align:center;">
+0.9895
+</td>
+<td style="text-align:center;">
+0.9998
+</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="modelado-predictivo.html#cb11-1" tabindex="-1"></a><span class="co"># Matriz de confusión</span></span>
+<span id="cb11-2"><a href="modelado-predictivo.html#cb11-2" tabindex="-1"></a>conf <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">table</span>(<span class="at">Real =</span> y_test, <span class="at">Predicho =</span> y_pred))</span>
+<span id="cb11-3"><a href="modelado-predictivo.html#cb11-3" tabindex="-1"></a>g_conf <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(conf, <span class="fu">aes</span>(<span class="at">x =</span> Predicho, <span class="at">y =</span> <span class="fu">fct_rev</span>(Real), <span class="at">fill =</span> Freq)) <span class="sc">+</span></span>
+<span id="cb11-4"><a href="modelado-predictivo.html#cb11-4" tabindex="-1"></a>  <span class="fu">geom_tile</span>(<span class="at">color =</span> <span class="st">&quot;white&quot;</span>) <span class="sc">+</span></span>
+<span id="cb11-5"><a href="modelado-predictivo.html#cb11-5" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> Freq), <span class="at">size =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb11-6"><a href="modelado-predictivo.html#cb11-6" tabindex="-1"></a>  <span class="fu">scale_fill_gradient</span>(<span class="at">low =</span> <span class="st">&quot;#F0FFFF&quot;</span>, <span class="at">high =</span> COLOR_WON, <span class="at">guide =</span> <span class="st">&quot;none&quot;</span>) <span class="sc">+</span></span>
+<span id="cb11-7"><a href="modelado-predictivo.html#cb11-7" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Matriz de confusión (prueba)&quot;</span>, <span class="at">x =</span> <span class="st">&quot;Predicho&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Real&quot;</span>) <span class="sc">+</span></span>
+<span id="cb11-8"><a href="modelado-predictivo.html#cb11-8" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">11</span>) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span>
+<span id="cb11-9"><a href="modelado-predictivo.html#cb11-9" tabindex="-1"></a></span>
+<span id="cb11-10"><a href="modelado-predictivo.html#cb11-10" tabindex="-1"></a><span class="co"># Curva ROC</span></span>
+<span id="cb11-11"><a href="modelado-predictivo.html#cb11-11" tabindex="-1"></a>o <span class="ot">&lt;-</span> <span class="fu">order</span>(p_test, <span class="at">decreasing =</span> <span class="cn">TRUE</span>); ys <span class="ot">&lt;-</span> (y_test <span class="sc">==</span> POS)[o]</span>
+<span id="cb11-12"><a href="modelado-predictivo.html#cb11-12" tabindex="-1"></a>roc <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">fpr =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fu">cumsum</span>(<span class="sc">!</span>ys) <span class="sc">/</span> <span class="fu">sum</span>(<span class="sc">!</span>ys)), <span class="at">tpr =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fu">cumsum</span>(ys) <span class="sc">/</span> <span class="fu">sum</span>(ys)))</span>
+<span id="cb11-13"><a href="modelado-predictivo.html#cb11-13" tabindex="-1"></a>g_roc <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(roc, <span class="fu">aes</span>(fpr, tpr)) <span class="sc">+</span></span>
+<span id="cb11-14"><a href="modelado-predictivo.html#cb11-14" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>) <span class="sc">+</span></span>
+<span id="cb11-15"><a href="modelado-predictivo.html#cb11-15" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> COLOR_WON, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb11-16"><a href="modelado-predictivo.html#cb11-16" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="at">x =</span> <span class="fl">0.75</span>, <span class="at">y =</span> <span class="fl">0.1</span>, <span class="at">label =</span> <span class="fu">sprintf</span>(<span class="st">&quot;AUC = %.3f&quot;</span>, mt_test[[<span class="st">&quot;auc&quot;</span>]])) <span class="sc">+</span></span>
+<span id="cb11-17"><a href="modelado-predictivo.html#cb11-17" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Curva ROC (prueba)&quot;</span>, <span class="at">x =</span> <span class="st">&quot;Tasa de falsos positivos&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Tasa de verdaderos positivos&quot;</span>) <span class="sc">+</span></span>
+<span id="cb11-18"><a href="modelado-predictivo.html#cb11-18" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">11</span>) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span>
+<span id="cb11-19"><a href="modelado-predictivo.html#cb11-19" tabindex="-1"></a></span>
+<span id="cb11-20"><a href="modelado-predictivo.html#cb11-20" tabindex="-1"></a>g_conf <span class="sc">+</span> g_roc</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-14-1.png" alt="" width="960" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="modelado-predictivo.html#cb12-1" tabindex="-1"></a><span class="co"># Reporte por clase</span></span>
+<span id="cb12-2"><a href="modelado-predictivo.html#cb12-2" tabindex="-1"></a><span class="fu">map_dfr</span>(<span class="fu">c</span>(<span class="st">&quot;nowin&quot;</span>, <span class="st">&quot;won&quot;</span>), <span class="cf">function</span>(cl) {</span>
+<span id="cb12-3"><a href="modelado-predictivo.html#cb12-3" tabindex="-1"></a>  tp <span class="ot">&lt;-</span> <span class="fu">sum</span>(y_pred <span class="sc">==</span> cl <span class="sc">&amp;</span> y_test <span class="sc">==</span> cl); fp_ <span class="ot">&lt;-</span> <span class="fu">sum</span>(y_pred <span class="sc">==</span> cl <span class="sc">&amp;</span> y_test <span class="sc">!=</span> cl); fn <span class="ot">&lt;-</span> <span class="fu">sum</span>(y_pred <span class="sc">!=</span> cl <span class="sc">&amp;</span> y_test <span class="sc">==</span> cl)</span>
+<span id="cb12-4"><a href="modelado-predictivo.html#cb12-4" tabindex="-1"></a>  p <span class="ot">&lt;-</span> tp <span class="sc">/</span> (tp <span class="sc">+</span> fp_); r <span class="ot">&lt;-</span> tp <span class="sc">/</span> (tp <span class="sc">+</span> fn)</span>
+<span id="cb12-5"><a href="modelado-predictivo.html#cb12-5" tabindex="-1"></a>  <span class="fu">tibble</span>(<span class="at">Clase =</span> cl, Precisión <span class="ot">=</span> p, <span class="at">Recall =</span> r, <span class="at">F1 =</span> <span class="dv">2</span> <span class="sc">*</span> p <span class="sc">*</span> r <span class="sc">/</span> (p <span class="sc">+</span> r), <span class="at">Soporte =</span> <span class="fu">sum</span>(y_test <span class="sc">==</span> cl))</span>
+<span id="cb12-6"><a href="modelado-predictivo.html#cb12-6" tabindex="-1"></a>}) <span class="sc">%&gt;%</span> <span class="fu">tabla_bonita</span>(<span class="at">digits =</span> <span class="dv">4</span>)</span></code></pre></div>
+<table class="table table-striped table-hover table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;">
+Clase
+</th>
+<th style="text-align:center;">
+Precisión
+</th>
+<th style="text-align:center;">
+Recall
+</th>
+<th style="text-align:center;">
+F1
+</th>
+<th style="text-align:center;">
+Soporte
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+nowin
+</td>
+<td style="text-align:center;">
+0.9869
+</td>
+<td style="text-align:center;">
+0.9902
+</td>
+<td style="text-align:center;">
+0.9885
+</td>
+<td style="text-align:center;">
+305
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+won
+</td>
+<td style="text-align:center;">
+0.9910
+</td>
+<td style="text-align:center;">
+0.9880
+</td>
+<td style="text-align:center;">
+0.9895
+</td>
+<td style="text-align:center;">
+334
+</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="modelado-predictivo.html#cb13-1" tabindex="-1"></a><span class="co"># Incertidumbre de la exactitud: intervalo bootstrap (2000 remuestreos del conjunto de prueba)</span></span>
+<span id="cb13-2"><a href="modelado-predictivo.html#cb13-2" tabindex="-1"></a><span class="fu">set.seed</span>(SEED)</span>
+<span id="cb13-3"><a href="modelado-predictivo.html#cb13-3" tabindex="-1"></a>acierto <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="sc">!</span>mask_err)</span>
+<span id="cb13-4"><a href="modelado-predictivo.html#cb13-4" tabindex="-1"></a>boots <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">2000</span>, <span class="fu">mean</span>(<span class="fu">sample</span>(acierto, <span class="fu">length</span>(acierto), <span class="at">replace =</span> <span class="cn">TRUE</span>)))</span>
+<span id="cb13-5"><a href="modelado-predictivo.html#cb13-5" tabindex="-1"></a>ic_acc <span class="ot">&lt;-</span> <span class="fu">quantile</span>(boots, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span>
+<span id="cb13-6"><a href="modelado-predictivo.html#cb13-6" tabindex="-1"></a>n_fw <span class="ot">&lt;-</span> <span class="fu">sum</span>(y_pred <span class="sc">==</span> <span class="st">&quot;won&quot;</span> <span class="sc">&amp;</span> mask_err); n_fn <span class="ot">&lt;-</span> <span class="fu">sum</span>(y_pred <span class="sc">==</span> <span class="st">&quot;nowin&quot;</span> <span class="sc">&amp;</span> mask_err)</span></code></pre></div>
+<p>En las 639 posiciones de prueba, el modelo acierta 632 y falla 7 (exactitud = 0.9890, con intervalo bootstrap al 95 % de [0.9797, 0.9969]). Hay 3 falso(s) <em>won</em> (una posición <code>nowin</code> que el modelo predice como victoria del peón) y 4 falso(s) <em>nowin</em>. La precisión de <code>won</code> es 0.9910, el recall 0.9880 y el AUC-ROC es 0.9998. Con un conjunto de prueba tan pequeño, una posición de diferencia mueve la exactitud en 0.0016; por eso el resultado debe leerse junto con el intervalo bootstrap.</p>
+</div>
+<div id="interpretabilidad-qué-variables-usa-el-modelo" class="section level2 hasAnchor" number="3.9">
+<h2><span class="header-section-number">3.9</span> Interpretabilidad: ¿qué variables usa el modelo?<a href="modelado-predictivo.html#interpretabilidad-qu%C3%A9-variables-usa-el-modelo" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>La <strong>importancia por permutación</strong> mide cuánto cae el F1 en el conjunto de prueba al barajar al azar los valores de una variable: si el modelo depende de ella, el desempeño empeora. Se calcula sobre el modelo completo, de modo que cada variable se permuta con sus categorías originales. Es una medida de la dependencia del <em>modelo</em>, no una relación causal.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="modelado-predictivo.html#cb14-1" tabindex="-1"></a>f1_base <span class="ot">&lt;-</span> <span class="fu">unname</span>(mt_test[<span class="st">&quot;f1&quot;</span>])</span>
+<span id="cb14-2"><a href="modelado-predictivo.html#cb14-2" tabindex="-1"></a>f1_won  <span class="ot">&lt;-</span> <span class="cf">function</span>(Xd) <span class="fu">unname</span>(<span class="fu">metricas</span>(y_test, <span class="fu">prob_won</span>(pipeline_ganador, Xd))[<span class="st">&quot;f1&quot;</span>])</span>
+<span id="cb14-3"><a href="modelado-predictivo.html#cb14-3" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="modelado-predictivo.html#cb14-4" tabindex="-1"></a><span class="fu">set.seed</span>(SEED)</span>
+<span id="cb14-5"><a href="modelado-predictivo.html#cb14-5" tabindex="-1"></a>imp <span class="ot">&lt;-</span> <span class="fu">map_dfr</span>(<span class="fu">names</span>(X_test), <span class="cf">function</span>(v) {</span>
+<span id="cb14-6"><a href="modelado-predictivo.html#cb14-6" tabindex="-1"></a>  caidas <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">20</span>, { Xp <span class="ot">&lt;-</span> X_test; Xp[[v]] <span class="ot">&lt;-</span> <span class="fu">sample</span>(Xp[[v]]); f1_base <span class="sc">-</span> <span class="fu">f1_won</span>(Xp) })</span>
+<span id="cb14-7"><a href="modelado-predictivo.html#cb14-7" tabindex="-1"></a>  <span class="fu">tibble</span>(<span class="at">variable =</span> v, <span class="at">caida =</span> <span class="fu">mean</span>(caidas), <span class="at">sd =</span> <span class="fu">sd</span>(caidas))</span>
+<span id="cb14-8"><a href="modelado-predictivo.html#cb14-8" tabindex="-1"></a>}) <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(<span class="fu">desc</span>(caida))</span>
+<span id="cb14-9"><a href="modelado-predictivo.html#cb14-9" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="modelado-predictivo.html#cb14-10" tabindex="-1"></a>imp <span class="sc">%&gt;%</span> <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">10</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb14-11"><a href="modelado-predictivo.html#cb14-11" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> caida, <span class="at">y =</span> <span class="fu">fct_reorder</span>(variable, caida))) <span class="sc">+</span></span>
+<span id="cb14-12"><a href="modelado-predictivo.html#cb14-12" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> COLOR_WON) <span class="sc">+</span></span>
+<span id="cb14-13"><a href="modelado-predictivo.html#cb14-13" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">xmin =</span> caida <span class="sc">-</span> sd, <span class="at">xmax =</span> caida <span class="sc">+</span> sd), <span class="at">width =</span> .<span class="dv">3</span>, <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>) <span class="sc">+</span></span>
+<span id="cb14-14"><a href="modelado-predictivo.html#cb14-14" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Caída del F1 al permutar la variable&quot;</span>, <span class="at">y =</span> <span class="cn">NULL</span>,</span>
+<span id="cb14-15"><a href="modelado-predictivo.html#cb14-15" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">&quot;Importancia por permutación (top 10)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb14-16"><a href="modelado-predictivo.html#cb14-16" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">11</span>) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-17-1.png" alt="" width="720" style="display: block; margin: auto;" /></p>
+<div id="coincide-con-lo-que-mostró-el-eda" class="section level3 hasAnchor" number="3.9.1">
+<h3><span class="header-section-number">3.9.1</span> ¿Coincide con lo que mostró el EDA?<a href="modelado-predictivo.html#coincide-con-lo-que-mostr%C3%B3-el-eda" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Se compara con la V de Cramér de cada variable con <code>class</code>.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="modelado-predictivo.html#cb15-1" tabindex="-1"></a>cramer_mod <span class="ot">&lt;-</span> <span class="cf">function</span>(a, b) {</span>
+<span id="cb15-2"><a href="modelado-predictivo.html#cb15-2" tabindex="-1"></a>  tbl <span class="ot">&lt;-</span> <span class="fu">table</span>(a, b)</span>
+<span id="cb15-3"><a href="modelado-predictivo.html#cb15-3" tabindex="-1"></a>  chi2 <span class="ot">&lt;-</span> <span class="fu">suppressWarnings</span>(<span class="fu">chisq.test</span>(tbl)<span class="sc">$</span>statistic)</span>
+<span id="cb15-4"><a href="modelado-predictivo.html#cb15-4" tabindex="-1"></a>  <span class="fu">sqrt</span>(<span class="fu">as.numeric</span>(chi2) <span class="sc">/</span> (<span class="fu">sum</span>(tbl) <span class="sc">*</span> (<span class="fu">min</span>(<span class="fu">dim</span>(tbl)) <span class="sc">-</span> <span class="dv">1</span>)))</span>
+<span id="cb15-5"><a href="modelado-predictivo.html#cb15-5" tabindex="-1"></a>}</span>
+<span id="cb15-6"><a href="modelado-predictivo.html#cb15-6" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="modelado-predictivo.html#cb15-7" tabindex="-1"></a>v_cramer <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">sapply</span>(<span class="fu">names</span>(X), <span class="cf">function</span>(v) <span class="fu">cramer_mod</span>(X[[v]], y)), <span class="at">decreasing =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb15-8"><a href="modelado-predictivo.html#cb15-8" tabindex="-1"></a>top5_eda <span class="ot">&lt;-</span> <span class="fu">names</span>(v_cramer)[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span>
+<span id="cb15-9"><a href="modelado-predictivo.html#cb15-9" tabindex="-1"></a>top5_mod <span class="ot">&lt;-</span> imp<span class="sc">$</span>variable[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span>
+<span id="cb15-10"><a href="modelado-predictivo.html#cb15-10" tabindex="-1"></a>solap <span class="ot">&lt;-</span> <span class="fu">length</span>(<span class="fu">intersect</span>(top5_eda, top5_mod))</span>
+<span id="cb15-11"><a href="modelado-predictivo.html#cb15-11" tabindex="-1"></a></span>
+<span id="cb15-12"><a href="modelado-predictivo.html#cb15-12" tabindex="-1"></a><span class="fu">tibble</span>(<span class="st">`</span><span class="at">Top 5 V de Cramér (EDA)</span><span class="st">`</span> <span class="ot">=</span> top5_eda, <span class="st">`</span><span class="at">Top 5 permutación (modelo)</span><span class="st">`</span> <span class="ot">=</span> top5_mod) <span class="sc">%&gt;%</span> <span class="fu">tabla_bonita</span>()</span></code></pre></div>
+<table class="table table-striped table-hover table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;">
+Top 5 V de Cramér (EDA)
+</th>
+<th style="text-align:center;">
+Top 5 permutación (modelo)
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+rimmx
+</td>
+<td style="text-align:center;">
+bknck
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+wxqsq
+</td>
+<td style="text-align:center;">
+wxqsq
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+bknck
+</td>
+<td style="text-align:center;">
+rimmx
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+wkxbp
+</td>
+<td style="text-align:center;">
+bkpos
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+katri
+</td>
+<td style="text-align:center;">
+wkxbq
+</td>
+</tr>
+</tbody>
+</table>
+<p>Tres variables concentran casi toda la importancia: bknck (caída del F1 de ≈ 0.202 al permutarla), wxqsq (≈ 0.197) y rimmx (≈ 0.147). Les siguen, muy por debajo, bkpos (≈ 0.040), wkxbq (≈ 0.029) y katri (≈ 0.029). 3 de las 5 variables principales del modelo coinciden con las de mayor V de Cramér del EDA, lo que da coherencia entre ambos análisis. Si alguna variable del EDA queda fuera del ranking del modelo, una explicación posible es que comparte información con otras (por ejemplo, <code>wkxbp</code> con <code>whxbp</code> y <code>wkxcr</code>, con V de 0.67 y 0.56), por lo que el modelo puede apoyarse en cualquiera de ellas. La permutación mide cuánto depende el modelo de una variable, no en qué dirección empuja; esa lectura sigue siendo la del EDA: <code>rimmx = t</code> solo aparece en posiciones <code>won</code>, y el control blanco de a8 (<code>wxqsq</code>) y el jaque al rey negro (<code>bknck</code>) se asocian a <code>nowin</code>.</p>
+</div>
+</div>
+<div id="estabilidad-ante-distintas-particiones" class="section level2 hasAnchor" number="3.10">
+<h2><span class="header-section-number">3.10</span> Estabilidad ante distintas particiones<a href="modelado-predictivo.html#estabilidad-ante-distintas-particiones" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>La exactitud de prueba depende de qué 20 % de las posiciones cayó en la prueba. Para ver cuánto varía, se repite la partición con 10 semillas distintas, reentrenando el modelo cada vez. Este ejercicio mide la dispersión.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="modelado-predictivo.html#cb16-1" tabindex="-1"></a>est <span class="ot">&lt;-</span> <span class="fu">map_dfr</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">9</span>, <span class="cf">function</span>(s) {</span>
+<span id="cb16-2"><a href="modelado-predictivo.html#cb16-2" tabindex="-1"></a>  it <span class="ot">&lt;-</span> <span class="fu">particion</span>(y, <span class="fl">0.2</span>, s)</span>
+<span id="cb16-3"><a href="modelado-predictivo.html#cb16-3" tabindex="-1"></a>  m  <span class="ot">&lt;-</span> <span class="fu">ajustar</span>(<span class="st">&quot;CatBoost&quot;</span>, X[<span class="sc">-</span>it, ], y[<span class="sc">-</span>it])</span>
+<span id="cb16-4"><a href="modelado-predictivo.html#cb16-4" tabindex="-1"></a>  mt <span class="ot">&lt;-</span> <span class="fu">metricas</span>(y[it], <span class="fu">prob_won</span>(m, X[it, ]))</span>
+<span id="cb16-5"><a href="modelado-predictivo.html#cb16-5" tabindex="-1"></a>  <span class="fu">tibble</span>(<span class="at">accuracy =</span> <span class="fu">unname</span>(mt[<span class="st">&quot;accuracy&quot;</span>]), <span class="at">f1 =</span> <span class="fu">unname</span>(mt[<span class="st">&quot;f1&quot;</span>]))</span>
+<span id="cb16-6"><a href="modelado-predictivo.html#cb16-6" tabindex="-1"></a>})</span>
+<span id="cb16-7"><a href="modelado-predictivo.html#cb16-7" tabindex="-1"></a></span>
+<span id="cb16-8"><a href="modelado-predictivo.html#cb16-8" tabindex="-1"></a><span class="fu">ggplot</span>(est, <span class="fu">aes</span>(accuracy)) <span class="sc">+</span></span>
+<span id="cb16-9"><a href="modelado-predictivo.html#cb16-9" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">8</span>, <span class="at">fill =</span> COLOR_NOWIN, <span class="at">color =</span> <span class="st">&quot;white&quot;</span>) <span class="sc">+</span></span>
+<span id="cb16-10"><a href="modelado-predictivo.html#cb16-10" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">mean</span>(est<span class="sc">$</span>accuracy), <span class="at">color =</span> COLOR_WON, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb16-11"><a href="modelado-predictivo.html#cb16-11" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Accuracy de prueba&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Particiones&quot;</span>, <span class="at">title =</span> <span class="st">&quot;Variación de la exactitud con 10 particiones&quot;</span>) <span class="sc">+</span></span>
+<span id="cb16-12"><a href="modelado-predictivo.html#cb16-12" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">11</span>) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-20-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="modelado-predictivo.html#cb17-1" tabindex="-1"></a><span class="fu">tibble</span>(estadístico <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;mean&quot;</span>, <span class="st">&quot;std&quot;</span>, <span class="st">&quot;min&quot;</span>, <span class="st">&quot;max&quot;</span>),</span>
+<span id="cb17-2"><a href="modelado-predictivo.html#cb17-2" tabindex="-1"></a>       <span class="at">accuracy =</span> <span class="fu">c</span>(<span class="fu">mean</span>(est<span class="sc">$</span>accuracy), <span class="fu">sd</span>(est<span class="sc">$</span>accuracy), <span class="fu">min</span>(est<span class="sc">$</span>accuracy), <span class="fu">max</span>(est<span class="sc">$</span>accuracy)),</span>
+<span id="cb17-3"><a href="modelado-predictivo.html#cb17-3" tabindex="-1"></a>       <span class="at">f1 =</span> <span class="fu">c</span>(<span class="fu">mean</span>(est<span class="sc">$</span>f1), <span class="fu">sd</span>(est<span class="sc">$</span>f1), <span class="fu">min</span>(est<span class="sc">$</span>f1), <span class="fu">max</span>(est<span class="sc">$</span>f1))) <span class="sc">%&gt;%</span></span>
+<span id="cb17-4"><a href="modelado-predictivo.html#cb17-4" tabindex="-1"></a>  <span class="fu">tabla_bonita</span>(<span class="at">digits =</span> <span class="dv">4</span>)</span></code></pre></div>
+<table class="table table-striped table-hover table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;">
+estadístico
+</th>
+<th style="text-align:center;">
+accuracy
+</th>
+<th style="text-align:center;">
+f1
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+mean
+</td>
+<td style="text-align:center;">
+0.9915
+</td>
+<td style="text-align:center;">
+0.9919
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+std
+</td>
+<td style="text-align:center;">
+0.0031
+</td>
+<td style="text-align:center;">
+0.0029
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+min
+</td>
+<td style="text-align:center;">
+0.9875
+</td>
+<td style="text-align:center;">
+0.9880
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+max
+</td>
+<td style="text-align:center;">
+0.9969
+</td>
+<td style="text-align:center;">
+0.9970
+</td>
+</tr>
+</tbody>
+</table>
+<p>Con 10 particiones distintas, la exactitud media fue 0.9915 (desviación 0.0031), con valores entre 0.9875 y 0.9969. Coincide con la validación cruzada (0.9926) y permite comparar con la partición original (0.9890): el desempeño esperado del modelo es, por tanto, de ≈ 99.2 %.</p>
+</div>
+<div id="guardado-del-modelo" class="section level2 hasAnchor" number="3.11">
+<h2><span class="header-section-number">3.11</span> Guardado del modelo<a href="modelado-predictivo.html#guardado-del-modelo" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Se guarda el modelo en el formato nativo de CatBoost (<code>.cbm</code>) y un archivo <code>modelo_meta.json</code> con las variables, los niveles de cada una y las métricas.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="modelado-predictivo.html#cb18-1" tabindex="-1"></a><span class="fu">catboost.save_model</span>(pipeline_ganador<span class="sc">$</span>fit, <span class="st">&quot;modelo_ajedrez.cbm&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="modelado-predictivo.html#cb20-1" tabindex="-1"></a>meta <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb20-2"><a href="modelado-predictivo.html#cb20-2" tabindex="-1"></a>  <span class="at">clase_positiva =</span> POS,</span>
+<span id="cb20-3"><a href="modelado-predictivo.html#cb20-3" tabindex="-1"></a>  <span class="at">variables =</span> <span class="fu">names</span>(X),</span>
+<span id="cb20-4"><a href="modelado-predictivo.html#cb20-4" tabindex="-1"></a>  <span class="at">niveles =</span> <span class="fu">lapply</span>(X, levels),</span>
+<span id="cb20-5"><a href="modelado-predictivo.html#cb20-5" tabindex="-1"></a>  <span class="at">metricas_test =</span> <span class="fu">as.list</span>(<span class="fu">round</span>(metricas_test, <span class="dv">4</span>)),</span>
+<span id="cb20-6"><a href="modelado-predictivo.html#cb20-6" tabindex="-1"></a>  <span class="at">ic95_accuracy =</span> <span class="fu">as.numeric</span>(ic_acc)</span>
+<span id="cb20-7"><a href="modelado-predictivo.html#cb20-7" tabindex="-1"></a>)</span>
+<span id="cb20-8"><a href="modelado-predictivo.html#cb20-8" tabindex="-1"></a><span class="fu">write_json</span>(meta, <span class="st">&quot;modelo_meta.json&quot;</span>, <span class="at">auto_unbox =</span> <span class="cn">TRUE</span>, <span class="at">pretty =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb20-9"><a href="modelado-predictivo.html#cb20-9" tabindex="-1"></a></span>
+<span id="cb20-10"><a href="modelado-predictivo.html#cb20-10" tabindex="-1"></a><span class="co"># Comprobación: el modelo guardado reproduce las predicciones</span></span>
+<span id="cb20-11"><a href="modelado-predictivo.html#cb20-11" tabindex="-1"></a>cargado <span class="ot">&lt;-</span> <span class="fu">catboost.load_model</span>(<span class="st">&quot;modelo_ajedrez.cbm&quot;</span>)</span>
+<span id="cb20-12"><a href="modelado-predictivo.html#cb20-12" tabindex="-1"></a>p_cargado <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">catboost.predict</span>(cargado, <span class="fu">catboost.load_pool</span>(<span class="fu">codificar</span>(X_test)),</span>
+<span id="cb20-13"><a href="modelado-predictivo.html#cb20-13" tabindex="-1"></a>                                         <span class="at">prediction_type =</span> <span class="st">&quot;Probability&quot;</span>))</span>
+<span id="cb20-14"><a href="modelado-predictivo.html#cb20-14" tabindex="-1"></a><span class="fu">stopifnot</span>(<span class="fu">isTRUE</span>(<span class="fu">all.equal</span>(p_cargado, p_test)))</span></code></pre></div>
+</div>
+<div id="conclusiones-1" class="section level2 hasAnchor" number="3.12">
+<h2><span class="header-section-number">3.12</span> Conclusiones<a href="modelado-predictivo.html#conclusiones-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ol style="list-style-type: decimal">
+<li>Se compararon cuatro algoritmos con el mismo preprocesamiento (<em>One-Hot</em>) sobre 3.196 posiciones y 32 variables categóricas, con una partición estratificada 80/20 y validación cruzada repetida (5 × 3) sobre el 80 % de entrenamiento.</li>
+<li>CatBoost obtuvo el F1 medio más alto en validación cruzada (0.9929 ± 0.0036) y el mejor AUC-ROC (0.9993). Supera de forma significativa a la Regresión Logística y, marginalmente, a Random Forest, pero no se distingue del Árbol de Decisión. La línea base de la clase mayoritaria queda en una exactitud de 0.522.</li>
+<li>En el conjunto de prueba, el modelo final alcanza Accuracy = 0.9890, F1 = 0.9895 y AUC-ROC = 0.9998, con 7 errores en 639 posiciones (3 falso(s) <em>won</em> y 4 falso(s) <em>nowin</em>).</li>
+<li>Con 10 particiones distintas la exactitud media es 0.9915 (desviación 0.0031), por lo que el desempeño esperado es de ≈ 99.2 %.</li>
+<li>Las variables que más pesan en el modelo son bknck, wxqsq y rimmx. 3 de las 5 principales coinciden con las que el EDA identificó por V de Cramér.</li>
+<li>El modelo se guardó en <code>modelo_ajedrez.cbm</code>, junto con <code>modelo_meta.json</code>, para su uso en el dashboard.</li>
+<li><strong>Limitaciones.</strong> Las diferencias entre CatBoost y los otros modelos de árboles son pequeñas, y no se ajustaron hiperparámetros. Las variables fueron diseñadas por Shapiro como predicados de conocimiento experto sobre el final, no son mediciones libres de partidas reales; esto explica la alta separabilidad de las clases. El resultado describe qué tan bien se aprende esa codificación experta y no debe extrapolarse a partidas reales. Además, este trabajo usa los colores de UCI (peón negro, torre blanca) y lee <code>won</code> como “gana el bando del peón”, porque es lo que indican los datos (todas las posiciones <code>nowin</code> tienen <code>rimmx = f</code>). La tesis original de Shapiro (1983) usa los colores contrarios y UCI rotula las clases como “White-can-win”. Esto afecta la interpretación de las variables, no el desempeño del modelo.</li>
+</ol>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="análisis-exploratorio-de-datos-eda.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": "https://github.com/rstudio/bookdown-demo/edit/master/02-literature.Rmd",
+    "text": "Edit"
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["bookdown-demo.pdf", "bookdown-demo.epub"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

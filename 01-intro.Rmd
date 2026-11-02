@@ -30,6 +30,7 @@ library(knitr)
 library(shiny)
 library(shinyWidgets)
 library(plotly)
+library(kableExtra)
 ```
 
 Se hace la carga de los datos:
@@ -48,27 +49,67 @@ nombres <- c("wkblk", "wknwy", "wkna8", "wkona", "wkspr", "wkxbq", "wkxcr", "wkx
     "bknck", "bkovl", "bkpos", "btoeg","class")
 
 colnames(datos) <- nombres
-colnames(datos)
+
+data.frame(
+  N = 1:length(nombres),
+  Variable = nombres
+) %>%
+  kable(
+    align = "c",
+    row.names = FALSE
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed"),
+    full_width = FALSE,
+    position = "center"
+  )
 ```
 
 Realizamos una inspección inicial de los datos:
 
 ```{r}
-dim(datos)  
+dimensiones <- dim(datos)
+
+data.frame(
+  Filas = dimensiones[1],
+  Columnas = dimensiones[2]
+) %>%
+  kable(
+    caption = "Dimensiones del dataset",
+    align = "c",
+    row.names = FALSE
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed"),
+    full_width = FALSE,
+    position = "center"
+  )
 ```
 
 ```{r}
-str(datos)
-```
+estructura <- data.frame(
+  Variable = names(datos),
+  Tipo = sapply(datos, function(x) class(x)[1]),
+  row.names = NULL
+)
 
-```{r}
-summary(datos)
+estructura %>%
+  kable(
+    caption = "Estructura del dataset (str)",
+    align = "c",
+    row.names = FALSE
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed"),
+    full_width = FALSE,
+    position = "center"
+  ) %>%
+  scroll_box(width = "100%", height = "400px")
 ```
 
 Verificamos que no hayan datos faltantes o casillas vacías (NAs):
 
 ```{r}
-colSums(is.na(datos))
 missmap(datos)
 ```
 
@@ -80,7 +121,25 @@ Las variables de este dataset son categóricas (representan características del
 datos <- datos %>%
   mutate(across(-class, as.factor),
          class = as.factor(class))
-str(datos)
+estructura <- data.frame(
+  Variable = names(datos),
+  Tipo = sapply(datos, function(x) class(x)[1]),
+  row.names = NULL
+)
+
+estructura %>%
+  kable(
+    caption = "Estructura del dataset (str)",
+    align = "c",
+    row.names = FALSE
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed"),
+    full_width = FALSE,
+    position = "center"
+  ) %>%
+  scroll_box(width = "100%", height = "400px")
+
 ```
 
 
@@ -111,7 +170,7 @@ tabla_target <- datos %>%
     Etiqueta = paste0("n: ", Frecuencia, "<br>Porcentaje: ", Porcentaje, "%")
   )
 
-colores_class <- c("nowin" = "#F3BF97", "won" = "#1CE0D3")
+colores_class <- c("nowin" = "#40B5A0", "won" = "#008080")
 
 fig_bar <- plot_ly(
   data = tabla_target,
@@ -139,7 +198,7 @@ fig_bar <- layout(
 fig_bar
 ```
 
-En 1669 partidas, el 52.2%, resultó `won`, es decir que las blancas ganaron, y en 1527 partidas, el 47.8%, resultó `nowin`, es decir que el peón negro logró coronar o las negras consiguieron tablas; la diferencia entre ambas clases es de solo 4.4 puntos porcentuales, lo que indica que el dataset no tiene un sesgo significativo hacia ninguna clase.
+En 1669 posiciones, el 52.2 %, resultó ‘won’, es decir que el bando del peón (negras) ganó, y en 1527 posiciones, el 47.8 %, resultó ‘nowin’, es decir que las blancas (rey + torre) detuvieron al peón, ya sea con tablas o con victoria blanca; la diferencia entre ambas clases es de solo 4.4 puntos porcentuales, lo que indica que el dataset no tiene un sesgo significativo hacia ninguna clase.
 
 
 ## Análisis de las variables independientes
@@ -163,48 +222,11 @@ frecuencias <- datos %>%
 library(kableExtra)
 library(dplyr)
 library(tidyr)
-library(knitr)
-
-vars <- colnames(datos)[colnames(datos) != "class"]
-
-pares_reales <- data.frame(
-  variable = vars,
-  par = sapply(vars, function(v) {
-    niveles <- sort(unique(as.character(datos[[v]])))
-    paste(niveles, collapse = "/")
-  }),
-  stringsAsFactors = FALSE
-)
-
-pares_deseados <- list(
-  c("f", "t"),
-  c("n", "t"),
-  c("g", "l")
-)
-
-# Ternarias
-ternarias <- frecuencias %>%
-  group_by(variable) %>%
-  filter(n() == 3) %>%
-  ungroup() %>%
-  select(variable, valor, porcentaje) %>%
-  pivot_wider(names_from = valor, values_from = porcentaje, values_fill = 0)
-
-```
-
-```{r, results='asis', message=FALSE, warning=FALSE} 
-library(kableExtra)
-library(dplyr)
-library(tidyr)
 library(ggplot2)
 library(gridExtra)
 library(grid)
 
 vars <- colnames(datos)[colnames(datos) != "class"]
-
-# Colores fijos por grupo
-colores_binarias <- c("#E2BEF1", "#FFEAA7")            # moradito y amarillo
-colores_ternarias <- c("#E2BEF1", "#FFEAA7", "#B5EAD7") # + verde menta
 
 # Detectar el par de niveles de cada variable
 pares_reales <- sapply(vars, function(v) {
@@ -212,12 +234,16 @@ pares_reales <- sapply(vars, function(v) {
   paste(niveles, collapse = "/")
 })
 
+# Lista de grupos
 grupos_vars <- list(
   "f / t"     = vars[pares_reales == "f/t"],
   "n / t"     = vars[pares_reales == "n/t"],
   "g / l"     = vars[pares_reales == "g/l"],
   "b / n / w" = vars[pares_reales == "b/n/w"]
 )
+
+colores_binarias <- c("#00CED1", "#8BFFFF")
+colores_ternarias <- c("#20B2AA", "#00CED1", "#8BFFFF")
 
 graficar_pastel <- function(var, paleta) {
   tabla <- datos %>%
@@ -227,9 +253,8 @@ graficar_pastel <- function(var, paleta) {
       Etiqueta = paste0(n, "\n", Porcentaje, "%"),
       valor = factor(!!sym(var))
     ) %>%
-    arrange(valor)  # ahora 'valor' ya existe porque lo creaste en el mutate
+    arrange(valor)
 
-  # Asignar colores de la paleta por orden
   colores_usar <- paleta[1:length(unique(tabla$valor))]
 
   ggplot(tabla, aes(x = "", y = n, fill = valor)) +
@@ -237,7 +262,7 @@ graficar_pastel <- function(var, paleta) {
     coord_polar(theta = "y") +
     geom_text(aes(label = Etiqueta),
               position = position_stack(vjust = 0.5),
-              size = 3.2) +
+              size = 3.2, color = "black") +
     labs(title = var, x = NULL, y = NULL) +
     scale_fill_manual(values = colores_usar) +
     theme_void(base_size = 8) +
@@ -253,9 +278,11 @@ graficar_pastel <- function(var, paleta) {
 
 for (nombre in names(grupos_vars)) {
   vars_grupo <- grupos_vars[[nombre]]
+  
   if (length(vars_grupo) == 0) next
   
-  # Elegir paleta según grupo
+  if (length(vars_grupo) == 0) next
+  
   paleta <- if (nombre == "b / n / w") colores_ternarias else colores_binarias
 
   cat(sprintf(
@@ -283,17 +310,14 @@ Se muestra el porcentaje de cada característica (`t`, `f`, `n`, `b`, `g`, `l`) 
 Se muestra el porcentaje de cada característica (`n`, `b`, `w`) para la variable ternaria katri.
 
 
-Variables del rey blanco (wk...):
-Se observa que el rey blanco rara vez bloquea a su propia torre (wkblk: 88.8% falso) o se encuentra en a8 (wkna8: 96.2% falso). Sin embargo, en un porcentaje significativo de posiciones (36.6%), el rey blanco puede atacar la casilla crítica b7 (wkxcr), lo que indica que las blancas tienen oportunidades de presión sobre el peón negro.
+Variables del rey blanco (wk...): Se observa que el rey blanco rara vez bloquea a su propia torre (wkblk: 88.8% falso) o se encuentra en la fila 8 en posición de ayudar a la torre (wkon8: 96.2% falso). Sin embargo, en un porcentaje significativo de posiciones (36.6%), el rey blanco puede atacar la casilla crítica b7 (wkxcr), lo que indica que las blancas tienen oportunidades de presión sobre el peón negro.
 
 whxbp: La torre blanca ataca al peón negro en el 38% de las posiciones .
 wxqsq: Las blancas controlan la casilla de coronación (a8) en el 30.4% de las posiciones.
 cntxt: El rey negro está en el borde del tablero en el 43.1% de las posiciones, lo que lo hace más vulnerable a clavadas.
 También vemos que las tácticas avanzadas son extremadamente raras (Jaque oculto (hdchk) con 0.5%, re-clavada diferida (reskd) con 0.8%, oposición especial (spcop) con 0%, y clavada tras jaques (skach) con 0.3%), sin embargo, la posibilidad de una clavada (skewer) está presente en el 30.7% de las posiciones (skewr), lo que la convierte en una amenaza real.
 
-Variables del rey negro (bk...):
-El rey negro está bajo presión en un porcentaje significativo de posiciones: en el 37.9% está en jaque (bknck), en el 37.2%** está sobrecargado (bkvol), y en el 26.6% está en posición de posible clavada (bkpos).
-
+Variables del rey negro (bk...): El rey negro está bajo presión en un porcentaje significativo de posiciones: en el 37.9% está en jaque (bknck), en el 37.2% está sobrecargado (bkovl) y en el 73.4% está en posición de posible doble ataque (bkpos).
 
 ## Verificación de supuestos
 
@@ -415,6 +439,8 @@ if (nrow(pares_problematicos) > 0) {
 }
 ```
 
+De las 36 variables predictoras, 35 cumplen con el criterio del 80% de celdas con frecuencia esperada ≥ 5 al cruzarse con class. La única excepción es spcop, cuyo nivel t aparece en solo 1 de las 3.196 posiciones (0.03%). Al ser una variable prácticamente constante, no aporta información al análisis de relación, por lo cual, se elimina inmediatamente.
+
 Variables con niveles de muy baja frecuencia (menos del 1% de las posiciones):
 
 ```{r, results='asis', message=FALSE, warning=FALSE}
@@ -444,9 +470,31 @@ frecuencia_minima %>%
   )
 ```
 
-De las 36 variables predictoras, 35 cumplen con el criterio del 80% de celdas con frecuencia esperada ≥ 5 al cruzarse con class. La única excepción es spcop, cuyo nivel t aparece en solo 1 de las 3.196 posiciones (0.03%). Al ser una variable prácticamente constante, no aporta información al análisis de relación.
+En el caso de los pares entre predictoras, se evaluaron 630 pares, de los cuales 508 cumplen los supuestos y 122 no. Los pares que no cumplen involucran sistemáticamente al menos una de las 14 variables con niveles minoritarios (menos del 10% de las posiciones), destacándose cuatro con frecuencias casi nulas: spcop (0.03%), skach (0.34%), hdchk (0.47%) y reskd (0.81%). Al cruzar dos de estas variables raras, las celdas de la tabla de contingencia quedan con frecuencias esperadas muy por debajo de 5, lo que invalida el uso del chi-cuadrado clásico, debido a esto, eliminamos estas variables.
 
-En el caso de los pares entre predictoras, se evaluaron 630 pares, de los cuales 508 cumplen los supuestos y 122 no. Los pares que no cumplen involucran sistemáticamente al menos una de las 14 variables con niveles minoritarios (menos del 10% de las posiciones), destacándose cuatro con frecuencias casi nulas: spcop (0.03%), skach (0.34%), hdchk (0.47%) y reskd (0.81%). Al cruzar dos de estas variables raras, las celdas de la tabla de contingencia quedan con frecuencias esperadas muy por debajo de 5, lo que invalida el uso del chi-cuadrado clásico.
+```{r}
+# Calcular el porcentaje del nivel menos frecuente por variable
+niveles_minimos <- datos %>%
+  select(-class) %>%
+  pivot_longer(cols = everything(), names_to = "variable", values_to = "valor") %>%
+  count(variable, valor, name = "n") %>%
+  group_by(variable) %>%
+  slice_min(n, n = 1, with_ties = FALSE) %>%
+  ungroup() %>%
+  mutate(pct_min = (n / nrow(datos)) * 100)
+
+# Obtener la lista de variables a eliminar
+vars_eliminar <- niveles_minimos %>%
+  filter(pct_min < 1) %>%
+  pull(variable)
+
+# Filtrar el dataset para eliminar esas columnas
+datos <- datos %>%
+  select(-all_of(vars_eliminar))
+
+# Actualizar la lista de variables predictoras para los siguientes gráficos
+vars_predictoras <- setdiff(names(datos), "class")
+```
 
 
 ## Análisis bivariado class vs independientes
@@ -513,15 +561,15 @@ fig_heatmap
 ```
 
 El heatmap muestra la fuerza de la asociación entre las variables predictoras y la variable objetivo (`class`). 
-Los valores más altos (azul oscuro) indican una relación más fuerte con el resultado del final de ajedrez. Los valores más bajos (blanco) sugieren que la variable es prácticamente independiente de si la posición es ganable o no.
+Los valores más altos (azul oscuro) indican una relación más fuerte con el resultado del final de ajedrez. Los valores más bajos (blanco) sugieren que la variable es prácticamente independiente de si el peón gana o no.
 
 El análisis de asociación con Cramér's V revela que las variables más relacionadas con el resultado (`won`/`nowin`) son:
 
-`rimmx` (0.45): Captura segura de la torre blanca. Si la torre blanca puede ser capturada de forma segura por las negras, las blancas pierden su principal ventaja.
-`wxqsq` (0.38): Control blanco de la casilla de coronación (a8). Si las blancas controlan a8, evitan que el peón negro corone.
-`bknck` (0.365): Rey negro en jaque. Si el rey negro está en jaque, las blancas están haciendo una amenaza directa que puede llevar a la victoria.
-`wkxbp` (0.233): Rey blanco captura el peón negro. Si el rey blanco puede capturar el peón, las blancas ganan de inmediato.
-`katri` (0.22): Control del punto de intersección. Si el rey blanco controla el punto de intersección, puede evitar que su propia torre sea clavada.
+`rimmx` (0.45): Se puede capturar la torre blanca de forma segura? Si se puede (t), el peón gana en todas las posiciones; todas las nowin tienen rimmx = f.
+`wxqsq` (0.38): Control blanco de la casilla de coronación (a8). Si las blancas controlan a8, el peón no puede coronar con seguridad.
+`bknck` (0.365): Rey negro en jaque. El rey debe responder al jaque, lo que retrasa la coronación del peón.
+`wkxbp` (0.233): El rey blanco ataca al peón negro. Con el peón atacado es más difícil que corone.
+`katri` (0.22): Control del punto de intersección, la casilla de borde que usaría la torre para clavar. Cuando lo controla el rey del bando del peón (katri = w, el rey negro), la torre no puede clavar y el peón tiende a ganar.
 
 
 Ahora calculemos los residuos estandarizados de Pearson para las 5 variables con mayor V de Cramér. Mientras que la V de Cramér indica la fuerza de la asociación, los residuos indican en qué celdas específicas de la tabla se concentra esa asociación y en qué dirección (positiva o negativa).
@@ -614,10 +662,7 @@ tabla_contingencia_completa %>%
 ```
 
 ```{r message=FALSE, warning=FALSE, results='asis'}
-colores_class <- c(
-  "won" = "#1CE0D3",
-  "nowin" = "#F3BF97"
-)
+colores_class <- c("won" = "#008080", "nowin" = "#40B5A0")
 
 graficar_barras_agrupadas <- function(var) {
   
@@ -683,27 +728,23 @@ for (i in seq_along(grupos)) {
 
 Factores relacionados con la victoria (`won`):
 
-`katri` (w): Cuando el rey blanco controla el punto de intersección (`katri = w`), la proporción de `won` (20.9%) es más del triple que en `nowin` (6.4%). Controlar el punto de intersección impide que la torre blanca sea clavada.
+`katri` (w): Cuando el rey del bando del peón (negro) controla el punto de intersección (katri = w), la proporción de won (20.9 %) es más del triple que en nowin (6.4 %). Controlar ese punto impide que la torre lo use para clavar.
 
-`rkxwp` (t): Cuando la torre blanca amenaza al peón negro (`rkxwp = t`), el 23.9% de los casos son `won` y el 15.8% son `nowin`. La amenaza de la torre sobre el peón favorece a las blancas, pero no es un factor determinante por sí solo.
+`rkxwp` (t): rkxwp = t es algo más frecuente en won (23.9 %) que en nowin (15.8 %). La diferencia es pequeña y la condición solo importa combinada con otras, por lo que no se interpreta de forma aislada.
 
-`bkpos` (t): Cuando el rey negro está en posición de posible clavada (`bkpos = t`), es ligeramente más común en `won` (79.6%) que en `nowin` (66.6%). Sin embargo, la diferencia no es muy grande, lo que indica que no es un factor determinante por sí solo. La posición del rey negro en posible clavada puede favorecer a las blancas, pero otros factores son más importantes.
+`bkpos` (t): bkpos = t es ligeramente más común en won (79.6 %) que en nowin (66.6 %). La diferencia es moderada y no es un factor determinante por sí solo.
 
 Factores relacionados con la no victoria (`nowin`):
 
-`rimmx` (f): Cuando la torre blanca no puede ser capturada de forma segura por el rey negro (`rimmx = f`), se da el 100% de los casos de `nowin`. Esto significa que, si la torre está segura pero no puede atacar el peón, este corona sin oposición. Esta es la relación más fuerte.
+`rimmx` (f): Todas las posiciones nowin tienen rimmx = f: si la torre blanca no puede ser capturada de forma segura (ni por el peón ni por el rey negro), el peón no gana. No es suficiente por sí sola, porque rimmx = f también aparece en parte de las won. Es la relación más fuerte.
 
-`bkna8` (t): Cuando el rey negro está en a8 (`bkna8 = t`), es 5 veces más frecuente en `nowin` (10.2%) que en `won` (1.2%). Esto indica que la presencia del rey negro en a8 es un predictor fuerte de `nowin`, ya que el rey negro defiende la casilla de coronación y protege el peón.
+`bkna8` (t): Es 5 veces más frecuente en nowin (10.2 %) que en won (1.2 %). El propio rey negro ocupa la casilla de coronación y el peón no puede avanzar.
 
-`bknck` (t): Cuando el rey negro está en jaque (`bknck = t`), es 2.7 veces más frecuente en `nowin` (56.5%) que en `won` (21.0%). Esto indica que el jaque al rey negro no siempre es favorable para las blancas.
+`bknck` (t): Es 2.7 veces más frecuente en nowin (56.5 %) que en won (21.0 %). El jaque obliga al rey negro a responder y retrasa la coronación.
 
-`wkxbp` (t): Cuando el rey blanco puede capturar el peón (`wkxbp = t`), es 2.5 veces más frecuente en `nowin` (31.8%) que en `won` (12.6%). Esto es contra intuitivo, ya que se esperaría que capturar el peón llevara a la victoria, pero los datos muestran lo contrario.
+`wkxbp` (t): Es 2.5 veces más frecuente en nowin (31.8 %) que en won (12.6 %). Con el peón atacado por el rey blanco es más difícil que corone.
 
-`wxqsq` (t): Cuando las blancas controlan la casilla de coronación a8 (`wxqsq = t`), es 3.5 veces más frecuente en `nowin` (48.7%) que en `won` (13.7%). Esto es contra intuitivo también.
-
-**Variables con poca diferencia**:
-
-Las variables `wkblk`, `wknwy`, `dsopp`, `qxmsq`, `reskd`, `reskr` y `btoeg` presentan distribuciones muy  entre `won` y `nowin`, lo que indica que podrían no ser útiles para predecir el resultado.
+`wxqsq` (t): Es 3.5 veces más frecuente en nowin (48.7 %) que en won (13.7 %). Si las blancas controlan a8, el peón no puede coronar con seguridad.
 
 
 ## Bivariado entre predictoras
@@ -852,7 +893,7 @@ fig_top5
 
 Para evaluar si existen variables redundantes (que miden información similar), se calculó la matriz de Cramer's V excluyendo la variable objetivo `class`. Los valores más altos indican que dos variables están asociadas entre sí, lo que sugiere que podrían estar midiendo conceptos relacionados:
 
-`whxbp` ↔ `wkxbp` (0.67) Captura del peón negro por la torre blanca vs captura por el rey blanco. Ambas miden si el peón puede ser capturado, lo que sugiere que están altamente relacionadas.
+`whxbp` ↔ `wkxbp` (0.67) Ataque de la torre blanca al peón negro vs ataque del rey blanco al peón. Ambas miden si el peón está atacado, lo que sugiere que están altamente relacionadas.
 
 `rkxwp` ↔ `whxbp` (0.639) Amenaza de la torre blanca sobre el peón vs ataque de la torre blanca al peón. Miden conceptos similares, ambos de la torre blanca sobre el peón negro. 
 
@@ -860,7 +901,7 @@ Para evaluar si existen variables redundantes (que miden información similar), 
 
 `cntxt` ↔ `skewr` (0.579) Rey negro en el borde (no a8) vs posibilidad de clavada. Si el rey negro está en el borde, es más vulnerable a una clavada de la torre blanca.
 
-`wkxbp` ↔ `wkxcr` (0.564) Rey blanco captura el peón vs rey blanco ataca b7. Ambas miden la capacidad del rey blanco para presionar al peón negro. 
+`wkxbp` ↔ `wkxcr` (0.564) El rey blanco ataca al peón vs el rey blanco ataca b7. Ambas miden la capacidad del rey blanco para presionar al peón negro.
 
 
 Ninguno de estos valores superan el 0.7, lo que indica que no hay variables altamente redundantes, es decir, que presenten multicolinealidad muy alta. Sin embargo, las relaciones moderadas (0.5 - 0.67) sugieren que algunos pares de variables miden conceptos relacionados desde diferentes perspectivas.
@@ -868,6 +909,9 @@ Ninguno de estos valores superan el 0.7, lo que indica que no hay variables alta
 
 ## Conclusiones 
 
-El análisis exploratorio permitió identificar los principales factores que determinan el resultado del final de ajedrez Rey+Torre (blancas) vs Rey+Peón (negras) en a7. La variable objetivo class presenta una distribución prácticamente balanceada (52.2% won, 47.8% nowin), lo que indica que no hay sesgo hacia ninguna de las clases. El estudio de las variables predictoras revela que la mayoría son binarias (t/f), con excepción de dwipd (g/l) y katri (la única ternaria: n/b/w). El análisis de frecuencias muestra que tácticas avanzadas como el jaque oculto (hdchk, 0.5%), la re-clavada diferida (reskd, 0.8%), la clavada tras jaques (skach, 0.3%) y la oposición especial (spcop, 0%) son muy raras. En cuanto a la asociación con class, la variable más determinante es rimmx (Cramér's V = 0.45): cuando la torre blanca no puede ser capturada de forma segura (rimmx = f), se da el 100% de los casos de nowin, lo que indica que la torre blanca es la pieza clave para detener el peón. Otras variables con alta asociación son wxqsq (0.38) y bknck (0.365). El análisis de redundancia entre predictoras muestra que no hay variables altamente redundantes (ninguna comparación supera 0.7 de Cramér's V), aunque se observaron relaciones moderadas entre conceptos relacionados, como whxbp ↔ wkxbp (0.67), que miden presión sobre el peón desde diferentes perspectivas. En conjunto, se concluye que el resultado del final depende de la combinación de múltiples factores, destacando la seguridad de la torre, el control del punto de intersección y la posición del rey negro.
+El análisis exploratorio permitió identificar los principales factores que determinan el resultado del final de ajedrez Rey+Torre (blancas) vs Rey+Peón (negras) en a7. La variable objetivo class presenta una distribución prácticamente balanceada (52.2% won, 47.8% nowin), lo que indica que no hay sesgo hacia ninguna de las clases. El estudio de las variables predictoras revela que la mayoría son binarias (t/f), con excepción de dwipd (g/l) y katri (la única ternaria: n/b/w). El análisis de frecuencias muestra que tácticas avanzadas como el jaque oculto (hdchk, 0.5%), la re-clavada diferida (reskd, 0.8%), la clavada tras jaques (skach, 0.3%) y la oposición especial (spcop, 0%) son muy raras. En cuanto a la asociación con class, la variable más determinante es rimmx (Cramér’s V = 0.45): todas las posiciones nowin tienen rimmx = f, es decir, cuando la torre blanca no puede ser capturada de forma segura el peón no gana, por lo que la seguridad de la torre blanca es una condición necesaria para detener al peón. Otras variables con alta asociación son wxqsq (0.38) y bknck (0.365). El análisis de redundancia entre predictoras muestra que no hay variables altamente redundantes (ninguna comparación supera 0.7 de Cramér's V), aunque se observaron relaciones moderadas entre conceptos relacionados, como whxbp ↔ wkxbp (0.67), que miden presión sobre el peón desde diferentes perspectivas. En conjunto, se concluye que el resultado del final depende de la combinación de múltiples factores, destacando la seguridad de la torre blanca (rimmx), el control del punto de intersección (katri), el control blanco de la casilla de coronación (wxqsq) y la posición del rey negro (bkna8, bknck).
 
+```{r}
+saveRDS(datos, "datos_limpios.rds")
+```
 

@@ -1,1 +1,456 @@
-# a
+# Modelado Predictivo
+
+Probaremos la Accuracy y el F1-Score entre 4 modelos para escoger el más apropiado: Regresión Logística, Árbol de Decisión, Random Forest y CatBoost.
+
+## Métricas
+
+Con `won` (victoria del bando del peón) como clase positiva, y $TP$, $FP$, $FN$ los verdaderos positivos, falsos positivos y falsos negativos:
+
+$$
+\text{Precisión}=\frac{TP}{TP+FP},\qquad
+\text{Recall}=\frac{TP}{TP+FN},\qquad
+F_1=\frac{2\cdot \text{Precisión}\cdot\text{Recall}}{\text{Precisión}+\text{Recall}}
+$$
+
+El AUC-ROC es la probabilidad de que el modelo asigne mayor probabilidad de `won` a una posición `won` que a una `nowin`, tomadas al azar.
+
+## Estrategia de validación
+
+Comparar modelos con una sola partición entrenamiento/prueba puede llevar a elegir un modelo por azar. Por eso el procedimiento es el siguiente:
+
+1. Se separa un 20 % de las posiciones como conjunto de prueba, de forma estratificada para conservar la proporción de clases.
+2. La codificación *One-Hot* usa los niveles definidos de cada variable y no emplea la variable objetivo, por lo que no hay fuga de información hacia la prueba.
+3. Los cuatro candidatos se entrenan con el 80 % restante, con sus hiperparámetros por defecto, y se comparan en el conjunto de prueba mediante Accuracy y F1-Score de la clase `won`.
+4. La decisión se confirma con validación cruzada estratificada repetida (5 particiones × 3 repeticiones = 15 evaluaciones por modelo) usando solo el 80 % de entrenamiento, junto con una línea base que siempre predice la clase mayoritaria y una prueba de Wilcoxon entre modelos.
+5. El modelo seleccionado se reentrena, se evalúa en la prueba con la matriz de confusión, la curva ROC y un intervalo de confianza para la exactitud, se interpreta mediante la importancia por permutación, y se comprueba su estabilidad con otras particiones. El modelo se guarda para el dashboard.
+
+## Librerías
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(glmnet)      # regresión logística regularizada (equivale a la L2 de scikit-learn)
+library(rpart)       # árbol de decisión
+library(ranger)      # random forest
+library(catboost)    # CatBoost
+library(knitr)
+library(kableExtra)
+library(patchwork)
+library(jsonlite)
+
+SEED <- 42
+POS  <- "won"                                   # clase positiva
+COLOR_WON <- "#008080"; COLOR_NOWIN <- "#40B5A0"
+
+fmt4 <- function(x) sprintf("%.4f", x)
+fmt3 <- function(x) sprintf("%.3f", x)
+fp   <- function(p) ifelse(p < 0.001, "< 0.001", sprintf("%.3f", p))
+
+tabla_bonita <- function(d, ...) {
+  kable(d, align = "c", ...) %>%
+    kable_styling(bootstrap_options = c("striped", "hover", "condensed"),
+                  full_width = FALSE, position = "center")
+}
+```
+
+### Funciones auxiliares
+
+Se definen una sola vez: la codificación *One-Hot*, las métricas, la partición estratificada, y una función que ajusta y otra que predice, de modo que los cuatro modelos (y la línea base) se tratan exactamente igual.
+
+```{r}
+# One-Hot de todas las predictoras (equivale al OneHotEncoder de scikit-learn).
+# Los niveles de cada factor quedan fijos, así que las columnas son las mismas en cualquier subconjunto.
+codificar <- function(d) {
+  m <- model.matrix(~ . - 1, data = d,
+                    contrasts.arg = lapply(d, contrasts, contrasts = FALSE))
+  colnames(m) <- make.names(colnames(m))
+  m
+}
+
+# AUC-ROC = P(prob. de won de un won > prob. de won de un nowin)
+auc_rank <- function(y, p) {
+  pos <- y == POS
+  n1 <- sum(pos); n0 <- sum(!pos)
+  (sum(rank(p)[pos]) - n1 * (n1 + 1) / 2) / (n1 * n0)
+}
+
+metricas <- function(y, p) {
+  pred <- ifelse(p >= 0.5, "won", "nowin")
+  tp <- sum(pred == "won"   & y == "won")
+  fp <- sum(pred == "won"   & y == "nowin")
+  fn <- sum(pred == "nowin" & y == "won")
+  prec <- ifelse(tp + fp == 0, 0, tp / (tp + fp))
+  rec  <- ifelse(tp + fn == 0, 0, tp / (tp + fn))
+  f1   <- ifelse(prec + rec == 0, 0, 2 * prec * rec / (prec + rec))
+  c(accuracy = mean(pred == y), precision = prec, recall = rec, f1 = f1, auc = auc_rank(y, p))
+}
+
+# Partición estratificada: devuelve los índices de prueba
+particion <- function(y, prop_test = 0.2, seed) {
+  set.seed(seed)
+  sort(unlist(lapply(split(seq_along(y), y),
+                     function(i) sample(i, size = round(length(i) * prop_test)))))
+}
+
+# Ajusta un modelo con los valores por defecto de cada algoritmo
+ajustar <- function(modelo, Xtr, ytr) {
+  Xm <- codificar(Xtr)
+  switch(modelo,
+    "Baseline: clase mayoritaria" = list(tipo = "base", p = mean(ytr == POS)),
+    "Regresión Logística" = list(tipo = "glm",
+       # ridge con lambda = 1/n: equivale a la regularización L2 por defecto (C = 1) de scikit-learn
+       fit = glmnet(Xm, ytr, family = "binomial", alpha = 0,
+                    lambda = 1 / nrow(Xm), standardize = FALSE)),
+    "Árbol de Decisión" = list(tipo = "tree",
+       # árbol sin podar ni limitar la profundidad, como el de scikit-learn por defecto
+       fit = rpart(y ~ ., data = data.frame(y = ytr, Xm), method = "class",
+                   control = rpart.control(cp = 0, minsplit = 2, minbucket = 1, xval = 0))),
+    "Random Forest" = list(tipo = "rf",
+       fit = ranger(y ~ ., data = data.frame(y = ytr, Xm), num.trees = 100,
+                    probability = TRUE, seed = SEED)),
+    "CatBoost" = list(tipo = "cb",
+       fit = catboost.train(
+         catboost.load_pool(Xm, label = as.integer(ytr == POS)),
+         params = list(loss_function = "Logloss", random_seed = SEED,
+                       logging_level = "Silent", allow_writing_files = FALSE))),
+    stop("Modelo desconocido: ", modelo))
+}
+
+# Probabilidad de 'won' para posiciones nuevas
+prob_won <- function(m, Xnew) {
+  Xm <- codificar(Xnew)
+  switch(m$tipo,
+    base = rep(m$p, nrow(Xm)),
+    glm  = as.numeric(predict(m$fit, Xm, type = "response")),
+    tree = as.numeric(predict(m$fit, data.frame(Xm), type = "prob")[, POS]),
+    rf   = as.numeric(predict(m$fit, data.frame(Xm))$predictions[, POS]),
+    cb   = as.numeric(catboost.predict(m$fit, catboost.load_pool(Xm),
+                                       prediction_type = "Probability")))
+}
+```
+
+## Preparación de los datos
+
+Se parte del conjunto depurado, con **32 variables predictoras** categóricas y la variable objetivo `class`. Se separan las predictoras (`X`) del objetivo (`y`) y se dividen los datos en 80 % entrenamiento y 20 % prueba, de forma estratificada.
+
+```{r}
+# El conjunto depurado viene del capítulo de EDA. Si se compila este capítulo solo:
+# (al final del EDA: saveRDS(datos, "datos_limpios.rds"))
+if (!exists("datos")) datos <- readRDS("datos_limpios.rds")
+
+df <- datos
+X  <- df %>% select(-class) %>% mutate(across(everything(), as.factor))
+y  <- factor(df$class, levels = c("nowin", "won"))
+
+idx_test <- particion(y, 0.2, SEED)
+X_train <- X[-idx_test, ]; X_test <- X[idx_test, ]
+y_train <- y[-idx_test];   y_test <- y[idx_test]
+
+data.frame(
+  Clase = levels(y),
+  Entrenamiento = round(as.numeric(prop.table(table(y_train))), 3),
+  Prueba = round(as.numeric(prop.table(table(y_test))), 3),
+  n_train = as.numeric(table(y_train)),
+  n_test = as.numeric(table(y_test))
+) %>% tabla_bonita()
+```
+
+## Comparación preliminar de los modelos
+
+Los cuatro candidatos se entrenan con el 80 % de entrenamiento y se evalúan una vez en el conjunto de prueba. La tabla ordena los modelos por F1-Score.
+
+```{r}
+nombres_modelos <- c("Regresión Logística", "Árbol de Decisión", "Random Forest", "CatBoost")
+
+df_resultados <- map_dfr(nombres_modelos, function(nm) {
+  m  <- ajustar(nm, X_train, y_train)
+  mt <- metricas(y_test, prob_won(m, X_test))
+  tibble(Modelo = nm, Accuracy = unname(mt["accuracy"]), `F1-Score` = unname(mt["f1"]))
+}) %>% arrange(desc(`F1-Score`))
+
+tabla_bonita(df_resultados, digits = 4)
+```
+
+```{r include=FALSE}
+a_split <- setNames(df_resultados$Accuracy, df_resultados$Modelo)
+f_split <- setNames(df_resultados$`F1-Score`, df_resultados$Modelo)
+```
+
+En la partición de prueba, CatBoost obtiene el mejor resultado (Accuracy = `r fmt4(a_split["CatBoost"])`, F1-Score = `r fmt4(f_split["CatBoost"])`), seguido del Árbol de Decisión (`r fmt4(a_split["Árbol de Decisión"])`; `r fmt4(f_split["Árbol de Decisión"])`), Random Forest (`r fmt4(a_split["Random Forest"])`; `r fmt4(f_split["Random Forest"])`) y la Regresión Logística (`r fmt4(a_split["Regresión Logística"])`; `r fmt4(f_split["Regresión Logística"])`). La diferencia entre CatBoost y el árbol equivale a unas `r round(abs(a_split["CatBoost"] - a_split["Árbol de Decisión"]) * length(y_test))` posición(es) de las `r length(y_test)` de prueba, por lo que no es concluyente. La brecha con la regresión logística (≈ `r round((a_split["CatBoost"] - a_split["Regresión Logística"]) * 100, 1)` puntos de exactitud) sí es amplia. Todos los modelos superan con holgura la referencia del 52 % de la clase mayoritaria.
+
+## Validación cruzada
+
+Para que la elección no dependa de una sola partición, cada modelo se evalúa 15 veces (validación cruzada estratificada de 5 particiones, repetida 3 veces) usando únicamente el 80 % de entrenamiento. Se añade una línea base que siempre predice la clase mayoritaria. Puede tardar unos minutos (CatBoost es el más lento).
+
+```{r message=FALSE, warning=FALSE}
+# Validación cruzada estratificada repetida: devuelve los índices de VALIDACIÓN de cada partición
+estratificado_repetido <- function(y, k = 5, repeticiones = 3, seed = SEED) {
+  folds <- list()
+  for (r in seq_len(repeticiones)) {
+    set.seed(seed + r)
+    asignado <- integer(length(y))
+    for (cl in levels(y)) {
+      i <- which(y == cl)
+      asignado[i] <- sample(rep_len(seq_len(k), length(i)))
+    }
+    for (f in seq_len(k)) folds[[length(folds) + 1]] <- which(asignado == f)
+  }
+  folds
+}
+
+candidatos <- c("Baseline: clase mayoritaria", nombres_modelos)
+folds <- estratificado_repetido(y_train)          # 15 evaluaciones por modelo
+
+cv_res <- map(candidatos, function(nm) {
+  res <- map_dfr(folds, function(val_idx) {
+    m  <- ajustar(nm, X_train[-val_idx, ], y_train[-val_idx])
+    mv <- metricas(y_train[val_idx],  prob_won(m, X_train[val_idx, ]))
+    mt <- metricas(y_train[-val_idx], prob_won(m, X_train[-val_idx, ]))
+    tibble(accuracy = unname(mv["accuracy"]), f1 = unname(mv["f1"]),
+           auc = unname(mv["auc"]), acc_train = unname(mt["accuracy"]))
+  })
+  message(sprintf("%-30s F1 = %.4f", nm, mean(res$f1)))
+  res
+})
+names(cv_res) <- candidatos
+```
+
+```{r}
+tabla_cv <- imap_dfr(cv_res, function(r, nm) {
+  tibble(
+    Modelo = nm,
+    Accuracy = sprintf("%.4f ± %.4f", mean(r$accuracy), sd(r$accuracy)),
+    `F1 (won)` = sprintf("%.4f ± %.4f", mean(r$f1), sd(r$f1)),
+    `AUC-ROC` = sprintf("%.4f ± %.4f", mean(r$auc), sd(r$auc)),
+    `Brecha train − val (acc)` = round(mean(r$acc_train - r$accuracy), 4),
+    .f1 = mean(r$f1))
+}) %>% arrange(desc(.f1)) %>% select(-.f1)
+
+tabla_bonita(tabla_cv)
+```
+
+```{r fig.width=8.5, fig.height=4, fig.align='center'}
+# Distribución de los 15 valores de F1 de cada modelo (un punto = una partición)
+df_f1 <- imap_dfr(cv_res, ~ tibble(Modelo = .y, f1 = .x$f1))
+
+ggplot(df_f1, aes(x = f1, y = factor(Modelo, levels = rev(tabla_cv$Modelo)))) +
+  geom_jitter(height = .15, alpha = .55, size = 1.8, color = COLOR_NOWIN) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 4.5, color = COLOR_WON) +
+  labs(x = "F1 de la clase won (validación cruzada)", y = NULL,
+       title = "Desempeño por modelo (◆ = media)") +
+  theme_minimal(base_size = 11) +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+```{r include=FALSE}
+m_f1  <- sapply(cv_res, function(r) mean(r$f1));   s_f1  <- sapply(cv_res, function(r) sd(r$f1))
+m_auc <- sapply(cv_res, function(r) mean(r$auc));  s_auc <- sapply(cv_res, function(r) sd(r$auc))
+m_acc <- sapply(cv_res, function(r) mean(r$accuracy))
+brecha <- sapply(cv_res, function(r) mean(r$acc_train - r$accuracy))
+reales <- setdiff(candidatos, "Baseline: clase mayoritaria")
+```
+
+En validación cruzada, CatBoost vuelve a obtener el mayor F1 medio (`r fmt4(m_f1["CatBoost"])` ± `r fmt4(s_f1["CatBoost"])`), seguido del Árbol de Decisión (`r fmt4(m_f1["Árbol de Decisión"])` ± `r fmt4(s_f1["Árbol de Decisión"])`), Random Forest (`r fmt4(m_f1["Random Forest"])` ± `r fmt4(s_f1["Random Forest"])`) y la Regresión Logística (`r fmt4(m_f1["Regresión Logística"])` ± `r fmt4(s_f1["Regresión Logística"])`). La línea base de la clase mayoritaria queda en una exactitud de `r fmt3(m_acc["Baseline: clase mayoritaria"])` y un AUC de `r fmt3(m_auc["Baseline: clase mayoritaria"])`, de modo que los cuatro modelos capturan señal real. Las brechas entre entrenamiento y validación son pequeñas en todos (entre `r fmt3(min(brecha[reales]))` y `r fmt3(max(brecha[reales]))`), así que no hay sobreajuste preocupante. En el gráfico, los tres modelos basados en árboles se solapan casi por completo y la regresión logística queda claramente por debajo. CatBoost tiene además el AUC-ROC más alto y estable (`r fmt4(m_auc["CatBoost"])` ± `r fmt4(s_auc["CatBoost"])`, frente a `r fmt4(m_auc["Árbol de Decisión"])` ± `r fmt4(s_auc["Árbol de Decisión"])` del árbol).
+
+### ¿Las diferencias entre modelos son reales o son ruido?
+
+Como todos los modelos se evalúan sobre **las mismas 15 particiones**, se puede comparar el F1 de CatBoost con el de cada uno de los demás, partición por partición (prueba de rangos con signo de Wilcoxon). Es una guía, no una prueba exacta: las particiones de la validación cruzada comparten datos entre sí, lo que hace los p-valores algo optimistas. Cuando dos modelos empatan en todas las particiones, el p-valor se reporta como 1.
+
+```{r}
+MODELO <- "CatBoost"
+
+comp <- map_dfr(setdiff(reales, MODELO), function(n) {
+  d <- cv_res[[MODELO]]$f1 - cv_res[[n]]$f1
+  p <- tryCatch(suppressWarnings(wilcox.test(d, mu = 0, exact = FALSE)$p.value),
+                error = function(e) 1)          # todas las diferencias son exactamente cero
+  if (is.na(p)) p <- 1
+  tibble(Modelo = n, dif = mean(d), gana = mean(d >= 0) * 100, p = p)
+})
+
+comp %>%
+  mutate(across(c(dif, p), ~ round(.x, 4)), gana = round(gana, 1)) %>%
+  rename(`Dif. media de F1 (CatBoost − modelo)` = dif,
+         `% de particiones donde CatBoost gana o empata` = gana,
+         `p (Wilcoxon)` = p) %>%
+  tabla_bonita()
+```
+
+```{r include=FALSE}
+dif <- setNames(comp$dif, comp$Modelo); pv <- setNames(comp$p, comp$Modelo); gn <- setNames(comp$gana, comp$Modelo)
+```
+
+CatBoost supera de forma significativa a la Regresión Logística (diferencia media de F1 de `r fmt4(dif["Regresión Logística"])`; gana o empata en el `r round(gn["Regresión Logística"])` % de las particiones; p = `r fp(pv["Regresión Logística"])`) y, con un margen mínimo, a Random Forest (`r fmt4(dif["Random Forest"])`; p = `r fp(pv["Random Forest"])`). No se distingue del Árbol de Decisión (`r fmt4(dif["Árbol de Decisión"])`; p = `r fp(pv["Árbol de Decisión"])`). Como las particiones comparten datos, los p-valores son algo optimistas, y la ventaja sobre Random Forest debe tomarse como marginal. Lo que sí indican los resultados es que la señal no es puramente aditiva: la regresión logística, que suma efectos independientes, queda unos 3 puntos de F1 por debajo de los modelos de árboles, que pueden representar combinaciones de condiciones tácticas. Entre los modelos de árboles las diferencias son demasiado pequeñas para declarar un ganador claro. Se selecciona CatBoost por tener el F1 medio más alto con la menor variabilidad entre particiones y el mejor AUC, algo útil porque el dashboard mostrará probabilidades.
+
+## Modelo final
+
+Con CatBoost seleccionado, se entrena el modelo sobre el conjunto de entrenamiento y se guarda (más abajo) en el formato nativo de CatBoost. Como en R la codificación *One-Hot* es una función (`codificar()`), el dashboard debe aplicarla a las categorías originales (`t`, `f`, `g`, `l`, ...) antes de predecir; por eso se guardan también los niveles de cada variable.
+
+```{r}
+pipeline_ganador <- ajustar("CatBoost", X_train, y_train)
+```
+
+## Evaluación en el conjunto de prueba
+
+Hasta aquí el conjunto de prueba solo sirvió para la comparación preliminar. Se evalúa ahora el modelo final: la **matriz de confusión** muestra cuántas posiciones de cada clase se clasifican bien y en qué dirección se equivoca el modelo (un falso *won* es una victoria del peón que el modelo anticipa y no ocurre; un falso *nowin* es la contraria), y la **curva ROC** resume el desempeño para todos los umbrales de decisión. Como el conjunto de prueba es pequeño, la exactitud se acompaña de un intervalo bootstrap al 95 %.
+
+```{r}
+p_test <- prob_won(pipeline_ganador, X_test)
+y_pred <- factor(ifelse(p_test >= 0.5, "won", "nowin"), levels = c("nowin", "won"))
+mask_err <- y_pred != y_test
+
+mt_test <- metricas(y_test, p_test)
+metricas_test <- c(Accuracy = mt_test[["accuracy"]], Precisión = mt_test[["precision"]],
+                   Recall = mt_test[["recall"]], F1 = mt_test[["f1"]], `AUC-ROC` = mt_test[["auc"]])
+
+as.data.frame(t(round(metricas_test, 4)), row.names = "CatBoost (prueba)") %>% tabla_bonita()
+```
+
+```{r fig.width=10, fig.height=4.2, fig.align='center'}
+# Matriz de confusión
+conf <- as.data.frame(table(Real = y_test, Predicho = y_pred))
+g_conf <- ggplot(conf, aes(x = Predicho, y = fct_rev(Real), fill = Freq)) +
+  geom_tile(color = "white") +
+  geom_text(aes(label = Freq), size = 5) +
+  scale_fill_gradient(low = "#F0FFFF", high = COLOR_WON, guide = "none") +
+  labs(title = "Matriz de confusión (prueba)", x = "Predicho", y = "Real") +
+  theme_minimal(base_size = 11) + theme(plot.title = element_text(hjust = 0.5))
+
+# Curva ROC
+o <- order(p_test, decreasing = TRUE); ys <- (y_test == POS)[o]
+roc <- tibble(fpr = c(0, cumsum(!ys) / sum(!ys)), tpr = c(0, cumsum(ys) / sum(ys)))
+g_roc <- ggplot(roc, aes(fpr, tpr)) +
+  geom_abline(linetype = "dashed", color = "grey50") +
+  geom_line(color = COLOR_WON, linewidth = 1) +
+  annotate("text", x = 0.75, y = 0.1, label = sprintf("AUC = %.3f", mt_test[["auc"]])) +
+  labs(title = "Curva ROC (prueba)", x = "Tasa de falsos positivos", y = "Tasa de verdaderos positivos") +
+  theme_minimal(base_size = 11) + theme(plot.title = element_text(hjust = 0.5))
+
+g_conf + g_roc
+```
+
+```{r}
+# Reporte por clase
+map_dfr(c("nowin", "won"), function(cl) {
+  tp <- sum(y_pred == cl & y_test == cl); fp_ <- sum(y_pred == cl & y_test != cl); fn <- sum(y_pred != cl & y_test == cl)
+  p <- tp / (tp + fp_); r <- tp / (tp + fn)
+  tibble(Clase = cl, Precisión = p, Recall = r, F1 = 2 * p * r / (p + r), Soporte = sum(y_test == cl))
+}) %>% tabla_bonita(digits = 4)
+```
+
+```{r}
+# Incertidumbre de la exactitud: intervalo bootstrap (2000 remuestreos del conjunto de prueba)
+set.seed(SEED)
+acierto <- as.integer(!mask_err)
+boots <- replicate(2000, mean(sample(acierto, length(acierto), replace = TRUE)))
+ic_acc <- quantile(boots, c(0.025, 0.975))
+n_fw <- sum(y_pred == "won" & mask_err); n_fn <- sum(y_pred == "nowin" & mask_err)
+```
+
+En las `r length(y_test)` posiciones de prueba, el modelo acierta `r sum(acierto)` y falla `r sum(!acierto)` (exactitud = `r fmt4(mt_test[["accuracy"]])`, con intervalo bootstrap al 95 % de [`r fmt4(ic_acc[1])`, `r fmt4(ic_acc[2])`]). Hay `r n_fw` falso(s) *won* (una posición `nowin` que el modelo predice como victoria del peón) y `r n_fn` falso(s) *nowin*. La precisión de `won` es `r fmt4(mt_test[["precision"]])`, el recall `r fmt4(mt_test[["recall"]])` y el AUC-ROC es `r fmt4(mt_test[["auc"]])`. Con un conjunto de prueba tan pequeño, una posición de diferencia mueve la exactitud en `r fmt4(1 / length(y_test))`; por eso el resultado debe leerse junto con el intervalo bootstrap.
+
+## Interpretabilidad: ¿qué variables usa el modelo?
+
+La **importancia por permutación** mide cuánto cae el F1 en el conjunto de prueba al barajar al azar los valores de una variable: si el modelo depende de ella, el desempeño empeora. Se calcula sobre el modelo completo, de modo que cada variable se permuta con sus categorías originales. Es una medida de la dependencia del *modelo*, no una relación causal.
+
+```{r fig.width=7.5, fig.height=4.2, fig.align='center'}
+f1_base <- unname(mt_test["f1"])
+f1_won  <- function(Xd) unname(metricas(y_test, prob_won(pipeline_ganador, Xd))["f1"])
+
+set.seed(SEED)
+imp <- map_dfr(names(X_test), function(v) {
+  caidas <- replicate(20, { Xp <- X_test; Xp[[v]] <- sample(Xp[[v]]); f1_base - f1_won(Xp) })
+  tibble(variable = v, caida = mean(caidas), sd = sd(caidas))
+}) %>% arrange(desc(caida))
+
+imp %>% slice_head(n = 10) %>%
+  ggplot(aes(x = caida, y = fct_reorder(variable, caida))) +
+  geom_col(fill = COLOR_WON) +
+  geom_errorbar(aes(xmin = caida - sd, xmax = caida + sd), width = .3, color = "grey50") +
+  labs(x = "Caída del F1 al permutar la variable", y = NULL,
+       title = "Importancia por permutación (top 10)") +
+  theme_minimal(base_size = 11) + theme(plot.title = element_text(hjust = 0.5))
+```
+
+### ¿Coincide con lo que mostró el EDA?
+
+Se compara con la V de Cramér de cada variable con `class`.
+
+```{r}
+cramer_mod <- function(a, b) {
+  tbl <- table(a, b)
+  chi2 <- suppressWarnings(chisq.test(tbl)$statistic)
+  sqrt(as.numeric(chi2) / (sum(tbl) * (min(dim(tbl)) - 1)))
+}
+
+v_cramer <- sort(sapply(names(X), function(v) cramer_mod(X[[v]], y)), decreasing = TRUE)
+top5_eda <- names(v_cramer)[1:5]
+top5_mod <- imp$variable[1:5]
+solap <- length(intersect(top5_eda, top5_mod))
+
+tibble(`Top 5 V de Cramér (EDA)` = top5_eda, `Top 5 permutación (modelo)` = top5_mod) %>% tabla_bonita()
+```
+
+```{r include=FALSE}
+cd <- setNames(imp$caida, imp$variable)
+```
+
+Tres variables concentran casi toda la importancia: `r imp$variable[1]` (caída del F1 de ≈ `r fmt3(cd[1])` al permutarla), `r imp$variable[2]` (≈ `r fmt3(cd[2])`) y `r imp$variable[3]` (≈ `r fmt3(cd[3])`). Les siguen, muy por debajo, `r imp$variable[4]` (≈ `r fmt3(cd[4])`), `r imp$variable[5]` (≈ `r fmt3(cd[5])`) y `r imp$variable[6]` (≈ `r fmt3(cd[6])`). `r solap` de las 5 variables principales del modelo coinciden con las de mayor V de Cramér del EDA, lo que da coherencia entre ambos análisis. Si alguna variable del EDA queda fuera del ranking del modelo, una explicación posible es que comparte información con otras (por ejemplo, `wkxbp` con `whxbp` y `wkxcr`, con V de 0.67 y 0.56), por lo que el modelo puede apoyarse en cualquiera de ellas. La permutación mide cuánto depende el modelo de una variable, no en qué dirección empuja; esa lectura sigue siendo la del EDA: `rimmx = t` solo aparece en posiciones `won`, y el control blanco de a8 (`wxqsq`) y el jaque al rey negro (`bknck`) se asocian a `nowin`.
+
+## Estabilidad ante distintas particiones
+
+La exactitud de prueba depende de qué 20 % de las posiciones cayó en la prueba. Para ver cuánto varía, se repite la partición con 10 semillas distintas, reentrenando el modelo cada vez. Este ejercicio mide la dispersión.
+
+```{r fig.width=7, fig.height=3.2, fig.align='center'}
+est <- map_dfr(0:9, function(s) {
+  it <- particion(y, 0.2, s)
+  m  <- ajustar("CatBoost", X[-it, ], y[-it])
+  mt <- metricas(y[it], prob_won(m, X[it, ]))
+  tibble(accuracy = unname(mt["accuracy"]), f1 = unname(mt["f1"]))
+})
+
+ggplot(est, aes(accuracy)) +
+  geom_histogram(bins = 8, fill = COLOR_NOWIN, color = "white") +
+  geom_vline(xintercept = mean(est$accuracy), color = COLOR_WON, linewidth = 1) +
+  labs(x = "Accuracy de prueba", y = "Particiones", title = "Variación de la exactitud con 10 particiones") +
+  theme_minimal(base_size = 11) + theme(plot.title = element_text(hjust = 0.5))
+
+tibble(estadístico = c("mean", "std", "min", "max"),
+       accuracy = c(mean(est$accuracy), sd(est$accuracy), min(est$accuracy), max(est$accuracy)),
+       f1 = c(mean(est$f1), sd(est$f1), min(est$f1), max(est$f1))) %>%
+  tabla_bonita(digits = 4)
+```
+
+Con 10 particiones distintas, la exactitud media fue `r fmt4(mean(est$accuracy))` (desviación `r fmt4(sd(est$accuracy))`), con valores entre `r fmt4(min(est$accuracy))` y `r fmt4(max(est$accuracy))`. Coincide con la validación cruzada (`r fmt4(m_acc["CatBoost"])`) y permite comparar con la partición original (`r fmt4(mt_test[["accuracy"]])`): el desempeño esperado del modelo es, por tanto, de ≈ `r round(mean(est$accuracy) * 100, 1)` %.
+
+## Guardado del modelo
+
+Se guarda el modelo en el formato nativo de CatBoost (`.cbm`) y un archivo `modelo_meta.json` con las variables, los niveles de cada una y las métricas.
+
+```{r}
+catboost.save_model(pipeline_ganador$fit, "modelo_ajedrez.cbm")
+
+meta <- list(
+  clase_positiva = POS,
+  variables = names(X),
+  niveles = lapply(X, levels),
+  metricas_test = as.list(round(metricas_test, 4)),
+  ic95_accuracy = as.numeric(ic_acc)
+)
+write_json(meta, "modelo_meta.json", auto_unbox = TRUE, pretty = TRUE)
+
+# Comprobación: el modelo guardado reproduce las predicciones
+cargado <- catboost.load_model("modelo_ajedrez.cbm")
+p_cargado <- as.numeric(catboost.predict(cargado, catboost.load_pool(codificar(X_test)),
+                                         prediction_type = "Probability"))
+stopifnot(isTRUE(all.equal(p_cargado, p_test)))
+```
+
+## Conclusiones
+
+1. Se compararon cuatro algoritmos con el mismo preprocesamiento (*One-Hot*) sobre `r format(nrow(df), big.mark = ".")` posiciones y `r ncol(X)` variables categóricas, con una partición estratificada 80/20 y validación cruzada repetida (5 × 3) sobre el 80 % de entrenamiento.
+2. CatBoost obtuvo el F1 medio más alto en validación cruzada (`r fmt4(m_f1["CatBoost"])` ± `r fmt4(s_f1["CatBoost"])`) y el mejor AUC-ROC (`r fmt4(m_auc["CatBoost"])`). Supera de forma significativa a la Regresión Logística y, marginalmente, a Random Forest, pero no se distingue del Árbol de Decisión. La línea base de la clase mayoritaria queda en una exactitud de `r fmt3(m_acc["Baseline: clase mayoritaria"])`.
+3. En el conjunto de prueba, el modelo final alcanza Accuracy = `r fmt4(mt_test[["accuracy"]])`, F1 = `r fmt4(mt_test[["f1"]])` y AUC-ROC = `r fmt4(mt_test[["auc"]])`, con `r sum(mask_err)` errores en `r length(y_test)` posiciones (`r n_fw` falso(s) *won* y `r n_fn` falso(s) *nowin*).
+4. Con 10 particiones distintas la exactitud media es `r fmt4(mean(est$accuracy))` (desviación `r fmt4(sd(est$accuracy))`), por lo que el desempeño esperado es de ≈ `r round(mean(est$accuracy) * 100, 1)` %.
+5. Las variables que más pesan en el modelo son `r imp$variable[1]`, `r imp$variable[2]` y `r imp$variable[3]`. `r solap` de las 5 principales coinciden con las que el EDA identificó por V de Cramér.
+6. El modelo se guardó en `modelo_ajedrez.cbm`, junto con `modelo_meta.json`, para su uso en el dashboard.
+7. **Limitaciones.** Las diferencias entre CatBoost y los otros modelos de árboles son pequeñas, y no se ajustaron hiperparámetros. Las variables fueron diseñadas por Shapiro como predicados de conocimiento experto sobre el final, no son mediciones libres de partidas reales; esto explica la alta separabilidad de las clases. El resultado describe qué tan bien se aprende esa codificación experta y no debe extrapolarse a partidas reales. Además, este trabajo usa los colores de UCI (peón negro, torre blanca) y lee `won` como "gana el bando del peón", porque es lo que indican los datos (todas las posiciones `nowin` tienen `rimmx = f`). La tesis original de Shapiro (1983) usa los colores contrarios y UCI rotula las clases como "White-can-win". Esto afecta la interpretación de las variables, no el desempeño del modelo.
+

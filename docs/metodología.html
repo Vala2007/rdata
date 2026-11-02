@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>3 Metodología | King+Rook vs King+Pawn on a7 (KRKPA7)</title>
+  <meta name="description" content="3 Metodología | King+Rook vs King+Pawn on a7 (KRKPA7)" />
+  <meta name="generator" content="bookdown 0.47 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="3 Metodología | King+Rook vs King+Pawn on a7 (KRKPA7)" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="3 Metodología | King+Rook vs King+Pawn on a7 (KRKPA7)" />
+  
+  
+  
+
+<meta name="author" content="Valamy Donado y Abraham Navarro" />
+
+
+<meta name="date" content="2026-08-23" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="objetivos.html"/>
+<link rel="next" href="el-dataset.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">KRKPA7</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introducción</a></li>
+<li class="chapter" data-level="2" data-path="objetivos.html"><a href="objetivos.html"><i class="fa fa-check"></i><b>2</b> Objetivos</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="objetivos.html"><a href="objetivos.html#finales-de-ajedrez"><i class="fa fa-check"></i><b>2.1</b> Finales de ajedrez</a></li>
+<li class="chapter" data-level="2.2" data-path="objetivos.html"><a href="objetivos.html#medidas-de-asociaci%C3%B3n-entre-variables-categ%C3%B3ricas"><i class="fa fa-check"></i><b>2.2</b> Medidas de asociación entre variables categóricas</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="metodología.html"><a href="metodología.html"><i class="fa fa-check"></i><b>3</b> Metodología</a></li>
+<li class="chapter" data-level="4" data-path="el-dataset.html"><a href="el-dataset.html"><i class="fa fa-check"></i><b>4</b> El dataset</a></li>
+<li class="chapter" data-level="5" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html"><i class="fa fa-check"></i><b>5</b> Análisis exploratorio de datos (EDA)</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#librer%C3%ADas"><i class="fa fa-check"></i><b>5.1</b> Librerías</a></li>
+<li class="chapter" data-level="5.2" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#an%C3%A1lisis-de-la-variable-target-class"><i class="fa fa-check"></i><b>5.2</b> Análisis de la variable target “class”</a></li>
+<li class="chapter" data-level="5.3" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#an%C3%A1lisis-de-las-variables-independientes"><i class="fa fa-check"></i><b>5.3</b> Análisis de las variables independientes</a></li>
+<li class="chapter" data-level="5.4" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#verificaci%C3%B3n-de-supuestos"><i class="fa fa-check"></i><b>5.4</b> Verificación de supuestos</a></li>
+<li class="chapter" data-level="5.5" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#an%C3%A1lisis-bivariado-class-vs-independientes"><i class="fa fa-check"></i><b>5.5</b> Análisis bivariado class vs independientes</a></li>
+<li class="chapter" data-level="5.6" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#bivariado-entre-predictoras"><i class="fa fa-check"></i><b>5.6</b> Bivariado entre predictoras</a></li>
+<li class="chapter" data-level="5.7" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#conclusiones"><i class="fa fa-check"></i><b>5.7</b> Conclusiones</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="modelado-predictivo.html"><a href="modelado-predictivo.html"><i class="fa fa-check"></i><b>6</b> Modelado Predictivo</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="modelado-predictivo.html"><a href="modelado-predictivo.html#m%C3%A9tricas"><i class="fa fa-check"></i><b>6.1</b> Métricas</a></li>
+<li class="chapter" data-level="6.2" data-path="modelado-predictivo.html"><a href="modelado-predictivo.html#estrategia-de-validaci%C3%B3n"><i class="fa fa-check"></i><b>6.2</b> Estrategia de validación</a></li>
+<li class="chapter" data-level="6.3" data-path="modelado-predictivo.html"><a href="modelado-predictivo.html#librer%C3%ADas-1"><i class="fa fa-check"></i><b>6.3</b> Librerías</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="modelado-predictivo.html"><a href="modelado-predictivo.html#funciones-auxiliares"><i class="fa fa-check"></i><b>6.3.1</b> Funciones auxiliares</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="modelado-predictivo.html"><a href="modelado-predictivo.html#preparaci%C3%B3n-de-los-datos"><i class="fa fa-check"></i><b>6.4</b> Preparación de los datos</a></li>
+<li class="chapter" data-level="6.5" data-path="modelado-predictivo.html"><a href="modelado-predictivo.html#comparaci%C3%B3n-preliminar-de-los-modelos"><i class="fa fa-check"></i><b>6.5</b> Comparación preliminar de los modelos</a></li>
+<li class="chapter" data-level="6.6" data-path="modelado-predictivo.html"><a href="modelado-predictivo.html#validaci%C3%B3n-cruzada"><i class="fa fa-check"></i><b>6.6</b> Validación cruzada</a>
+<ul>
+<li class="chapter" data-level="6.6.1" data-path="modelado-predictivo.html"><a href="modelado-predictivo.html#las-diferencias-entre-modelos-son-reales-o-son-ruido"><i class="fa fa-check"></i><b>6.6.1</b> ¿Las diferencias entre modelos son reales o son ruido?</a></li>
+</ul></li>
+<li class="chapter" data-level="6.7" data-path="modelado-predictivo.html"><a href="modelado-predictivo.html#modelo-final"><i class="fa fa-check"></i><b>6.7</b> Modelo final</a></li>
+<li class="chapter" data-level="6.8" data-path="modelado-predictivo.html"><a href="modelado-predictivo.html#evaluaci%C3%B3n-en-el-conjunto-de-prueba"><i class="fa fa-check"></i><b>6.8</b> Evaluación en el conjunto de prueba</a></li>
+<li class="chapter" data-level="6.9" data-path="modelado-predictivo.html"><a href="modelado-predictivo.html#interpretabilidad-qu%C3%A9-variables-usa-el-modelo"><i class="fa fa-check"></i><b>6.9</b> Interpretabilidad: ¿qué variables usa el modelo?</a>
+<ul>
+<li class="chapter" data-level="6.9.1" data-path="modelado-predictivo.html"><a href="modelado-predictivo.html#coincide-con-lo-que-mostr%C3%B3-el-eda"><i class="fa fa-check"></i><b>6.9.1</b> ¿Coincide con lo que mostró el EDA?</a></li>
+</ul></li>
+<li class="chapter" data-level="6.10" data-path="modelado-predictivo.html"><a href="modelado-predictivo.html#estabilidad-ante-distintas-particiones"><i class="fa fa-check"></i><b>6.10</b> Estabilidad ante distintas particiones</a></li>
+<li class="chapter" data-level="6.11" data-path="modelado-predictivo.html"><a href="modelado-predictivo.html#guardado-del-modelo"><i class="fa fa-check"></i><b>6.11</b> Guardado del modelo</a></li>
+<li class="chapter" data-level="6.12" data-path="modelado-predictivo.html"><a href="modelado-predictivo.html#conclusiones-1"><i class="fa fa-check"></i><b>6.12</b> Conclusiones</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">King+Rook vs King+Pawn on a7 (KRKPA7)</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="metodología" class="section level1 hasAnchor" number="3">
+<h1><span class="header-section-number">3</span> Metodología<a href="metodología.html#metodolog%C3%ADa" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Análisis exploratorio de datos: En el análisis univariado se examina la distribución de niveles y comportamiento individual de cada una de las 36 variables predictoras y de la variable objetivo class mediante tablas de frecuencia, gráficos de barras, y gráficos de pastel. En el análisis bivariado se evalúa la relación entre cada variable predictora y class mediante tablas de contingencia, matriz V de Cramér y gráficos de barras agrupados por nivel y clase. En el análisis multivariado se construye una matriz V de Cramér entre todas las predictoras para detectar posibles variables redundantes, grupos de variables que miden conceptos similares y posibles problemas de multicolinealidad categórica.
+Las herramientas utilizadas en esta fase son R y Python, y el reporte se elabora en Bookdown y Jupyter Book respectivamente.</p>
+<p>Visualización interactiva: Con base en los patrones identificados en el EDA, se construye un dashboard interactivo que permite filtrar por clase, es decir, por won o nowin, explorar cada variable de forma individual y agrupada, y visualizar las matrices con tooltip. Se implementa en Shiny y en Dash.</p>
+<p>Modelado predictivo: Se procederá a construir un modelo de predicción, que, a partir de las variables del tablero, clasifique correctamente si una posición termina en victoria de las blancas (won) o no (nowin), evaluando su desempeño mediante métricas como exactitud, matriz de confusión, F1-score, AUC-ROC, y validación cruzada. Además, se implementará un chatbot en ambos dashboards.</p>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="objetivos.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="el-dataset.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": "https://github.com/rstudio/bookdown-demo/edit/master/index.Rmd",
+    "text": "Edit"
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["bookdown-demo.pdf", "bookdown-demo.epub"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

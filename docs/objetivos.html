@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>2 Objetivos | King+Rook vs King+Pawn on a7 (KRKPA7)</title>
+  <meta name="description" content="2 Objetivos | King+Rook vs King+Pawn on a7 (KRKPA7)" />
+  <meta name="generator" content="bookdown 0.47 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="2 Objetivos | King+Rook vs King+Pawn on a7 (KRKPA7)" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="2 Objetivos | King+Rook vs King+Pawn on a7 (KRKPA7)" />
+  
+  
+  
+
+<meta name="author" content="Valamy Donado y Abraham Navarro" />
+
+
+<meta name="date" content="2026-08-23" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="index.html"/>
+<link rel="next" href="metodología.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">KRKPA7</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introducción</a></li>
+<li class="chapter" data-level="2" data-path="objetivos.html"><a href="objetivos.html"><i class="fa fa-check"></i><b>2</b> Objetivos</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="objetivos.html"><a href="objetivos.html#finales-de-ajedrez"><i class="fa fa-check"></i><b>2.1</b> Finales de ajedrez</a></li>
+<li class="chapter" data-level="2.2" data-path="objetivos.html"><a href="objetivos.html#medidas-de-asociaci%C3%B3n-entre-variables-categ%C3%B3ricas"><i class="fa fa-check"></i><b>2.2</b> Medidas de asociación entre variables categóricas</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="metodología.html"><a href="metodología.html"><i class="fa fa-check"></i><b>3</b> Metodología</a></li>
+<li class="chapter" data-level="4" data-path="el-dataset.html"><a href="el-dataset.html"><i class="fa fa-check"></i><b>4</b> El dataset</a></li>
+<li class="chapter" data-level="5" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html"><i class="fa fa-check"></i><b>5</b> Análisis exploratorio de datos (EDA)</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#librer%C3%ADas"><i class="fa fa-check"></i><b>5.1</b> Librerías</a></li>
+<li class="chapter" data-level="5.2" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#an%C3%A1lisis-de-la-variable-target-class"><i class="fa fa-check"></i><b>5.2</b> Análisis de la variable target “class”</a></li>
+<li class="chapter" data-level="5.3" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#an%C3%A1lisis-de-las-variables-independientes"><i class="fa fa-check"></i><b>5.3</b> Análisis de las variables independientes</a></li>
+<li class="chapter" data-level="5.4" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#verificaci%C3%B3n-de-supuestos"><i class="fa fa-check"></i><b>5.4</b> Verificación de supuestos</a></li>
+<li class="chapter" data-level="5.5" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#an%C3%A1lisis-bivariado-class-vs-independientes"><i class="fa fa-check"></i><b>5.5</b> Análisis bivariado class vs independientes</a></li>
+<li class="chapter" data-level="5.6" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#bivariado-entre-predictoras"><i class="fa fa-check"></i><b>5.6</b> Bivariado entre predictoras</a></li>
+<li class="chapter" data-level="5.7" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#conclusiones"><i class="fa fa-check"></i><b>5.7</b> Conclusiones</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="modelado-predictivo.html"><a href="modelado-predictivo.html"><i class="fa fa-check"></i><b>6</b> Modelado Predictivo</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="modelado-predictivo.html"><a href="modelado-predictivo.html#m%C3%A9tricas"><i class="fa fa-check"></i><b>6.1</b> Métricas</a></li>
+<li class="chapter" data-level="6.2" data-path="modelado-predictivo.html"><a href="modelado-predictivo.html#estrategia-de-validaci%C3%B3n"><i class="fa fa-check"></i><b>6.2</b> Estrategia de validación</a></li>
+<li class="chapter" data-level="6.3" data-path="modelado-predictivo.html"><a href="modelado-predictivo.html#librer%C3%ADas-1"><i class="fa fa-check"></i><b>6.3</b> Librerías</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="modelado-predictivo.html"><a href="modelado-predictivo.html#funciones-auxiliares"><i class="fa fa-check"></i><b>6.3.1</b> Funciones auxiliares</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="modelado-predictivo.html"><a href="modelado-predictivo.html#preparaci%C3%B3n-de-los-datos"><i class="fa fa-check"></i><b>6.4</b> Preparación de los datos</a></li>
+<li class="chapter" data-level="6.5" data-path="modelado-predictivo.html"><a href="modelado-predictivo.html#comparaci%C3%B3n-preliminar-de-los-modelos"><i class="fa fa-check"></i><b>6.5</b> Comparación preliminar de los modelos</a></li>
+<li class="chapter" data-level="6.6" data-path="modelado-predictivo.html"><a href="modelado-predictivo.html#validaci%C3%B3n-cruzada"><i class="fa fa-check"></i><b>6.6</b> Validación cruzada</a>
+<ul>
+<li class="chapter" data-level="6.6.1" data-path="modelado-predictivo.html"><a href="modelado-predictivo.html#las-diferencias-entre-modelos-son-reales-o-son-ruido"><i class="fa fa-check"></i><b>6.6.1</b> ¿Las diferencias entre modelos son reales o son ruido?</a></li>
+</ul></li>
+<li class="chapter" data-level="6.7" data-path="modelado-predictivo.html"><a href="modelado-predictivo.html#modelo-final"><i class="fa fa-check"></i><b>6.7</b> Modelo final</a></li>
+<li class="chapter" data-level="6.8" data-path="modelado-predictivo.html"><a href="modelado-predictivo.html#evaluaci%C3%B3n-en-el-conjunto-de-prueba"><i class="fa fa-check"></i><b>6.8</b> Evaluación en el conjunto de prueba</a></li>
+<li class="chapter" data-level="6.9" data-path="modelado-predictivo.html"><a href="modelado-predictivo.html#interpretabilidad-qu%C3%A9-variables-usa-el-modelo"><i class="fa fa-check"></i><b>6.9</b> Interpretabilidad: ¿qué variables usa el modelo?</a>
+<ul>
+<li class="chapter" data-level="6.9.1" data-path="modelado-predictivo.html"><a href="modelado-predictivo.html#coincide-con-lo-que-mostr%C3%B3-el-eda"><i class="fa fa-check"></i><b>6.9.1</b> ¿Coincide con lo que mostró el EDA?</a></li>
+</ul></li>
+<li class="chapter" data-level="6.10" data-path="modelado-predictivo.html"><a href="modelado-predictivo.html#estabilidad-ante-distintas-particiones"><i class="fa fa-check"></i><b>6.10</b> Estabilidad ante distintas particiones</a></li>
+<li class="chapter" data-level="6.11" data-path="modelado-predictivo.html"><a href="modelado-predictivo.html#guardado-del-modelo"><i class="fa fa-check"></i><b>6.11</b> Guardado del modelo</a></li>
+<li class="chapter" data-level="6.12" data-path="modelado-predictivo.html"><a href="modelado-predictivo.html#conclusiones-1"><i class="fa fa-check"></i><b>6.12</b> Conclusiones</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">King+Rook vs King+Pawn on a7 (KRKPA7)</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="objetivos" class="section level1 hasAnchor" number="2">
+<h1><span class="header-section-number">2</span> Objetivos<a href="objetivos.html#objetivos" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Objetivo general: Analizar el comportamiento del final de ajedrez Rey + Torre vs Rey + Peón a partir del dataset KRKPA7, mediante técnicas de análisis exploratorio de datos, visualización interactiva y modelado predictivo, para identificar los patrones que determinan si el peón (negras) logra ganar o es detenido por las blancas.</p>
+<p>Objetivos específicos:
+- Realizar un análisis que caracterice de forma univariada y bivariada las 36 variables categóricas del dataset, identificando su distribución, asociación con la variable objetivo y relaciones entre predictoras, mediante tablas de frecuencia, matrices de asociación (V de Cramér) y visualizaciones interactivas (Cramér, 1946).
+- Construir un modelo predictivo que, a partir de las variables del tablero, que clasifique correctamente si una posición termina en victoria del bando del peón, es decir, las negras (won), o no (nowin), evaluando su desempeño mediante métricas como exactitud, matriz de confusión, F1-score, AUC-ROC, y validación cruzada.
+# Marco teórico</p>
+<div id="finales-de-ajedrez" class="section level2 hasAnchor" number="2.1">
+<h2><span class="header-section-number">2.1</span> Finales de ajedrez<a href="objetivos.html#finales-de-ajedrez" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Los finales de ajedrez han sido estudiados desde dos perspectivas complementarias: la teoría ajedrecística, que establece reglas prácticas sobre cómo ganar o entablar, y la teoría de la computación, que los utiliza como problemas de búsqueda y clasificación (Russell y Norvig, 2020), estos, ya con pocas piezas, permiten definir con precisión qué significa “ganar” y “no ganar” en cada posición, y por lo tanto admiten reglas verificables que pueden ser aprendidas, inducidas o programadas. La teoría clásica, recogida por ejemplo en el manual de finales de Dvoretsky, establece que las blancas ganan si logran detener al peón con la torre y acercar su rey para dar mate. Las negras, en cambio, obtienen tablas o ganan si coronan el peón, ahogan al rey blanco o capturan la torre.</p>
+</div>
+<div id="medidas-de-asociación-entre-variables-categóricas" class="section level2 hasAnchor" number="2.2">
+<h2><span class="header-section-number">2.2</span> Medidas de asociación entre variables categóricas<a href="objetivos.html#medidas-de-asociaci%C3%B3n-entre-variables-categ%C3%B3ricas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Dado que todas las variables del dataset KRKPA7 son de naturaleza categórica, no es posible utilizar coeficientes de correlación como el de Pearson o Spearman, que están diseñados para variables cuantitativas. En su lugar, se emplean medidas de asociación específicas para datos cualitativos, siendo la más utilizada en la literatura la V de Cramér, propuesta por Harald Cramér en 1946 (Cramér, 1946). Es una medida estadística que cuantifica la fuerza de la asociación entre dos variables categóricas. Sus valores oscilan entre 0 y 1. Un valor de 0 indica que no existe relación entre las variables, es decir, que son independientes. Un valor de 1 indica una relación perfecta, en la que una variable determina completamente a la otra. Valores intermedios sugieren distintos grados de asociación, donde valores cercanos a 0.1 se consideran asociaciones débiles, cercanos a 0.3 moderadas, cercanos a 0.5 fuertes y superiores a 0.7 muy fuertes (Cohen, 1988).
+<span class="math display">\[
+V = \sqrt{\frac{\chi^2}{n \times \min(r-1, c-1)}}
+\]</span>
+El cálculo se basa en el estadístico chi-cuadrado, que mide la diferencia entre lo observado y lo esperado si las variables fueran independientes. La n representa el número total de observaciones. La r corresponde al número de filas de la tabla de contingencia y la c al número de columnas de la misma tabla.</p>
+<p>Para que la V de Cramér sea válida se requiere que ambas variables sean categóricas, que las observaciones sean independientes y que las frecuencias esperadas de la tabla de contingencia sean adecuadas (al menos el 80 % de las celdas con frecuencia esperada ≥ 5). Cuando alguna celda queda por debajo de ese umbral, el p-valor del chi-cuadrado clásico pierde validez. En esos casos, si se requiere un contraste de hipótesis, se recomienda usar chi-cuadrado con simulación de Monte Carlo o la prueba exacta de Fisher para tablas 2×2 (Agresti, 2002). Sin embargo, la V de Cramér como medida descriptiva se calcula directamente a partir del estadístico chi-cuadrado observado, sin requerir corrección.</p>
+<p>Una ventaja importante de la V de Cramér es que permite comparar la fuerza de asociación entre pares de variables incluso cuando las tablas de contingencia tienen dimensiones distintas, algo que no ocurre con otras medidas como el coeficiente phi, que solo es aplicable a tablas de 2x2 (Agresti, 2002). Esto resulta particularmente útil en el dataset KRKPA7, donde algunas variables son binarias y otras presentan tres o más niveles. En este proyecto, la V de Cramér se utiliza con dos propósitos principales. En primer lugar, para cuantificar la relación entre cada variable predictora y la variable objetivo class, lo cual permite identificar qué atributos del tablero están más asociados con el resultado final de la partida. En segundo lugar, para construir una matriz de asociación entre todas las variables predictoras, con el fin de detectar redundancias, grupos de variables que miden conceptos similares y posibles problemas de multicolinealidad categórica que podrían afectar el desempeño de los modelos predictivos.</p>
+<p>Residuos estandarizados:</p>
+<p>Una vez detectada una asociación significativa con la V de Cramér, es útil identificar qué celdas específicas contribuyen a esa asociación. Para esto se emplean los residuos estandarizados de Pearson, que comparan la frecuencia observada con la esperada bajo independencia:
+<span class="math display">\[
+r_{ij} = \frac{O_{ij} - E_{ij}}{\sqrt{E_{ij}}}
+\]</span>
+Un residuo mayor a 2 en valor absoluto indica que esa celda aporta significativamente a la asociación. Un residuo mayor a 3 señala una desviación fuerte. Los residuos positivos indican que la combinación observada ocurre más de lo esperado, y los negativos que ocurre menos (Agresti, 2002). Existe también la versión ajustada de Haberman, que corrige por el tamaño de la tabla y es preferible cuando hay más de 2 filas o columnas.</p>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="metodología.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": "https://github.com/rstudio/bookdown-demo/edit/master/index.Rmd",
+    "text": "Edit"
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["bookdown-demo.pdf", "bookdown-demo.epub"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
